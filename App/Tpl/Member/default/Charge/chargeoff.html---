@@ -1,0 +1,78 @@
+<style type="text/css">
+body { margin: 0; _height: 100%; }
+.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; border: #E9E8E7 solid 1px; }
+.tdContent { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; border: #E9E8E7 solid 1px; }
+.alertDiv_pin { margin: 0px auto; background-color: #FEFACF; border: 1px solid green; line-height: 25px; background-image: url(http://img.anxindai.com/images/info/001_30.png); background-position: 20px 4px; background-repeat: no-repeat; }
+.alertDiv_pin li { margin: 5px 0; list-style-type: decimal; color: #005B9F; padding: 0px; line-height: 20px; }
+.alertDiv_pin ul { text-align: left; list-style-type: decimal; display: block; padding: 0px; margin: 0px 0px 0px 75px; }
+.font666 { color: #666; }
+.dv_header_8 { background-image: url(); }
+.dv_account_0 { margin-top: 8px; }
+</style>
+<div style="width: 766px; display: none;" class="alertDiv_pin">
+	<ul style="display: block;">
+	</ul>
+</div>
+<div class="top_account_bg">
+	<img style="margin-top: -3px;" src="__ROOT__/Style/H/images/ministar.gif">
+	请准确填写您的充值金额和帐单流水号
+</div>
+<div style="width: 100%; overflow:hidden; margin-top: 15px;">
+<form action="__APP__/Pay/offline" method="post" name="offlinePay" id="offlinePay">
+	<table style="width: 710px; float: left; margin: 0px 20px;
+		padding: 0px; border-collapse: collapse; text-align: left;" id="formTb" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td class="tdTitle">
+				充值金额：
+			</td>
+			<td class="tdContent">
+                <input id="money_off" name="money_off" class="text2" type="text">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				入帐银行：
+			</td>
+			<td class="tdContent">
+				<input id="off_bank" name="off_bank" class="text2" type="text">(指您往网站指定的哪个银行进行了汇款)
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				账单流水号：
+			</td>
+			<td class="tdContent">
+				<input id="tran_id" name="tran_id" class="text2" type="text">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				充值方式：
+			</td>
+			<td class="tdContent">
+				<input id="off_way" name="off_way" class="text2" type="text">(如网银转帐，柜台汇款,汇款人等)
+			</td>
+		</tr>
+	</tbody></table>
+</form>
+</div>
+<div style="text-align: center; width: 740px; height: 30px; margin: 10px;">
+	<img id="btn_set" class="img_button" onclick="ckoffline()" src="__ROOT__/Style/M/images/btnsubupdate.jpg">
+	<img class="img_button" onclick="location.href=location.href;" src="__ROOT__/Style/M/images/btncancel.jpg">
+</div>
+<div>{$vo.type_content}</div>
+<script type="text/javascript">
+function ckoffline(){
+	var money = parseInt($("#money_off").val());
+	var tran_id = $("#tran_id").val();
+	if(!(money>0)){
+		$.jBox.tip("充值金额必须大于0");
+		return;
+	}
+	if(tran_id==""){
+		$.jBox.tip("帐单流水号不能为空");
+		return;
+	}
+	$("#offlinePay").submit();
+}
+</script>

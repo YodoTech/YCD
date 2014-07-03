@@ -1,0 +1,34 @@
+<include file="Public:_header" />
+<script type="text/javascript" src="__ROOT__/Style/My97DatePicker/WdatePicker.js" language="javascript"></script>
+<tagLib name="htmlA" />
+<div class="so_main">
+
+<div class="page_tit">添加广告</div>
+<div class="page_tab"></div>
+<div class="form2">
+	<form method="post" action="__URL__/doEdit" onsubmit="return subcheck();" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="{$vo.id}" />
+	<input type="hidden" name="ad_type" value="{$vo.ad_type}" />
+	<div id="tab_1">
+	
+	<dl class="lineD"><dt>广告位置：</dt><dd><htmlA:input id="title" value="{$vo.title}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>开始时间：</dt><dd><htmlA:timer value="{$vo.start_time|date='Y-m-d',###}" id="start_time" tip='开始展示在网站的时间' arg="{maxDate:'#F{$dp.$D(\\\\'end_time\\\\')||\\\\'2020-10-01\\\\'}'}"/></dd></dl>
+	<dl class="lineD"><dt>结束时间：</dt><dd><htmlA:timer id="end_time" value="{$vo.end_time|date='Y-m-d',###}" tip='停止展示的时间' arg="{minDate:'#F{$dp.$D(\\\\'start_time\\\\')}',maxDate:'2020-10-01'}"/></dd></dl>
+	<dl class="lineD"><dt>是否去除P标签：</dt><dd><htmlA:radio id="remove_p" default="0|是,1|否" /></dd></dl>
+	<dl class="lineD"><dt>广告内容：</dt>
+	  <dd>
+		<include file="./Style/Editor/kissy.html" />
+		<htmlA:editor id="content" w='780px' type='kissy' value="{$vo.content}"/>
+	  </dd>
+	</dl>
+	
+	</div><!--tab1-->
+
+	<div class="page_btm">
+	  <input type="submit" class="btn_b" value="确定" />
+	</div>
+	</form>
+</div>
+
+</div>
+<include file="Public:_footer" />

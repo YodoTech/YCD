@@ -1,0 +1,470 @@
+ <include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<script type="text/javascript" src="__ROOT__/Style/Js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+var mbTest = /^(13|14|15|18)[0-9]{9}$/;
+var timer = null;
+var leftsecond = 60; //倒计时
+var msg = "";
+function sendMobileValidSMSCode() {
+	$("#btnSendMsg").html("");
+	var mobile = $("#txt_phone").val();
+	if (mobile == "") {
+		$("#btnSendMsg").html("获取验证码");
+		$('#sendSMSTip').html("请输入手机号码");
+		return;
+	}
+	if (mbTest.test(mobile)) {
+		$('#sendSMSTip').html("短信发送中...");
+		$.ajax({
+			url: "__URL__/sendphone/",
+			type: "post",
+			dataType: "json",
+			data: {"cellphone":mobile},
+			success: function(d) {
+				leftsecond = 60;
+				if (d.status == 1) {
+					msg = "发送成功，如未收到";
+					clearInterval(timer);
+					timer = setInterval(setLeftTime, 1000, "1");
+					$("#btnSendMsg").html("");
+					$("#txt_phone").attr("readonly", true);
+				}
+				else if (d.status == 2) {
+					$('#sendSMSTip').html("该手机号码已被其他用户使用");
+					$("#btnSendMsg").html("获取验证码");
+					$("#txt_phone").removeAttr("readonly");
+				}
+				else {
+					msg = "校验码发送失败,请重试";
+					$("#sendSMSTip").html(msg);
+					$("#btnSendMsg").html("获取验证码");
+					$("#txt_phone").attr("readonly", true);
+				}
+			}
+		});
+	}
+	else {
+		$("#btnSendMsg").removeAttr("disabled");
+		$("#btnSendMsg").html("获取验证码");
+		$("#sendSMSTip").html("手机号码有误");
+	}
+}
+function setLeftTime() {
+	var second = Math.floor(leftsecond);
+	$(".spTip").eq(0).html(msg + second + "秒后可重发");
+	leftsecond--;
+	if (leftsecond < 1) {
+		$(".spTip").eq(0).html("现在可重新发送！");
+		clearInterval(timer);
+		try {
+			$("#btnSendMsg").html("获取验证码");
+			$("#txt_phone").removeAttr("readonly");
+		} catch (E) { }
+		return;
+	}
+}
+
+function myrefresh3()
+{
+       window.location.reload();
+	   window.location.href="/member/verify?id=1#fragment-2";
+}
+
+var apppath = "__APP__";
+function setMobile() {
+	var code = $('#txt_smsCode').val();
+	$.ajax({
+		url: "__URL__/validatephone",
+		type: "post",
+		dataType: "json",
+		data: {"code":code},
+		success: function(d) {
+			if (d.status==1) {
+				$.jBox.tip("验证成功");
+			}
+			else {
+				if (d.status == 2) {
+					leftsecond = 60;
+					msg = "验证失败或者校验码失效，";
+					clearInterval(timer);
+					timer = setInterval(setLeftTime, 1000, "1");
+					$("#btnSendMsg").attr("disabled", true);
+					$("#txt_phone").attr("readonly", true);
+				}
+				if (d.status == 0) {
+					$(".spTip").html(d.message);
+				}
+			}
+		},
+		complete:function(XMLHttpRequest, textStatus){
+				setTimeout('myrefresh3()',3000); //指定3秒刷新
+		}
+	});
+}
+
+function setSafeQuestion() {
+	var question1 = $('#question1').val();
+	var question2 = $('#question2').val();
+	var answer1 = $('#answer1').val();
+	var answer2 = $('#answer2').val();
+	var isValidForm = true;
+	if ($.trim(answer1) == '') {
+		isValidForm = false;
+		$('#answer1err').html('请输入安全问题答案。');
+	}
+	if ($.trim(answer2) == '') {
+		isValidForm = false;
+		$('#answer2err').html('请输入安全问题答案。');
+	}
+	if (question1 == question2) {
+		isValidForm = false;
+		$('#qErr').html('请设置两个不相同的安全问题。');
+	}
+	if (isValidForm) {
+		$('#answer1err').html('');
+		$('#answer2err').html('');
+		$('#qErr').html('');
+	}
+	else {
+		return;
+	}
+	$.ajax({
+		url: "__URL__/questionsave/",
+		type: "post",
+		dataType: "json",
+		data: {"q1":question1,"q2":question2,"a1":answer1,"a2":answer2},
+		success: function(result) {
+			if (result.status == 0) {
+				$('#answer2err').html('安全问题设置失败，请稍后再试。');
+			}
+			else {
+				$.jBox.tip("设置成功");
+			}
+		}
+	});
+}
+//验证身份证号方法
+var testIdcard = function(idcard) {
+var Errors = new Array("验证通过!", "身份证号码位数不对!", "身份证号码出生日期超出范围!", "身份证号码校验错误!", "身份证地区非法!");
+var area = { 11: "北京", 12: "天津", 13: "河北", 14: "山西", 15: "内蒙古", 21: "辽宁", 22: "吉林", 23: "黑龙江", 31: "上海", 32: "江苏", 33: "浙江", 34: "安徽", 35: "福建", 36: "江西", 37: "山东", 41: "河南", 42: "湖北", 43: "湖南", 44: "广东", 45: "广西", 46: "海南", 50: "重庆", 51: "四川", 52: "贵州", 53: "云南", 54: "西藏", 61: "陕西", 62: "甘肃", 63: "青海", 64: "宁夏", 65: "xinjiang", 71: "台湾", 81: "香港", 82: "澳门", 91: "国外" }
+var idcard, Y, JYM;
+var S, M;
+var idcard_array = new Array();
+idcard_array = idcard.split("");
+if (area[parseInt(idcard.substr(0, 2))] == null) return Errors[4];
+switch (idcard.length) {
+	case 15:
+		if ((parseInt(idcard.substr(6, 2)) + 1900) % 4 == 0 || ((parseInt(idcard.substr(6, 2)) + 1900) % 100 == 0 && (parseInt(idcard.substr(6, 2)) + 1900) % 4 == 0)) {
+			ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$/; //测试出生日期的合法性 
+		}
+		else {
+			ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}$/; //测试出生日期的合法性 
+		}
+		if (ereg.test(idcard))
+			return Errors[0];
+		else
+			return Errors[2];
+		break;
+	case 18:
+		if (parseInt(idcard.substr(6, 4)) % 4 == 0 || (parseInt(idcard.substr(6, 4)) % 100 == 0 && parseInt(idcard.substr(6, 4)) % 4 == 0)) {
+			ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}[0-9Xx]$/; //闰年出生日期的合法性正则表达式 
+		}
+		else {
+			ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$/; //平年出生日期的合法性正则表达式 
+		}
+		if (ereg.test(idcard)) {
+			S = (parseInt(idcard_array[0]) + parseInt(idcard_array[10])) * 7 + (parseInt(idcard_array[1]) + parseInt(idcard_array[11])) * 9 + (parseInt(idcard_array[2]) + parseInt(idcard_array[12])) * 10 + (parseInt(idcard_array[3]) + parseInt(idcard_array[13])) * 5 + (parseInt(idcard_array[4]) + parseInt(idcard_array[14])) * 8 + (parseInt(idcard_array[5]) + parseInt(idcard_array[15])) * 4 + (parseInt(idcard_array[6]) + parseInt(idcard_array[16])) * 2 + parseInt(idcard_array[7]) * 1 + parseInt(idcard_array[8]) * 6 + parseInt(idcard_array[9]) * 3;
+			Y = S % 11;
+			M = "F";
+			JYM = "10X98765432";
+			M = JYM.substr(Y, 1);
+			if (M == idcard_array[17])
+				return Errors[0];
+			else
+				return Errors[3];
+		}
+		else
+			return Errors[2];
+		break;
+	default:
+		return Errors[1];
+		break;
+}
+}
+
+function myrefresh1()
+{
+       window.location.reload();
+	   window.location.href="/member/verify?id=1#fragment-3";
+}
+function setIdCard() {
+	var realname = $('#realname').val();
+	var idcard = $('#idcard').val();
+	var isValidForm = true;
+	if ($.trim(realname) == '') {
+		isValidForm = false;
+		$('#realnameErr').html('请输入您的真实姓名。');
+	}else{
+		$('#realnameErr').html('');
+	}
+	
+	if ($.trim(idcard) == '') {
+		isValidForm = false;
+		$('#idcardErr').html('请输入您的身份证号码。');
+	}
+	else {
+		var idcartValidResult = testIdcard($.trim(idcard));
+		if (idcartValidResult.indexOf('通过') == -1) {
+			isValidForm = false;
+			$('#idcardErr').html(idcartValidResult);
+		}
+	}
+	if (isValidForm) {
+		$('#realnameErr').html('');
+		$('#idcardErr').html('');
+	}
+	else {
+		return;
+	} 
+	$.ajax({
+		url: "__URL__/saveid/",
+		type: "post",
+		dataType: "json",
+		data: {"realname":realname,"idcard":idcard},
+		success: function(result) {
+			if (result.status == "0") {
+				$('#idcardErr').html(result.message);
+			}
+			else {
+				$.jBox.tip("验证成功");
+			}
+		},
+		complete:function(XMLHttpRequest, textStatus){
+				setTimeout('myrefresh1()',3000); //指定3秒刷新
+		}
+	});
+}
+function ajaxFileUploads()
+{
+	$("#loading_makeclub").ajaxStart(function(){	$(this).show();	}).ajaxComplete(function(){	$(this).hide();	});
+	$.ajaxFileUpload({
+			url:'__URL__/ajaxupimg/',
+			secureuri:false,
+			fileElementId:'imgfile',
+			dataType: 'json',
+			success: function (data, status)
+			{
+				if(data.status==1){
+					$("#idimg").css('color','green').html('上传成功');
+				}
+				else  $("#idimg").css('color','red').html('上传失败，请重试');
+			}
+		})
+}
+
+function ajaxFileUploads2()
+{
+	$("#loading_makeclub2").ajaxStart(function(){	$(this).show();	}).ajaxComplete(function(){	$(this).hide();	});
+	$.ajaxFileUpload({
+			url:'__URL__/ajaxupimg2/',
+			secureuri:false,
+			fileElementId:'imgfile2',
+			dataType: 'json',
+			success: function (data, status)
+			{
+				if(data.status==1){
+					$("#idimg2").css('color','green').html('上传成功');
+				}
+				else  $("#idimg2").css('color','red').html('上传失败，请重试');
+			}
+		})
+}
+
+	function checkEmailValided(){
+        $.ajax({
+            url: "__URL__/emailvalided/",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1){
+							$.jBox.tip("验证成功");
+					}else{
+						$("#emailtip").show();
+					}
+				}
+            }
+        });
+	}
+
+	function sendValidEmail1(){
+		$.jBox.tip("邮件发送中......",'loading');
+        $.ajax({
+            url: "__URL__/emailvsend1/",
+            timeout: 8000,
+            cache: false,
+            type: "post",
+            dataType: "json",
+			data: {},
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1){
+						$.jBox.tip('新邮件已经发送成功，请注意查收！');
+						
+					}else{
+						$.jBox.tip('发送失败,请重试！');
+						
+					}
+				}
+            },
+			complete:function(XMLHttpRequest, textStatus){
+					setTimeout('myrefresh()',3000); //指定3秒刷新
+			}
+        });
+	}
+
+	function sendValidEmail(){
+		var email = $("#email").val();
+		if(email==""){
+			$.jBox.tip('邮箱地址不能为空！','tip');
+			return;
+		}else{
+			var emailreg = new RegExp("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$", "i");
+			if(!emailreg.test(email)){
+				$.jBox.tip('请输入正确的邮箱地址','tip');
+				return;
+			}else{
+				AsyncEmail(email);
+			}
+		}
+		send_email(email);
+		/*$.jBox.tip("邮件发送中......",'loading');
+        $.ajax({
+            url: "__URL__/emailvsend/",
+            timeout: 5000,
+            cache: false,
+            type: "post",
+            dataType: "json",
+			data: {"email":email},
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1){
+						$.jBox.tip('新邮件已经发送成功，请注意查收！');
+						window.location.reload();
+					}else{
+						$.jBox.tip('发送失败,请重试！');
+						window.location.reload();
+					}
+				}
+            }
+        });*/
+	}
+	function AsyncEmail(email) {
+	$.jBox.tip("正在检测电子邮件地址……",'loading');
+	$.ajax({
+            type: "post",
+            async: false,
+			dataType: "json",
+            url: "__URL__/ckemail/",
+            data: {"Email":email},
+            //timeout: 3000,
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1){
+					}else{
+						$.jBox.tip('邮箱已经在本站注册！','tip');
+						return false;
+					}
+				}
+			}
+        });
+	}
+	
+function myrefresh()
+{
+       window.location.reload();
+	   window.location.href="/member/verify?id=1#fragment-1";
+}
+
+
+	function send_email(email){
+		$.jBox.tip("邮件发送中......",'loading');
+        $.ajax({
+            url: "__URL__/emailvsend/",
+			data: {"email":email},
+            timeout: 8000,
+			cache: false,
+			type: "post",
+			dataType: "json",
+            success: function (d, s, r) {
+					if(d.status==1){
+						$.jBox.tip(d.message,"success");
+					}else if(d.status==2){
+						$.jBox.tip(d.message,"fail");
+					}else{
+						$.jBox.tip(d.message,"fail");
+					}
+            },
+			complete:function(XMLHttpRequest, textStatus){
+					setTimeout('myrefresh()',3000); //指定3秒刷新
+			}
+        });
+	}
+	function email(){
+		$.jBox.tip("验证成功");
+	}
+	
+	$.jBox("get:__URL__/welcome/", {
+		title: "{$glo.web_name}验证中心",
+		width: "auto",
+		buttons: {'关闭': true }
+	});
+</script>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="wrap2">
+  <div id="hy_left"> <include file="Public:_left" /> </div>
+  <div id="hy_right">
+    <div class="box">
+     <div class="Menubox1" id="rotate">
+					<ul class="menu ajaxdata">
+                        <li><a href="#fragment-1" ajax_href="__URL__/email/">邮箱认证</a></li>
+						<li><a id="mx3" href="#fragment-3" ajax_href="__URL__/idcard/">实名认证</a></li>
+                        <li><a  id="mx2" href="#fragment-2" ajax_href="__URL__/cellphone/">手机认证</a></li>                       
+                        <li><a id="mx4" href="#fragment-4" ajax_href="__URL__/face/">现场认证</a></li>
+                        <li><a id="mx5" href="#fragment-5" ajax_href="__URL__/video/">视频认证</a></li>
+						<li><a id="mx6" href="#fragment-6" ajax_href="__URL__/safequestion/">安全问题设置</a></li>
+                        <li><a id="mx7" href="#fragment-7" ajax_href="__APP__/Member/memberinfo/editdata/">资料认证</a></li>
+					</ul>
+				</div> 
+      <div class="contentright">
+        <div id="fragment-1" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-2" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-3" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-4" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-5" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-6" style="display:none">
+          <!--升级会员-->
+        </div>
+        <div id="fragment-7" style="display:none">
+          <!--升级会员-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<include file="Public:_footer" group="Home" />

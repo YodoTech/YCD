@@ -1,0 +1,142 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.dv_header_8{background-image: url();}
+.dv_account_0{margin-top:10px;}
+.tdHeard{border:0px;border-bottom:1px solid #dedede;border-top:1px solid #dedede;}
+.tdContent{border:0px; border-bottom:1px solid #dedede; height:32px;}
+td.xffe{text-align:center; padding:0px}
+td.tdContent,th.tdHeard{width:auto}
+</style>
+<table cellspacing="0" cellpadding="0" id="formTb" style="width: 100%; float: left; margin: 0px;padding: 0px; border-collapse: collapse; text-align: left;">
+		<tbody>
+        <tr class="trBg">
+			<td class="tdTitle">
+				申请类型：
+			</td>
+			<td class="tdContent">
+				<htmlA:radio id="apply_type" datakey="aType" class="text2"/>
+			</td>
+			<td id="dv_company" class="tdTip">
+			</td>
+		</tr>
+        <tr>
+			<td class="tdTitle">
+				申请金额：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="apply_money"  class="text2"/>元
+			</td>
+			<td id="dv_company" class="tdTip">
+			</td>
+		</tr>
+        <tr>
+			<td class="tdTitle">
+				申请说明：
+			</td>
+			<td class="tdContent">
+				<htmlA:text style="height:50px; width:100%" id="apply_info"  class="text2"/>
+			</td>
+			<td id="dv_company" class="tdTip">
+			</td>
+		</tr>
+        <tr>
+			<td  colspan="3">
+            <a href="javascript:;" onclick="apply();"><img src="__ROOT__/Style/M/images/btnappcheck.gif" style="border:none; margin:10px 0 0 20px;"></a>
+            </td>
+		</tr>
+</tbody>
+</table>
+
+<table id="content" style="width: 100%; float: left; margin: 0px;padding: 0px; text-align: left;" cellpadding="0" cellspacing="0">
+	<tbody><tr class="trBg tdEven"> 
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			提交时间
+		</th>
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			申请类型
+		</th>
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			申请金额
+		</th>
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			审核状态
+		</th>
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			处理意见
+		</th>
+		<th scope="col" class="tdHeard" style="width: 100px;">
+			授信额度
+		</th>
+	</tr>
+	<volist name="list" id="vo">
+<tr><td class="tdContent xffe">{$vo.add_time|date="Y-m-d H:i",###}</td><td class="tdContent xffe">{$aType[$vo['apply_type']]}</td><td class="tdContent xffe">{$vo.apply_money|Fmoney=###}</td><td class="tdContent xffe">{$vo.status}</td><td class="tdContent xffe">{$vo.deal_info|default="--"}</td><td class="tdContent xffe">{$vo.credit_money|Fmoney|default="0.00"}元</td></tr>
+	</volist>
+	<tr><td colspan="6"><div id="pager" data="info6" class="yahoo2 ajaxpagebar" style="text-align: right; padding-left:0px; padding-right:0px; height: 36px;width: 100%;text-indent: 0px;">{$pagebar}</div></td>
+</tbody></table>
+
+
+<script type="text/javascript">
+function apply(){
+	p = makevar(['apply_type','apply_money','apply_info']);
+	p['_tps'] = "post";
+	if(typeof p.apply_money =="undefined"){
+		$.jBox.tip("申请金额不能为空");
+		return;	
+	}
+	if(typeof p.apply_info =="undefined"){
+		$.jBox.tip("申请说明不能为空");
+		return;	
+	}
+	$.jBox.tip('提交中......','loading');
+	$.ajax({
+		url: "__URL__/apply/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					updatelog();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+}
+function updatelog(){
+        $.ajax({
+            url: "__URL__/applylog/",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#info8").html(d.content);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+}
+
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.content);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+</script>

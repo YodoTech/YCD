@@ -1,0 +1,193 @@
+<tagLib name="htmlA" />
+<table cellspacing="0" cellpadding="0" id="formTb" style="width: 685px; float: left; margin: 0px;padding: 0px; border-collapse: collapse; text-align: left;">
+		<tbody><tr class="trBg">
+			<td class="tdTitle">
+				现居住地址：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="address" value="{$vo.address}" class="text2"/>
+			</td>
+			<td id="dv_homeAdress" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				住宅电话：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="tel" value="{$vo.tel}" class="text2"/>
+			</td>
+			<td id="dv_homeTel" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				第一联系人：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact1" value="{$vo.contact1}" class="text2"/>
+			</td>
+			<td id="dv_firstname" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				关系：
+			</td>
+			<td class="tdContent">
+			<htmlA:radio id="contact1_re" default="家庭成员|家庭成员,朋友|朋友,商业伙伴|商业伙伴" value="key|vo.contact1_re" />
+			</td>
+			<td id="dv_firstrelation" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				手机号码：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact1_tel" value="{$vo.contact1_tel}" class="text2"/>
+			</td>
+			<td id="dv_firstmobile" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				其他：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact1_other" value="{$vo.contact1_other}" class="text2"/>
+			</td>
+			<td id="dv_qq" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				第二联系人：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact2" value="{$vo.contact2}" class="text2"/>
+			</td>
+			<td id="dv_secondname" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				关系：
+			</td>
+			<td class="tdContent">
+			<htmlA:radio id="contact2_re" default="家庭成员|家庭成员,朋友|朋友,商业伙伴|商业伙伴" value="key|vo.contact2_re" />
+			</td>
+			<td id="dv_secondrelation" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				手机号码：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact2_tel" value="{$vo.contact2_tel}" class="text2"/>
+			</td>
+			<td id="dv_secondmobile" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				其他：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact2_other" value="{$vo.contact2_other}" class="text2"/>
+			</td>
+			<td id="dv_msn" class="tdTip">
+			</td>
+		</tr>
+
+		<tr class="trBg">
+			<td class="tdTitle">
+				第三联系人：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact3" value="{$vo.contact3}" class="text2"/>
+			</td>
+			<td id="dv_secondname" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				关系：
+			</td>
+			<td class="tdContent">
+			<htmlA:radio id="contact3_re" default="家庭成员|家庭成员,朋友|朋友,商业伙伴|商业伙伴" value="key|vo.contact3_re" />
+			</td>
+			<td id="dv_secondrelation" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				手机号码：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact3_tel" value="{$vo.contact3_tel}" class="text2"/>
+			</td>
+			<td id="dv_secondmobile" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				其他：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="contact3_other" value="{$vo.contact3_other}" class="text2"/>
+			</td>
+			<td id="dv_msn" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;
+				
+			</td>
+			<td style="height: 50px;padding-left: 10px;" class="tdContent">
+				<img style="margin-top: 5px; cursor: pointer;" src="__ROOT__/Style/M/images/saveandcon.jpg" onmouseout="this.style.filter = 'alpha(opacity=100)'" onmousemove="this.style.filter = 'alpha(opacity=60)'; this.style.cursor='hand' " onclick="editContact();">
+				 <a href="javascript:;" onclick="$('#xtab').find('a[data=info3]').click();"><img src="__ROOT__/Style/M/images/skipandcon.jpg" style="border:none; margin:5px 0 0 20px;"></a>
+			</td>
+			<td id="Td1" class="tdTip">
+			</td>
+		</tr>
+	</tbody> 
+</table>
+<script type="text/javascript">
+function editContact(){
+	p = makevar(['contact2_other','contact2_tel','contact1_tel','contact1_other','contact2_re','contact1_re','contact1','contact2','tel','address','contact3_tel','contact3','contact3_other','contact3_re',]);
+	p['_tps'] = "post";
+
+	var mxs = true;
+	$.each(p,function(i){
+		if(typeof p[i] == "undefined"){
+			mxs=false;
+			$.jBox.tip("所有项目都不能为空");	
+		}
+	});
+	if(mxs===false){
+	  $.jBox.tip("所有项目都不能为空");	
+	  return;
+	}
+
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/editcontact/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info3]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+}
+</script>

@@ -1,0 +1,164 @@
+<script type="text/javascript">
+function videoverify(){
+	$.jBox.confirm("申请视频认证后会直接从帐户扣除认证费用{$glo.fee_video|default=0}元，然后客服会联系您进行认证。<br/><font style='color:red'>确定要申请认证吗?</font>", "视频认证", dovideo, { buttons: { '确认申请': true, '暂不申请': false} });
+}
+function dovideo(v, h, f) {
+	if (v == true){
+        $.ajax({
+            url: "__APP__/common/video",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1) $.jBox.tip(d.message, 'success');
+					else $.jBox.tip(d.message, 'fail');
+				}
+            }
+        });
+	}
+	return true;
+};
+// 自定义按钮
+function faceverify(){
+	$.jBox.confirm("<font style='color:red'>确定要申请现场认证吗?</font>", "现场认证", doface, { buttons: { '确认申请': true, '暂不申请': false} });
+}
+function doface(v, h, f) {
+	if (v == true){
+        $.ajax({
+            url: "__APP__/common/face",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1) $.jBox.tip(d.message, 'success');
+					else $.jBox.tip(d.message, 'fail');
+				}
+            }
+        });
+	}
+	return true;
+};
+//是否滚动
+/* $(document).ready(function(){
+                var topMain=103
+                var navaa=$(".navaa");
+                $(window).scroll(function(){
+                    if ($(window).scrollTop()>topMain){
+                        navaa.addClass("navaa_scroll");
+                    }
+                    else
+                    {
+                        navaa.removeClass("navaa_scroll");
+                    }
+                });
+     
+        })*/
+		
+<!--经典导航-->
+//简单的URL判定导航
+$(document).ready(function(){
+function nav(obj,childUl,childBox){
+        var oLi = $("li a",childUl);
+        var oDiv = $(childBox);
+var A1= window.location.pathname;
+        var A2=A1.split("/")[1];
+//裸域名时
+if(A2=='')oLi.first().addClass("nav_on");
+function showTab(){
+oLi.each(function(i){
+//根据URL判定
+var A3=$(this).attr("href");
+var A4=A3.split("/")[1];
+if(A2==A4 || A2==$(this).attr("id"))
+$(this).addClass("nav_on");
+//二级菜单
+if($(oLi[i]).hasClass("nav_on"))
+{oDiv.hide();
+            $(oDiv[i]).show(); 
+}
+})
+}
+showTab();
+oLi.mouseenter(function(){
+ var index = oLi.index(this);
+			$(oLi).removeClass("hover");
+            $(oLi[index]).addClass("hover");
+            oDiv.hide();
+            $(oDiv[index]).show();
+		 if(!$(oLi[index]).hasClass("nav_on")){
+			 //定位
+    var left=$('.DAOHangzhong').offset().left;
+	var left2=$(oLi[index]).offset().left;
+	var left3=left2-left;
+	var width = $(oLi[index]).innerWidth();
+var width2=$(oDiv[index]).innerWidth();
+	var position=left3+width/2-20-width2/2;
+	var zhong=$('.DAOHangzhong').width;
+	$(oDiv[index]).css("left",position+'px');
+	if (position<=0){
+		$(oDiv[index]).css("left",'0px');
+		}
+		if(position+width2>zhong){
+		$(oDiv[index]).css("right",'0px');	
+		}
+   }
+})
+$(obj).mouseleave(function(){
+ oLi.removeClass("hover");
+showTab()
+})
+    }
+nav("#menu","#nav_daohang",".navlist");
+$('.navlist').each(function(){
+	var last=$('li',this);
+	var last1=last.last();
+	last1.css("background","none");
+	//alert(last1);
+	});
+});
+</script>
+</head>
+<body>
+<!--头部开始-->
+<div class="dv_header">
+    <div class="Mini">
+        <a href="">欢迎您...</a>
+        <a class="right_a" href="javascript:addBookmark('{$glo.web_name}','__APP__')">加入收藏</a> <span class="right_sp">|</span> <a class="right_a" href="/help/wenti.html">常见问题</a> <span class="right_sp">|</span> <a class="right_a"  href="/service/index.html">在线客服</a> <span class="right_sp">|</span> <a class="right_a"  href="/member/">账户中心</a> <span class="right_sp">|</span> <a class="right_a"  href="/member/common/register/">免费注册</a>
+    </div>
+</div>
+<div id="header_bg">
+<div id="logo"><a href="/">
+      <div class=logoimg>{:get_ad(1)}</div>
+      </a>
+    </div>
+</div>
+<!--导航开始 -->
+<div id="menu">
+<div class="DAOHangzhong">
+<ul id="nav_daohang">
+<php>$typelist = getTypeList(array('type_id'=>0,'limit'=>9)); foreach($typelist as $vtype=> $va){ 
+				</php>
+<li><a id="{$va.type_nid}"  href="{$va.turl}"><span>{$va.type_name}</span></a></li>
+<php>}</php>
+</ul>
+<div class="menu2">
+<div id="menu_con">
+<php>$typelist = getTypeList(array('type_id'=>0,'limit'=>9)); foreach($typelist as $vtype2=> $vb){ </php>
+<div  class="navlist">
+<ul id="erji_nav">
+<php>$sontypelist = getTypeList(array('type_id'=>$vb['id'],'limit'=>8,'notself'=>true)); foreach($sontypelist as $sonvtype){</php>
+  <li><a href="{$sonvtype.turl}"><span>{$sonvtype.type_name}</span></a></li> 
+ <php>}</php> 
+</ul>
+</div> 
+<php>}</php>
+</div>
+</div></div></div>
+<!--导航结束 -->
+<!--头部结束-->

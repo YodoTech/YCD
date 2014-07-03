@@ -1,0 +1,254 @@
+<script type="text/javascript">
+var newTitle = '{$glo.web_name}提醒您：';
+var regCount = /^(([1-9]{1}[0-9]{0,})|([0-9]{1,}))$/;
+$(document).ready(function() {
+	if (!$("input[type='radio']:checked").length) {
+		$("input[type='radio']:first").attr("checked", "checked");
+	}
+});
+
+var objectarray =
+[
+	"您好，您的设置保存成功！",
+	"您好，您没有进行任何设置！",
+	"您好，您的设置成功！",
+	"您好，请输入正确的余额！",
+	"您好，请输入正确的利率！",
+	"您好，请输入正确的借款周期！",
+	"您好，您已经设置过一样的提醒！"
+];
+
+function SettingStr(value, callback) {
+	if (value.indexOf('成功') > -1)
+	{ $.jBox.tip(value, 'success', function(action) { if (callback) callback(); }); }
+	else {
+		$.jBox.tip(value, 'tip', function(action) { if (callback) callback(); });
+	}
+}
+</script>
+
+<script language="javascript" type="text/javascript">
+var dateMiniSet = '2012-07-14';
+var settingcount = '1';
+$(document).ready(function() {
+	if (settingcount != 0) {
+		$("#noresultrow").css("display", "none");
+	}
+});
+//提交设置
+function updateLoanAuto() {
+	var checklist = $(":checked[name='chkAutoRule']");
+	if (checklist.length == 0 && settingcount == "0") {
+		SettingStr("您没有进行任何条件设置", null); return;
+	}
+	else {
+		var interest = 0; //年化利率
+		if ($(":checked[id='chkinterestrates']").length > 0) {
+			interest = $(":input[name='interestrates']").val();
+			if (!regCount.test(interest) || interest == 0) { SettingStr(objectarray[4], null); return; }
+		}
+		var miniamount = 0; //账号最小余额
+		if ($(":checked[id='chkminiamount']").length > 0) {
+			miniamount = $(":input[name='miniamount']").val();
+			if (miniamount < 50) { SettingStr(objectarray[3], null); return; }
+		}
+		var loancycle = ""; //投资期限
+		if ($(":checked[id='chkloancycle']").length > 0) {
+			var start = $(":input[name='loancycle']").val();
+			var end = $(":input[name='loancycle']").eq(1).val();
+			var minivalue = $("#loancycle").attr("minivalue");
+			var maxvalue = $("#loancycle1").attr("maxvalue");
+			if (minivalue == undefined || minivalue == "") {
+				minivalue = 1;
+			}
+			if (maxvalue == undefined || maxvalue == "") {
+				maxvalue = 240;
+			}
+			if ((!regCount.test(start) || !regCount.test(end)) || parseInt(start) > parseInt(end) || parseInt(start) < minivalue || parseInt(end) > maxvalue) { SettingStr(objectarray[5], null); return; }
+			else { loancycle = start + "," + end; }
+		}
+		var expireddate = ""; //失效日期
+		if ($(":checked[id='chkexpireddate']").length > 0) {
+			expireddate = $(":input[name='expireddate']").val();
+		}
+		var borrowkind = $(":checked[name='borrow_type']").val();
+		$.ajax({
+			url: "__URL__/savetip",
+			type: "post",
+			dataType: "json",
+			data: "interestrates=" + interest + "&miniamount=" + miniamount + "&loancycle=" + loancycle + "&borrowkind=" + borrowkind,
+			success: function(d) {
+				if (d) {
+					if(d.status==1){
+						alert(d.message+"，点击确定后将自动刷新页面");
+						window.location.reload();
+					}
+					else  $.jBox.tip(d.message,'fail');
+				}
+			}
+		});
+	}
+}
+</script>
+
+<style type="text/css">
+.tdHead { font-size: 12px; font-weight: bold; text-align: left; height: 40px; line-height: 40px; background-color: #F9F9F9; border: #E9E8E7 solid 1px; text-align: center; }
+.tdContent { font-size: 12px; text-align: left; height: 35px; line-height: 35px; border: #E9E8E7 solid 1px; padding-left: 10px; padding-right: 10px; text-align: left; }
+.btnsave { border: none; width: 80px; height: 31px; background-image: url(__ROOT__/Style/H/images/b1i.jpg); cursor: pointer; }
+.text6 { width: 50px; margin: 0 3px; }
+.line11 { float: left; height: 32px; width: 39px; }
+.line12 { float: left; height: 22px; width: 669px; padding: 10px 0 0 0; }
+.line2 { float: left; height: 29px; width: 520px; padding: 5px 0 0 25px; border-width: 1px 0 0 0; border-style: solid; border-color: #e1e1e1; }
+#line3 { float: left; height: 30px; width: 683px; padding: 7px 0 0 25px; background-color: #f0f0f0; border-width: 1px 0; border-style: solid; border-color: #e1e1e1; line-height:180%; }
+#line4 { float: left; height: 28px; width: 708px; padding: 20px 0; text-align: right; }
+#line5 { float: left; height: auto; width: 708px; padding: 10px 0 15px 0; background-color: #fff7f8; border-width: 1px 0 0 0; border-style: solid; border-color: #ef7475; }
+#line51 { float: left; height: 17px; width: 658px; padding: 0 25px 0 25px; }
+.line511 { float: left; height: 17px; width: 17px; }
+.line512 { float: left; height: 15px; width: 639px; padding: 2px 0 0 2px; }
+#line52 { float: left; height: auto; width: 640px; padding: 8px 25px 0 43px; line-height: 2.1; color: #005B9F; }
+.line1 { float: left; height: 32px; width: 708px; border-width: 3px 0 0 0; border-style: solid; border-color: #e1e1e1; }
+.dv_header_8 { background-image: url(); }
+.dv_account_0 { margin-top: 10px; }
+.vtexttop { vertical-align: text-top; *vertical-align: middle; }
+.sp_gray { color: #666666; }
+.errsty { float: left; overflow: hidden; height: 25px; line-height: 20px; }
+.resetResult { background: url(__ROOT__/Style/H/images/button/zdtb_13.jpg); height: 28px; width: 163px; border: 0px; }
+.settingtable {width:100%;}
+.settingtable td{ border-bottom:solid 1px #ccc; text-align:center;}
+.settingtable th{ text-align:center;}
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/F/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，{$glo.web_name}将根据您的设置，在新标上线时向您手机发送短信提醒
+</div>
+<div style="margin: 10px 0 0 24px;">
+	<br>
+	<div style="background-image:url(__ROOT__/Style/H/images/phone_03.jpg); background-repeat:no-repeat; background-position:right; width:710px;">
+	<div class="line1">
+		<div class="line12" style="padding-left: 25px;">
+			新标上线同时满足以下条件，请向我的手机发送提醒短信：</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="InterestRates" id="chkinterestrates" style="margin: 3px 15px 0 0;" disabled="disabled" checked="checked" type="checkbox">年化利率≥ 
+			<select id="interest_rate" name="interestrates" class="text6"><option value="17">17</option><option value="18">18</option><option value="19">19</option>
+				<option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
+			%；
+		</div>
+		<div id="errsty2" class="errsty">
+		</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>                                
+			<input name="chkBorrowKind" value="BorrowKind" id="chkborrowkind" style="margin: 3px 15px 0 0;" disabled="disabled" checked="checked" type="checkbox">产品类型
+			<label><input checked="checked" name="borrow_type" value="0" class="vtexttop" type="radio"> 普通标</label>  <label><input name="borrow_type" value="3" class="vtexttop" type="radio"> 流转标</label>；
+		</div>
+		<div id="Div1" class="errsty">
+		</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>                                
+			<input name="chkAutoRule" value="LoanCycle" id="chkloancycle" style="margin: 3px 15px 0 0;" type="checkbox">借款期限或回购期限
+			<input class="text6" name="loancycle" id="loancycle" minivalue="1" type="text">个月到<input class="text6" name="loancycle" id="loancycle1" maxvalue="12" type="text">个月之间；
+			<script type="text/javascript">
+				$("input[name='loancycle']").focus(function(){
+					$("#chkloancycle").attr("checked",'checked');
+				});
+			</script>
+		</div>
+		<div id="errsty3" class="errsty">
+		</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="MiniAmount" id="chkminiamount" style="margin: 3px 15px 0 0;" type="checkbox">账户余额≥
+			<input class="text6" name="miniamount" id="miniamount" minivalue="50" type="text">元；
+			<script type="text/javascript">
+				$("input[name='miniamount']").focus(function(){
+					$("#chkminiamount").attr("checked",'checked');
+				});
+			</script>
+		</div>
+		<div id="errsty4" class="errsty">
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+	</div>
+	<div id="line3">
+		<div style="float: left; overflow: hidden;">
+		
+			当满足上面条件时，请发送提醒短信到 <font color="#990000">{$user_phone}</font> 提醒我。
+			
+			<a style="color:#666;" href="/member/safe#fragment-3">[修改我的手机号码]</a>
+		</div>
+	</div>
+	<div id="line4">
+		<img style="cursor: pointer;" alt="确定" onclick="updateLoanAuto()" src="__ROOT__/Style/H/images/btn2.gif">
+		&nbsp;&nbsp;&nbsp;</div>
+	<div id="line5">
+		<div id="line51">
+			<div class="line511">
+				<img alt="" src="__ROOT__/Style/H/images/minilogo.gif"></div>
+			<div class="line512">
+				<span style="float:left;">您当前的新标上线提醒设置为：</span>
+				
+						<script type="text/javascript">
+							function ResetResult(id) {
+								id = (id == undefined || id == null) ? 0 : id;
+								$.jBox.confirm('您好，确认要取消当前设置吗?', newTitle, function(action) {
+									if (action == 'ok') {
+										if ($("#noresultrow").attr("display") != "none") {
+											$.post("__URL__/removetip", {settingId: id }, function(d) {
+												if (d) {
+													if(d==1){
+														alert("取消成功，点击确定后将自动刷新页面");
+														window.location.reload();
+													}else{
+														$.jBox.tip("对不起，取消失败，请重试","fail");
+													}
+												}
+											});
+										}
+										else {
+											$.jBox.alert('您好，您目前没有任何设置！', newTitle);
+										}
+									}
+								});
+							}
+						</script>
+				</div>
+		</div><br><br>
+		<div id="line52">
+			<table class="settingtable" cellpadding="0" cellspacing="0">
+				<tbody>
+		<if condition="$vo.id gt '0'">
+				<tr>
+					<th style="width:140px">产品类型</th><th style="width:120px">年化利率</th><th style="width:150px">借贷/回购期限</th><th style="width:120px">账户余额</th><th></th>
+				</tr>                                
+			
+				<tr>
+					<td>{$vo.borrow_type}</td>
+					<td>≥{$vo.interest_rate}%</td>
+					<td><if condition="$vo.duration_from eq '0'">未限制<else/>{$vo.duration_from}个月到{$vo.duration_to}个月</if></td>
+					<td><if condition="$vo.account_money eq '0.00'">未限制<else/>≥{$vo.account_money}</if></td>
+					<td>&nbsp;</td>
+				</tr>
+			
+			<tr><td colspan="5" style="border:none;"><br>
+				<span style="float:right;"><input value="" class="resetResult" onclick="ResetResult({$vo.id})" type="button"></span>
+			</td></tr>
+			<else/>
+				<tr><td></td><td colspan="2">您没有进行任何设置</td><td></td><td></td></tr>
+			</if>
+			</tbody></table>
+		</div>
+	</div>
+</div>

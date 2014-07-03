@@ -1,0 +1,268 @@
+<include file="Public:_header_common"/>
+<title>我的账户-- {$glo.web_name}</title>
+<!--{$uclogin}-->
+<link href="__ROOT__/Style/H/css/by_hy_zx.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/JQtip/tip-yellowsimple/tip-yellowsimple.css" />
+<SCRIPT language="javascript" src="__ROOT__/Style/JQtip/jquery.poshytip.js" type="text/javascript"></SCRIPT>
+<script type="text/javascript">
+	function displayDiv(num) {
+		var obj = document.getElementById("udiv" + num);
+		var obja = document.getElementById("ulink" + num);
+		var objtop = document.getElementById("utop" + num);
+		var objbottom = document.getElementById("ubottom" + num);
+
+		if (obj.style.display == 'none') {
+			objbottom.style.display = '';
+			obj.style.display = '';
+			objtop.style.backgroundImage = "url(__ROOT__/Style/M/images/account/uctop.jpg)";
+			obja.innerHTML = "-";
+		}
+		else {
+			obj.style.display = 'none';
+			objbottom.style.display = 'none';
+			objtop.style.backgroundImage = "url(__ROOT__/Style/M/images/account/ucall.jpg)";
+			obja.innerHTML = "+";
+		}
+	}
+	
+	$(function(){
+	$('.xtitle').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5
+	});
+});
+</script>
+<style type="text/css">
+	.ulunderline { margin: 25px 10px 25px 30px; width: 660px; border-bottom: 1px dashed #d8d8d8; height:20px;}
+	.ulunderline2 { margin: 15px 10px 15px 30px; width: 500px; border-bottom: 1px dashed #d8d8d8; height:20px; }
+	.ulunderline3 { margin: 5px 10px 15px 30px; width: 500px; border-bottom: 1px dashed #d8d8d8; height:25px; }
+	ul.otherline { background: none #ffffff; text-align:left;}
+	ul.otherline li { border-bottom: none; display:inline; height:25px;}
+	ul li.li10 { float: left;  text-align:left; padding-top:20px;}
+	ul.otherline li.li9 { width: 70px;  float: left;  text-align:left; padding-top:5px;}
+	ul.otherline li.li1 { width: 70px;  float: left;  text-align:left;}
+	ul.otherline li.li2 { width: 160px; color: #005B9F;float: left;text-align:left;}
+	ul.otherline li.li3 { width: 70px;  float: left; text-align:left;}
+	ul.otherline li.li4 { width: 140px; float: left;color: #005B9F;text-align:left;}
+	ul.otherline li.li5 { width: 90px; text-align: right; }
+	ul.otherline li.li6 { width: 110px; color: #005B9F; }
+	ul.otherline li.li7 { width: 210px; color: #005B9F; }
+	ul.otherline li.li8 { width: 200px;  float: left;  text-align:left;}
+	ul.otherline li a .gray{color:#999999}
+	.userLink { color: #000000; height: 24px; float: right; margin-right: 15px; margin-top:5px; font-size: 24px; font-weight: 7; font-family: 楷体; }
+	#ulink1, #ulink2 { color: #3a3a3a; }
+	#ubottom1, #ubottom2, #ubottom3, #ubottom4, #ubottom5 { background-image: url(__ROOT__/Style/M/images/account/ucbottom.jpg); width: 780px; height: 10px; }
+	.xtitle{cursor:pointer}
+.dv_l_4_1{ background-image:url(/Style/H/images/facebg.jpg); WIDTH: 100px; float:left; height:100px;}
+</style>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div id="maincontent_account">
+  <CENTER>
+    <DIV style="width:980px;">
+      <div id="hy_left"> <include file="Public:_left" /> </div>
+      <div id="hy_right">
+        <div id="utop1" class="datum" style="background-image: url(__ROOT__/Style/M/images/account/uctop.jpg);
+	width: 780px; height: 35px;"> <strong style="float: left; padding-top:10px; padding-left:20px;">个人资料：</strong> <a id="ulink1" onclick="displayDiv('1')" style="text-decoration: none;" onmousemove="javascript:this.style.cursor='pointer'" class='userLink'>- </a> </div>
+        <div id="udiv1" style="border-left: #cccccc 1px solid; border-right: #cccccc 1px solid;
+	height: auto; overflow:hidden; width: 778px;">
+          <div style="float: left; padding-top: 10px;">
+            <ul class="otherline ulunderline2">
+              <li class="li1">用户名：</li>
+              <li class="li2"> {:session('u_user_name')} </li>
+              <li class="li3">会员等级：</li>
+              <li class="li4"> <span class="xtitle" title="积分：{$minfo.credits|default=0}分">{$minfo.credits|getLeveIco=###,2}</span></li>
+            </ul>
+            <ul class="otherline ulunderline3">
+              <li class="li9">认&#12288;&#12288;证：</li>
+              <li > {$minfo.id|getVerify_ucenter=###}</li>
+            </ul>
+            <ul class="otherline ulunderline2">
+              <li class="li1">信用额度：</li>
+              <li class="li2"> {$minfo.credit_cuse|Fmoney=###} (<a href="__APP__/member/moneylimit#fragment-1" style="color:#F00">申请额度</a>) </li>
+              <li class="li3">担保额度:</li>
+              <li class="li4"> {$minfo.borrow_vouch_cuse|Fmoney=###} </li>
+            </ul>
+            <ul class="otherline ulunderline2">
+              <li class="li1">VIP<span style="padding:0px 3px">期</span>限：</li>
+              <li class="li2">
+                <if condition="$minfo.user_leve eq 0"> 您还未申请VIP(<a href="__APP__/member/vip">申请VIP</a>)
+                  <elseif condition="$minfo.time_limit gt time()"/>
+                  {$minfo.time_limit|date="Y-m-d",###}到期
+                  <else/>
+                  您的VIP已于{$minfo.time_limit|date="Y-m-d",###}到期(<a href="__APP__/member/vip">重新申请</a>) </if>
+              </li>
+            </ul>
+            <if condition="$minfo.user_leve neq 0 && $minfo.time_limit gt time()">
+              <if condition="$minfo['customer_id'] gt 0">
+                <ul class="otherline ulunderline2">
+                  <li class="li1">您的客服：</li>
+                  <li class="li2"> {$kflist[$minfo['customer_id']]} </li>
+                  <li class="li3"></li>
+                  <li class="li4"> </li>
+                </ul>
+                <ul class="otherline ulunderline2">
+                  <li class="li1">客服工号：</li>
+                  <li class="li2"> {$minfo.customer_id} </li>
+                  <li class="li3"></li>
+                  <li class="li4"> </li>
+                </ul>
+                <ul class="otherline ulunderline2">
+                  <li class="li1">客服电话：</li>
+                  <li class="li2"> {$kfs[0]['phone']} </li>
+                  <li class="li3"></li>
+                  <li class="li4"> </li>
+                </ul>
+                <ul class="otherline ulunderline2">
+                  <li class="li1">客服 Q Q：</li>
+                  <li class="li2"> <a href="http://wpa.qq.com/msgrd?v=3&amp;uin={$kfs[0]['qq']}&amp;site=qq&amp;menu=yes" target="_blank" >{$kfs[0]['qq']}&nbsp;<img border="0" src="__ROOT__/Style/H/images/pa.gif" title="点击这里给我发消息" style="list-style-position:initial;list-style-image:initial;" alt="点击这里给我发消息"></a> </li>
+                  <li class="li3"></li>
+                  <li class="li4"></li>
+                </ul>
+                <else/>
+                <ul class="otherline ulunderline2">
+                  <li class="li5"><a href="__APP__/member/vip">[申请属于您的专属客服]</a></li>
+                </ul>
+              </if>
+            </if>
+          </div>
+          <div class="d1" style="width: 130px; border: 1px solid #CCCCCC; padding: 3px; float: left;
+		margin-left: 5px; margin-top: 45px;"> <a href="__APP__/member/user#fragment-1" title="点击进行头像更换"> <img style="width: 130px; height: 120px;" id="photo" alt="点击进行头像更换" src="{$UID|get_avatar=###}" title="点击进行头像更换" /></a>
+		 
+		 </div>
+		 <div class="d1" style="width: 130px; border: 1px solid #CCCCCC; padding: 3px; float: left;
+		margin-left: 5px; margin-top: 5px;">
+		 <a href="__APP__/member/user#fragment-1" title="点击进行头像更换">【更换头像】</a>
+		 </div>
+        </div>
+        <div id="ubottom1"> </div>
+        <div id="utop2" class="datum" style="margin-top: 15px; background-image: url(__ROOT__/Style/M/images/account/uctop.jpg);
+	width: 780px; height: 35px;"> <strong style="float: left;padding-top:10px; padding-left:20px;">安全中心：</strong> <a id="ulink2" onclick="displayDiv('2')" 	style="text-decoration: none;" onmousemove="javascript:this.style.cursor='pointer'"		class='userLink'>-</a> </div>
+        <div id="udiv2" style="border-left: #cccccc 1px solid; border-right: #cccccc 1px solid;
+	height: 150px; width: 778px;">
+          <div style="float: left; padding-top: 10px;">
+            <ul class="otherline ulunderline">
+              <li class="li1">真实姓名：</li>
+              <li class="li2"> {$memberdetail.real_name|default="还未验证"}&nbsp;
+                <if condition="$mstatus.phone_status neq '1'"><span class="gray">[</span><a href="__APP__/member/verify#fragment-3">马上验证</a><span class="gray">]</span></if>
+              </li>
+              <li class="li3">身份证号：</li>
+              <li class="li7"> {$memberdetail.idcard|hidecard=###,1,"还未验证"}&nbsp;
+                <if condition="$mstatus.phone_status neq '1'"><span class="gray">[</span><a href="__APP__/member/verify#fragment-3">马上验证</a><span class="gray">]</span></if>
+              </li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li1">登录密码：</li>
+              <li class="li2">安全度中 <span class="gray">[</span><a href="__APP__/member/user#fragment-2">马上修改</a><span class="gray">]</span> </li>
+              <li class="li3">安全问题：</li>
+              <li class="li7">
+                <if condition="$mstatus.safequestion_status eq '1'">已设置
+                  <else/>
+                  还未设置</if>
+                <span class="gray">[</span>
+                <if condition="$mstatus.safequestion_status eq '1'"><a href="__APP__/member/safe#fragment-2">马上修改</a>
+                  <else/>
+                  <a href="__APP__/member/verify#fragment-6">马上设置</a></if>
+                <span class="gray">]</span> </li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li1">手机号码：</li>
+              <li class="li2"> {$memberinfo.user_phone|hidecard=###,2,"还未验证"}&nbsp;<span class="gray">[</span>
+                <if condition="$mstatus.phone_status eq '1'"><a href="__APP__/member/safe#fragment-3">马上修改</a>
+                  <else/>
+                  <a href="__APP__/member/verify#fragment-2">马上验证</a></if>
+                <span class="gray">]</span></li>
+              <li class="li3">电子邮箱：</li>
+              <li class="li7"> {$memberinfo.user_email|default="还未验证"}
+                <if condition="$mstatus.email_status eq '1' ">
+                  <else/>
+                  <span class="gray">[</span><a href="__APP__/member/verify#fragment-1">马上验证</a><span class="gray">]</span></if>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="ubottom2"> </div>
+        <div id="utop3" class="datum" style="margin-top: 15px; background-image: url(__ROOT__/Style/M/images/account/uctop.jpg);
+	width: 780px; height: 35px;"> <strong style="float: left; padding-top:10px; padding-left:20px;">资金信息：</strong> <span style="float: left;padding-top:10px;" class="gray"> [</span><a style="float: left;padding-top:10px;" href="__APP__/member/capital#fragment-1">明细</a><span style="float: left;padding-top:10px;" class="gray">]</span> <a id="ulink3" onclick="displayDiv('3')" style="text-decoration: none;"	onmousemove="javascript:this.style.cursor='pointer'" class='userLink'>-</a> </div>
+        <div id="udiv3" style="border-left: #cccccc 1px solid; border-right: #cccccc 1px solid;
+	height:auto; overflow:auto; width: 778px;">
+          <div style="float: left; padding-top: 10px;">
+            <ul class="otherline ulunderline">
+              <li class="li8">账户总额[<span class="xtitle" title="账户总额=可用余额+冻结总额+待收总额">?</span>]：</li>
+              <li class="li2">{:Fmoney(getFloatvalue($minfo['account_money']+$minfo['money_collect']+$minfo['money_freeze'],2))}</li>
+              <li class="li5">可用余额[<span class="xtitle" title="可以直接使用的金额">?</span>]：</li>
+              <li class="li6">{$minfo.account_money|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">冻结总额[<span class="xtitle" title="冻结总额是您当前暂时不能使用的金额，冻结总额包括投标冻结、提现冻结">?</span>]：</li>
+              <li class="li2">{$minfo.money_freeze|Fmoney=###}</li>
+              <li class="li5">已赚利息：</li>
+              <li class="li6">{$capitalinfo.tj.earnInterest|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">投资总额：</li>
+              <li class="li2">{$capitalinfo.tj.jcze|Fmoney=###}</li>
+              <li class="li5">已收总额：</li>
+              <li class="li6">{$capitalinfo.tj.ysze|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">待收总额[<span class="xtitle" title="是您借款给别人但还没收回的本息总额,待收总额=待收本金总额+待收利息">?</span>]：</li>
+              <li class="li2">{$minfo.money_collect|Fmoney=###}</li>
+              <li class="li5">待收利息：</li>
+              <li class="li6">{$capitalinfo.tj.willgetInterest|Fmoney=###}</li>
+            </ul>
+			 <ul class="otherline ulunderline">
+              <li class="li8">投标奖励：</li>
+              <li class="li2">{$toubiaojl|Fmoney=###}</li>
+              <li class="li5">推广奖励：</li>
+              <li class="li6">{$tuiguangjl|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">最近待收金额：</li>
+              <li class="li2">{:Fmoney(getFloatvalue($lastInvest['capital']+$lastInvest['interest'],2))}</li>
+              <li class="li5">最近待收时间：</li>
+              <li class="li6">{$lastInvest.gettime|mydate="Y-m-d",###,'无待收'}<a href="__APP__/member/tendout#fragment-3">[待收明细]</a></li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">已还总额：</li>
+              <li class="li2">{$capitalinfo.tj.yhze|Fmoney=###}</li>
+              <li class="li5">待还总额：</li>
+              <li class="li6">{$capitalinfo.tj.dhze|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">最近待还金额：</li>
+              <li class="li2">{:Fmoney(getFloatvalue($lastBorrow['borrow_money']+$lastBorrow['borrow_interest'],2))}</li>
+              <li class="li5">最近待还时间：</li>
+              <li class="li6">{$lastBorrow.gettime|mydate="Y-m-d",###,'无待还'}<a href="__APP__/member/borrowin#fragment-3">[待还明细]</a></li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">借款信用额度：</li>
+              <li class="li2">{$minfo.credit_limit|Fmoney=###}</li>
+              <li class="li5">可用信用额度：</li>
+              <li class="li6">{$minfo.credit_cuse|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">借款担保总额：</li>
+              <li class="li2">{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+              <li class="li5">可用借款担保额度：</li>
+              <li class="li6">{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+            </ul>
+            <ul class="otherline ulunderline">
+              <li class="li8">投资担保总额：</li>
+              <li class="li2">{$minfo.invest_vouch_limit|Fmoney=###}</li>
+              <li class="li5">可用投资担保额度：</li>
+              <li class="li6">{$minfo.invest_vouch_cuse|Fmoney=###}</li>
+            </ul>
+          </div>
+        </div>
+        <div id="ubottom3"> </div>
+      </div>
+    </div>
+  </CENTER>
+</div>
+<include file="default:Public:_footer_inner" group="Home" />

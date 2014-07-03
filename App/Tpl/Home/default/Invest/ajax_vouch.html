@@ -1,0 +1,36 @@
+<style type="text/css">
+.pop-tb-con{padding-top:0px}.text-red{color:#cc3300}.mar20{margin:20px 0px}INPUT.btn-action{border-bottom:#cc0000 0px solid;text-align:center;border-left:#cc0000 0px solid;line-height:30px;width:80px;display:inline-block;background:url(../bg/btn-red.jpg) #cc0000 0px 0px;height:30px;color:#fff;border-top:#cc0000 0px solid;border-right:#cc0000 0px solid}.pop-tb{border-bottom:#d5d5d5 1px solid;border-left:#d5d5d5 1px solid;background-color:#fff;margin:20px auto;width:700px;height:310px;border-top:#d5d5d5 1px solid;border-right:#d5d5d5 1px solid}.pop-tb-l{border-bottom:#e5e5e5 0px solid;border-left:#e5e5e5 0px solid;background-color:#fdffe5;width:198px;float:left;height:260px;border-top:#e5e5e5 0px solid;border-right:#e5e5e5 1px solid;padding-top:10px}.pop-tb-l UL LI{line-height:30px;padding-left:20px;height:30px}.pop-tb-l UL LI STRONG{color:#ff0000;font-size:14px}.pop-tb-r{padding-left:20px;width:400px;float:right;padding-top:10px}.pop-tb-r UL LI{line-height:30px;height:30px}.pop-tb-r UL LI A{color:#c30;margin-left:30px}
+.invest_input{border:1px solid #CCC; padding:3px}
+</style>
+<div class="pop-tb-con clearfix" sizset="1" sizcache06741904719221702="1">
+<div class="pop-tb-l">
+<ul>
+    <li>借款人：{$vo.uname} </li>
+    <li>借款金额：<STRONG>{$vo.borrow_money|Fmoney=###}</STRONG> </li>
+    <li>借款利率: {$vo.borrow_interest_rate}%/<if condition="$vo.repayment_type eq 1">天<else/>年</if> </li>
+    <li>担保进度：{$vo.vouch_progress} % </li>
+    <li>还需担保: {$vo.vouch_need|Fmoney=###} </li>
+    <li>借款期限: {$vo.borrow_duration}<if condition="$vo.repayment_type eq 1">天<else/>个月</if> </li>
+    <li>还款方式: {$Bconfig['REPAYMENT_TYPE'][$vo['repayment_type']]} </li>
+</ul>
+</div>
+
+<div class="pop-tb-r">
+<FORM method="post" name="vouchForm" id="vouchForm" action="__URL__/vouchmoney">
+<input type="hidden" name="borrow_id" value="{$vo.id}" />
+<input type="hidden" name="cookieKey" id="cookieKey" value="{$cookieKey}" />
+<ul>
+<li>可用投资担保额度： {$invest_vouch_cuse|default=0.00} 元 <A target="_blank" href="__APP__/member/memberinfo">申请额度</A> </li>
+<li>担保奖励: {$vo.reward_vouch_rate}% </li>
+<li>担保金额：<INPUT type="text" id="vouch_money" class="invest_input" onkeyup="value=value.replace(/[^0-9]/g,'')" size="11" name="vouch_money" value="" />&nbsp;元
+</li>
+<li>支付密码：<if condition="$has_pin eq 'yes'"><INPUT type="password" class="invest_input" id="pin" name="pin" value="" /><else/>
+<A href="__APP__/member/user#fragment-3" target="_blank"><FONT color="#ff0000">请先设一个支付交易密码</FONT></A></if>
+</li>
+</ul>
+<P class="mar20"><INPUT class="btn-action" type="button" onclick="PostDataVouch()" value="确认担保" /></P>
+<P></P>
+<P class="text-red"><INPUT type="hidden" name="id" value="11396" />注意:点击确认表示您将担保并同意支付,同一用户对同一个标限投5次</P>
+</FORM>
+</div>
+</div>

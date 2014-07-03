@@ -1,0 +1,242 @@
+<style type="text/css">
+	body { margin: 0; _height: 100%; }
+	.dv_header_8 { background-image: url(); }
+	.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; border: #E9E8E7 solid 1px; }
+	.tdContent { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; border: #E9E8E7 solid 1px; }
+	.alertDiv { margin: 0px auto; background-color: #FEFACF; border: 1px solid green; line-height: 25px; background-image: url(__ROOT__/Style/M/images/info/001_30.png); background-position: 20px 4px; background-repeat: no-repeat; }
+	.alertDiv li { margin: 5px 0; list-style-type: decimal; color: #005B9F; padding: 0px; line-height: 20px; }
+	.alertDiv ul { text-align: left; list-style-type: decimal; display: block; padding: 0px; margin: 0px 0px 0px 75px; }
+	.btnsubupdate { width: 86px; height: 30px; background-image: url(__ROOT__/Style/M/images/btnsubupdate.jpg); background-repeat: no-repeat; border: none; cursor: pointer; }
+	.btncancel { height: 30px; margin-left: 10px; width: 60px; background-image: url(__ROOT__/Style/M/images/btncancel.jpg); border: none; background-repeat: no-repeat; cursor: pointer; }
+	.style1 { width: 770px; height: 100%; overflow: hidden; float: left; margin-left: 5px; }
+	#spTip { color: #ff0000; }
+	#back { display: none; position: absolute; z-index: 2; top: 0; left: 0; background: #000; width: 100%; line-height: 21px; height: 100%; }
+	#layer { display: none; background: #fff; z-index: 5; color: #005B9F; position: absolute; left: 32%; background: url(__ROOT__/Style/M/images/icon/part/i_w.jpg); }
+	.winframe { width: 600px; height: 300px; }
+	.winframe .inframe { padding-left: 230px; text-align: left; font-size: 14px; }
+	.spTip { color: #FF0000; }
+	#part1 { text-align: left; padding: 0 20px; display: none; margin-top: 10px; }
+	#btnResetSubmit { background-image: url(__ROOT__/Style/M/images/btnresetphonesubmit.gif); width: 150px; height: 32px; border: none; cursor: pointer; }
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">通过绑定邮箱，能够为您的账号提供更安全的保障
+</div>
+<div style="padding: 15px 0 0 50px; text-align: left; line-height: 24px;">
+	尊敬的{$glo.web_name}会员，在绑定邮箱并通过验证之后，您可以通过邮箱重置密码，获取{$glo.web_name}最新动态等相关服务。
+</div>
+<div style="padding: 20px 25px; text-align: left;" id="safe_succ">
+	<table style="line-height: 25px; width: 100%" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td style="width: 160px; text-align: right;">
+				<img alt="" src="__ROOT__/Style/H/images/email.jpg">
+			</td>
+			<td style="width: 490px; padding-left: 10px; border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5;
+				border-right: 1px solid #e5e5e5;">
+				您好，您已绑定的邮箱为<strong style="color: #bf0506;" id="useremail">{$email}</strong>
+				<div>
+					<label>
+						<input value="" name="radgroup" onclick="javascript:ShowLayer()" type="radio">
+						通过重置邮件重新设置邮箱</label></div>
+				<div>
+					<label>
+						<input value="" name="radgroup" onclick="javascript:ShowLayer1()" type="radio">
+						通手机验证码和安全问题重新设置邮箱</label></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="border-bottom: 1px solid #e5e5e5; height: 20px;">&nbsp;
+				
+			</td>
+		</tr>
+	</tbody></table>
+</div>
+<!--重置邮件-->
+<div style="margin-top: 10px; text-align: left; padding-left: 20px; display: block;" id="cont_email">
+	<div style="margin: 20px 10px 20px 12px; overflow: hidden;">
+		<img src="__ROOT__/Style/H/images/minilogo.gif" alt="">
+		<strong>是否发送邮件重置邮箱</strong>
+		<input id="btnsend" style="background-image: url(__ROOT__/Style/M/images/btnbg02.gif);
+				width: 94px; height: 27px; border: none; font-weight: bold; color: #fff; cursor: pointer;" type="button" value="发送邮件">
+		<span id="sendEmailTip"></span>
+	</div>
+</div>
+<!--手机验证码和回答问题-->
+<div style="margin-top: 10px; text-align: left; padding-left: 20px; display: none;" id="cont_safe">
+	<div style="margin: 20px 10px 10px 12px; overflow: hidden;">
+		<img src="__ROOT__/Style/H/images/minilogo.gif" alt="">
+		<strong>是否发送手机验证码和回答安全问题重置邮箱</strong>
+		<input id="btnSendEmail" style="background-image: url(__ROOT__/Style/H/images/btnbg02.gif);
+			width: 94px; height: 27px; border: none; font-weight: bold; color: #fff; cursor: pointer;" value="确认发送" type="button">
+		<span class="spTip" id="mobileqatip"></span>
+	</div>
+	<div style="margin: 20px 10px 10px 44px;">
+		<font color="#BB0706">*</font> 手机验证码：&nbsp;&nbsp;
+		<input id="txtResetCode" name="txtResetCode" class="text2" type="text">
+	</div>
+	<div style="margin: 10px 10px 10px 82px; overflow: hidden;">
+		<table style="width: 250px; line-height: 33px;" cellpadding="0" cellspacing="0">
+			<tbody><tr>
+				<td>
+					&nbsp;问题1：&nbsp;&nbsp;
+				</td>
+				<td>
+					<span id="answer1">{$sq.question1}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<font color="#BB0706">*</font>答案1：&nbsp;&nbsp;
+				</td>
+				<td>
+					<input class="text2" id="anwer1" type="text">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;问题2：&nbsp;&nbsp;
+				</td>
+				<td>
+					<span id="answer2">{$sq.question2}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<font color="#BB0706">*</font>答案2：&nbsp;&nbsp;
+				</td>
+				<td>
+					<input class="text2" id="anwer2" type="text">
+				</td>
+			</tr>
+			<tr>
+				<td class="querone">&nbsp;
+					
+				</td>
+				<td>
+					<input name="btnUpdate" id="btnUpdate" value=" " style="background-image: url(__ROOT__/Style/H/images/btnsubmit.gif);
+						cursor: pointer; border: none; width: 64px; height: 32px;" type="button">
+				</td>
+			</tr>
+		</tbody></table>
+
+		<script type="text/javascript">
+			var newTitle = '{$glo.web_name}提醒您：';
+
+			function ShowLayer() {
+				$("#cont_email").show(300);
+				$("#cont_safe").hide(300);
+				$("#cont_setemail").hide();
+			}
+			function ShowLayer1() {
+				$("#cont_safe").show(300);
+				$("#cont_email").hide(300);
+				$("#cont_setemail").hide();
+			}
+
+			var timer;
+			var leftsecond = 60;
+			var msg = "";
+			function setLeftTime() {
+				var second = Math.floor(leftsecond);
+				$(".spTip").eq(0).html(msg + second + "秒后可点击重发");
+				leftsecond--;
+				if (leftsecond < 1) {
+					$(".spTip").eq(0).html("现在可重新发送！");
+					clearInterval(timer);
+					leftsecond = 60;
+					try {
+						//$("#btnSendEmail").removeAttr("disabled");
+					} catch (E) { }
+					return;
+				}
+			}
+			$(document).ready(function() {
+				$.post("/ajax/ajax_safe.ashx", { Cmd: "getsafe", UserId: "A59FC6A0F6341D70" }, function(data) {
+					var rs = data.toString().split('|');
+					$("#answer1").html(rs[0]);
+					$("#answer2").html(rs[1]);
+				});
+			});
+
+			$("#btnUpdate").click(function() {
+				var an1 = $("#anwer1").val();
+				var an2 = $("#anwer2").val();
+				var code = $("#txtResetCode").val();
+				$.post("/ajax/ajax_safe.ashx", { Cmd: "safe_answer_code", UserId: "A59FC6A0F6341D70", ans1: an1, ans2: an2, Code: code }, function(data) {
+					if (data > 0) {
+						$("#cont_safe").hide(100);
+						$("#cont_setemail").show(400);
+						$("#anwer1").val('');
+						$("#anwer2").val('');
+						$("#txtResetCode").val('');
+						try { clearInterval(timer); } catch (E) { }
+					} else if (data == 0) {
+						asyncbox.alert("您好，手机安全码已失效, 请重新点击获取！", newTitle);
+					}
+					else if (data == -1) {
+					asyncbox.error("您好，手机安全码有误, 请重新填写！", newTitle, function() { $("#txtResetCode").focus().select(); });
+					} else if (data == -2) {
+
+					asyncbox.error("您好，安全问题答案错误！", newTitle);
+					}
+					else {
+						asyncbox.error("您好，您输入的手机验证码和安全问题答案有误！", newTitle, function() { $("#anwer1").focus().select(); });
+					}
+				});
+			});
+
+			function Close() {
+				$("#back").slideUp(400);
+				$("#layer").slideUp(300);
+			}
+
+			$("#btnSendEmail").click(function() {
+				var tel = "15802573464";
+				if (tel == '') {
+					asyncbox.alert("您好，请将您的安全信息填写完整！", newTitle, function() { location.href = "safety.html"; });
+					return;
+				}
+				$("#mobileqatip").html('请求发送中,请等待...');
+				$.post("/ajax/ajax_safe.ashx",
+					{
+						Cmd: "sendsmscode",
+						UserId: "A59FC6A0F6341D70",
+						PhoneNum: tel,
+						Anxin: "0A8AE153A4AFA69AD16E91435B77EE1F27A5E46B2E11125065B2CB22BDAECBE6266B65FB2D366352"
+					},
+					function(data) {
+						if (data > 0)
+						{ timer = setInterval(setLeftTime, 1000); }
+					});
+			});
+
+		
+		</script>
+
+		<script type="text/javascript">
+
+			$("#btnsend").click(function() {
+				$("#sendEmailTip").html('邮件发送中...');
+				$.post("/ajax/ajax_user.ashx", { Cmd: "setemail", UEmail: "98742420@qq.com" }, function(data) {
+					if (data == 1) {
+						$("#sendEmailTip").html('邮件发送成功!');
+					}
+				});
+			});
+
+		</script>
+
+	</div>
+</div>
+<!--设置新邮箱-->
+<div style="margin-top: 10px; text-align: left; display: none; padding-left: 20px;" id="cont_setemail">
+	<div style="margin: 20px 10px 20px 12px; overflow: hidden;">
+		<img src="__ROOT__/Style/H/images/minilogo.gif" alt="">
+		<strong>请输入新的邮件地址</strong>
+		<input class="text2" id="newemail" type="text">
+		<span id="updatetip"></span>
+		<br>
+		<input id="btnCheckUpdateEmail" style="background-image: url(__ROOT__/Style/H/images/btnbg02.gif);
+			width: 94px; height: 27px; border: none; font-weight: bold; color: #fff; cursor: pointer;
+			margin-left: 190px; margin-top: 20px;" value="提交修改" type="button">
+	</div>
+</div>

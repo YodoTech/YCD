@@ -1,0 +1,21 @@
+<style type="text/css">
+.ajaxloginbox{padding:20px 50px;}
+.loginbox input{width:220px; color:#999999; height:25px; line-height:25px}
+.loginbox p{margin-top:10px}
+.loginbox .simg{text-align:center}
+.bt{height:25px; line-height:25px; border-bottom:1px solid #0066CC; position:relative}
+.bt li{height:25px; padding:0px 15px; width:30px; font-size:14px; font-weight:bold; position:absolute; background:#CCCCCC}
+.bt li.one{left:0px; top:0px;}
+.bt li.two{left:70px; top:0px;}
+.bt li.cur{padding-bottom:1px; height:24px; background:#FFFFFF; overflow:hidden;border:1px solid #376EA5; border-bottom:0 none; }
+</style>
+<div class="ajaxloginbox">
+	<div class="bt">
+		<ul class="clearfix"><li class="one cur">登陆</li><li class="two" onclick="register();">注册</li></ul>
+	</div>
+	<div class="loginbox">
+		<p>拍宝帐号：<input type="text" id="uname" /></p>
+		<p>输入密码：<input type="password" id="pass" /></p>
+		<p class="simg">&nbsp;<img src="__ROOT__/Style/M/images/log.png" onmousemove="this.src='__ROOT__/Style/M/images/log2.png'" onmouseout="this.src='__ROOT__/Style/M/images/log.png'" onclick="submitlogin();" /></p>
+	</div>
+</div>

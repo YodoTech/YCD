@@ -1,0 +1,189 @@
+<include file="Public:_header" />
+<link href="__ROOT__/Style/Swfupload/swfupload.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/handlers.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/swfupload.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/My97DatePicker/WdatePicker.js" language="javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//swf上传图片
+		swfu = new SWFUpload(
+		{
+			// Backend Settings
+			upload_url: "__URL__/swfupload",
+			post_params: {"PHPSESSID": "<php> echo session_id(); </php>", "dopost" : ""},
+
+			// File Upload Settings
+			file_size_limit : "2 MB",	// 2MB
+			file_types : "*.jpg; *.gif; *.png",
+			file_types_description : "选择 JPEG/GIF/PNG 格式图片",
+			file_upload_limit : "0",
+
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			button_image_url : "../images/SmallSpyGlassWithTransperancy_17x18.png",
+			button_placeholder_id : "spanButtonPlaceholder",
+			button_width: 250,
+			button_height: 18,
+			button_text : '<span class="button">选择本地图片 <span class="buttonSmall">(单图最大为 2 MB，支持多选)</span></span>',
+			button_text_style : '.button { font-family: "宋体", sans-serif; font-size: 12px; } .buttonSmall { font-size: 10pt; }',
+			button_text_top_padding: 0,
+			button_text_left_padding: 18,
+			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+			button_cursor: SWFUpload.CURSOR.HAND,
+			
+			// Flash Settings
+			flash_url : "__ROOT__/Style/Swfupload/swfupload.swf",
+
+			custom_settings : {
+				upload_target : "divFileProgressContainer"
+			},
+			
+			// Debug Settings
+			debug: false
+		});
+		//swf上传图片
+	});
+
+</script>
+<script type="text/javascript">
+//swf上传后排序
+function rightPic(o){
+	 var o = $("#albCtok"+o);
+	 if( o.next().length > 0) {
+		  var tmp = o.clone();
+		  var oo = o.next();
+		  o.remove();
+		  oo.after(tmp);
+	 }else{
+		alert("已经是最后一个了"); 
+	 }
+}
+//swf上传后排序
+function leftPic(o){
+	 var o = $("#albCtok"+o);
+	 if( o.prev().length > 0) {
+		  var tmp = o.clone();
+		  var oo = o.prev();
+		  o.remove();
+		  oo.before(tmp);
+	 }else{
+		alert("已经是第一个了"); 
+	 }
+}
+//swf上传后删除图片start
+function delPic(id){
+	var imgpath = $("#albCtok"+id).find("input[type='hidden']").eq(0).val();
+	var datas = {'picpath':imgpath,'oid':id};
+	$.post("__URL__/swfupload?delpic", datas, picdelResponse,'json');
+}
+
+function picdelResponse(res){
+	var imgdiv = $("#albCtok"+res.data);
+		imgdiv.remove();
+		ui.success(res.info);
+		ui.box.close();
+}
+//swf上传后删除图片end
+</script>
+<tagLib name="htmlA" />
+<div class="so_main">
+
+<div class="page_tit">发布流转标</div>
+<div class="page_tab"><span data="tab_1" class="active">基本信息</span><span data="tab_4">借款方资料</span><span data="tab_3">资料审核</span><span data="tab_5">借款方图片资料</span></div>
+<div class="form2">
+	<form method="post" action="__URL__/doAdd" onsubmit="return subcheck();" enctype="multipart/form-data">
+	<div id="tab_1">
+	
+	<dl class="lineD"><dt>是否显示：</dt><dd><htmlA:radio id="is_show" default="0|不显示,1|显示" tip="是否在列表显示出来"/></dd></dl>
+	<dl class="lineD"><dt>借款标题：</dt><dd><htmlA:input id="borrow_name" value="{$vo.borrow_name}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>最小流转单位：</dt><dd><htmlA:input addstr='onkeyup="summoney();"' id="per_transfer" value="{$vo.per_transfer}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>总流转份数：</dt><dd><htmlA:input addstr='onkeyup="summoney();"' id="transfer_total" value="{$vo.transfer_total}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>借款金额：</dt><dd><htmlA:input addstr='readonly="true"' id="borrow_money" value="{$vo.borrow_money}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>年化利率：</dt><dd><htmlA:input id="borrow_interest_rate" value="{$vo.borrow_interest_rate}" tip="%"/></dd></dl>
+	<dl class="lineD"><dt>借款期限：</dt><dd><htmlA:input id="borrow_duration" value="{$vo.borrow_duration}" tip="填整数，表示月数"/></dd></dl>
+	<dl class="lineD"><dt>最低认购期限：</dt><dd><htmlA:input id="min_month" value="{$vo.min_month}" tip="填整数，表示月数"/></dd></dl>
+<script type="text/javascript">
+function summoney(){
+ 	var pertr = $("#per_transfer").val();
+	$("#borrow_money").val(parseFloat(pertr) * parseInt($("#transfer_total").val()));
+}
+</script>	
+	
+	</div><!--tab1-->
+	
+	<div id="tab_3" style="display:none">
+	
+	<dl class="lineD"><dt>添加一个项目：</dt><dd><input type="button" class="btn_w" value="添加项目" onclick="addone()" style="text-align:center" /></dd></dl>
+	<php>$vl = unserialize($vo['updata']);foreach($vl as $key=>$v){</php>
+	<dl class="lineD"><dt>资料名称：</dt>
+		<dd><input type="text" name="updata_name[]" value="{$v.name}" />&nbsp;&nbsp;更新时间:<input type="text" onclick="WdatePicker();" name="updata_time[]" value="{$v.time}" class="Wdate" /></dd>
+	</dl>
+	<php>}</php>
+	</div><!--tab3-->
+	
+	<div id="tab_4" style="display:none">
+	<dl class="lineD"><dt>借款人：</dt><dd><htmlA:input id="borrow_uid" addstr='onblur="getusername(this);"'/><span class="userinfo"></span><span class="tip">请填入会员ID</span></dd></dl>
+	<dl class="lineD"><dt>借款方商业概述：</dt><dd><htmlA:text id="borrow_breif" value="{$vo.borrow_breif}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>借款方资产情况：</dt><dd><htmlA:text id="borrow_capital" value="{$vo.borrow_capital}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>借款方资金用途：</dt><dd><htmlA:text id="borrow_use" value="{$vo.borrow_use}" tip="*"/></dd></dl>
+	<dl class="lineD"><dt>风险控制措施：</dt><dd><htmlA:text id="borrow_risk" value="{$vo.borrow_risk}" tip="*"/></dd></dl>
+	
+	</div><!--tab1-->
+	
+	<div id="tab_5" style="display:none">
+		<dl class="lineD"><dt>商品图片：</dt><dd><div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;"><span id="spanButtonPlaceholder"></span></div></dd></dl>
+		<dl class="lineD"><dt>图片预览：</dt>
+		<dd>
+		<table cellpadding="0" cellspacing="0" width="100%">
+		<tr id="handfield">
+		  <td colspan="4" class="bline" style="background:url(images/albviewbg.gif) #fff 0 20px no-repeat;">
+			<table width='100%' height='160' style="margin:0 0 20px 0">
+				<tr>
+					<td>
+						<div id="divFileProgressContainer" style="height:75px;"></div>
+						<div id="thumbnails">
+						</div>
+					</td>
+				</tr>
+			</table>
+		  </td>
+		</tr>
+		</table>
+		</dd></dl>
+	</div>
+	
+	<div class="page_btm">
+	  <input type="submit" class="btn_b" value="确定" />
+	</div>
+	</form>
+</div>
+
+</div>
+<script type="text/javascript">
+//获取会员用户名
+getusername();
+function getusername(){
+	var uid = $("#borrow_uid").val();
+	$(".userinfo").html("加载中...");
+
+	var datas = {'uid':uid};
+	$.post("__URL__/getusername", datas, uidResponse,'json');
+}
+
+function uidResponse(res){
+	$(".userinfo").html(res.uname);
+}
+
+function addone(){
+	var htmladd = '<dl class="lineD"><dt>资料名称：</dt>';
+		htmladd+= '<dd><input type="text" name="updata_name[]" value="" />&nbsp;&nbsp;更新时间:<input type="text" name="updata_time[]" onclick="WdatePicker();" class="Wdate" /></dd>';
+		htmladd+= '</dl>';
+	$(htmladd).appendTo("#tab_3");
+}
+</script>
+<include file="Public:_footer" />

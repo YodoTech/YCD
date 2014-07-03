@@ -1,0 +1,384 @@
+<style type="text/css">
+	.dv_header_8 { background-image: url(); }
+	.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; border: #E9E8E7 solid 1px; }
+	.tdContent { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; border: #E9E8E7 solid 1px; }
+	.alertDiv { margin: 0px auto; background-color: #FEFACF; border: 1px solid green; line-height: 25px; background-image: url(__ROOT__/Style/M/images/info/001_30.png); background-position: 20px 4px; background-repeat: no-repeat; }
+	.alertDiv li { margin: 5px 0; list-style-type: none; color: #005B9F; padding: 0px; line-height: 20px; }
+	.alertDiv ul { text-align: left; list-style-type: decimal; display: block; padding: 0px; margin: 0px 0px 0px 75px; }
+	.btnsubupdate { width: 86px; height: 30px; background-image: url(__ROOT__/Style/M/images/btnsubupdate.jpg); background-repeat: no-repeat; border: none; cursor: pointer; }
+	.btncancel { height: 30px; margin-left: 10px; width: 60px; background-image: url(__ROOT__/Style/M/images/btncancel.jpg); border: none; background-repeat: no-repeat; cursor: pointer; }
+	.tdTitle2 { text-align: right; padding-right: 10px; width: 50%; font-weight: bold; }
+	.style1 { width: 770px; height: 100%; overflow: hidden; float: left; margin-left: 5px; }
+	.querone { font-weight: bold; width: 150px; text-align: right; }
+	#back { display: none; position: absolute; z-index: 2; top: 0; left: 0; background: #000; width: 100%; line-height: 21px; height: 980px; }
+	#layer { display: none; background: #fff; z-index: 5; color: #005B9F; position: absolute; top: 38%; left: 32%; background: url(__ROOT__/Style/M/images/icon/part/i_w.jpg); }
+	.winframe { width: 600px; height: 300px; }
+	.winframe .inframe { padding-left: 230px; text-align: left; font-size: 14px; }
+	.spTip { color: #FF0000; }
+	#btnUpdate { background-image: url(__ROOT__/Style/M/images/btnsubmit.gif); cursor: pointer; border: none; width: 64px; height: 32px; }
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;"> 通过设置安全问题，能够为您的账号提供更安全的保障
+</div>
+<div style="padding: 15px 0 0 50px; text-align: left; line-height: 24px;">
+	尊敬的{$glo.web_name}会员，在绑定邮箱并通过验证之后，您可以通过邮箱重置密码，获取{$glo.web_name}最新动态等相关服务。
+</div>
+<div style="padding: 20px; text-align: left;" id="safe_succ">
+	<table cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td style="width: 160px; text-align: right;">
+				<img alt="" src="__ROOT__/Style/M/images/account/wenhao.jpg">
+			</td>
+			<td style="width: 490px; padding-left: 10px; border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5;
+				border-right: 1px solid #e5e5e5;">
+				<span style="color: #005B9F">温馨提示：您好，您的安全问题已设置</span>
+				<div style="color: #2f2f2f; margin-top: 10px;">
+					<label>
+						<input value="" name="radgroup" onclick="javascript:ShowLayer()" type="radio">
+						通过回答原始问题更改安全问题设置</label></div>
+				<div style="color: #2f2f2f; margin-top: 10px;">
+					<label>
+						<input value="" name="radgroup" onclick="javascript:ShowLayer1()" type="radio">
+						通过手机验证码和邮箱更改安全问题设置</label></div>
+			</td>
+		</tr>
+	</tbody></table>
+</div>
+<!--回答问题-->
+<div style="display: none; padding: 0 20px 20px 20px;" id="cont_safe">
+	<div style="text-align: left;">
+		<div style="overflow: hidden;">
+			<img alt="" src="__ROOT__/Style/M/images/minilogo.gif">
+			<strong>您已设置安全问题，如要修改安全问题，请在下面回答您已经设置的安全问题。</strong>
+		</div>
+		<table style="width: 100%; line-height: 33px; margin-top: 20px;
+			margin: 0 auto;" cellpadding="0" cellspacing="0">
+			<tbody><tr>
+				<td class="querone" style="font-weight: normal;">
+					问题1：&nbsp;&nbsp;
+				</td>
+				<td>
+					<span id="answer1">{$sq.question1}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="querone" style="font-weight: normal;">
+					<font color="#BB0706">*</font> 答案1：&nbsp;&nbsp;
+				</td>
+				<td>
+					<input class="text2" id="anwer1" type="text">
+				</td>
+			</tr>
+			<tr>
+				<td class="querone" style="font-weight: normal;">
+					问题2：&nbsp;&nbsp;
+				</td>
+				<td>
+					<span id="answer2">{$sq.question2}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="querone" style="font-weight: normal;">
+					<font color="#BB0706">*</font> 答案2：&nbsp;&nbsp;
+				</td>
+				<td>
+					<input class="text2" id="anwer2" type="text">
+				</td>
+			</tr>
+			<tr>
+				<td class="querone">&nbsp;
+					
+				</td>
+				<td>
+					<input name="btnUpdate" id="btnUpdate" value=" " type="button">
+				</td>
+			</tr>
+		</tbody></table>
+
+		<script type="text/javascript">
+			$("#btnUpdate").click(function() {
+				var an1 = $("#anwer1").val();
+				var an2 = $("#anwer2").val();
+				if (an1 == '') {
+					$.jBox.tip("您好，第一个安全问题答案不能为空！",'tip');
+					$("#anwer1").focus();
+					return;
+				}
+				if (an2 == '') {
+					$.jBox.tip("您好，第二个安全问题答案不能为空！",'tip');
+					$("#anwer2").focus();
+					return;
+				}
+				
+				$.ajax({
+					url: "__URL__/changesafe/",
+					data: {"a1":an1,"a2":an2},
+					timeout: 8000,
+					cache: false,
+					type: "post",
+					dataType: "json",
+					success: function (d, s, r) {
+						if(d){
+							if (d.status == 1) {
+								$("#cont_safe").hide(100);
+								$("#cont_setsafe").show(400);
+							} else {
+								$.jBox.tip("安全问题答案错误",'tip')
+							}
+						}
+					}
+				});
+			});
+
+		</script>
+
+	</div>
+</div>
+<!--通过手机和邮箱修改-->
+<div style="display: none; padding: 0 20px 20px 20px;" id="cont_email">
+	<div style="text-align: left; overflow: hidden;">
+		<div style="overflow: hidden;">
+			<img src="__ROOT__/Style/M/images/minilogo.gif" alt="">
+			<strong>是否发送手机验证码和邮件安全码重置安全问题</strong>
+			<input id="btnSendEmail" style="background-image: url(__ROOT__/Style/M/images/btnbg02.gif);
+				width: 94px; height: 27px; border: none; font-weight: bold; color: #fff; cursor: pointer;" value="确认发送" type="button">
+			<span class="spTip"></span>
+		</div>
+		<div style="margin: 20px 10px 10px 44px;">
+			<font color="#BB0706">*</font> 手机验证码：&nbsp;&nbsp;
+			<input id="txtResetCode" name="txtResetCode" class="text2" type="text">
+			<font color="#BB0706">输入您手机收到的验证码</font>
+		</div>
+		<div style="margin: 20px 10px 10px 44px;">
+			<font color="#BB0706">*</font> 邮件安全码：&nbsp;&nbsp;
+			<input id="txtEmailCode" name="txtResetCode" class="text2" type="text">
+			<font color="#BB0706">输入您电子邮件收到的安全码</font>
+		</div>
+		<div style="margin: 20px 10px 10px 144px;">
+			<input id="btnSubmit" style="background-image: url(__ROOT__/Style/M/images/btnbg02.gif);
+				width: 94px; height: 27px; border: none; font-weight: bold; color: #fff; cursor: pointer;" value=" 提 交 " type="button">
+		</div>
+
+		<script type="text/javascript">
+			//倒计时
+			var leftsecond = 60;
+			var msg = "";
+			var timer="";
+			function setLeftTime() {
+				var second = Math.floor(leftsecond);
+				$(".spTip").eq(0).html(msg + second + "秒后可点击重发");
+				$("#btnSendEmail").unbind();
+				leftsecond--;
+				if (leftsecond < 1) {
+					$("#btnSendEmail").click(fve);
+					$(".spTip").eq(0).html("现在可重新发送！");
+					leftsecond = 60;
+					clearInterval(timer);
+					try {
+						//$("#btnSendEmail").removeAttr("disabled");
+					} catch (E) { }
+					return;
+				}
+			}
+			//发送手机验证码
+			$("#btnSendEmail").click(fve);
+			
+			function fve() {
+				var tel = "{$userphone}";
+				if (tel == '') {
+					alert("对不起，您的验证信息填写不完整,现在转向验证中心页面！");
+					window.location.href = "__APP__/member/verify";
+					return;
+				}
+				$.jBox.tip("发送中......","loading");
+				$.post("__URL__/sendverify",
+					{
+						'phone': tel
+					},
+					function(data) {
+						if (data == 1){
+							$.jBox.tip("发送成功，请查收","success");
+							timer = setInterval(setLeftTime, 1000);
+						}else{
+							$.jBox.tip("发送失败，请重试","fail");
+						}
+				});
+			};
+
+			$("#btnSubmit").click(function() {
+				var code = $("#txtResetCode").val();
+				var email = $("#txtEmailCode").val();
+				if (code == '') {
+					$.jBox.tip("您好，手机验证码不能为空！", 'tip', $("#txtResetCode").focus());
+					return;
+				}
+				if (email == '') {
+					$.jBox.tip("您好，邮件验证码不能为空！", 'tip', $("#txtEmailCode").focus());
+					return;
+				}
+				$.ajax({
+					url: "__URL__/verifyep",
+					type: "post",
+					dataType: "json",
+					data: {"pcode":code,"ecode":email},
+					success: function(d) {
+						if (d.status==1) {
+							$("#cont_safe").hide(100);
+							$("#cont_email").hide(100);
+							$("#cont_setsafe").show(400);
+						} else {
+								$.jBox.tip("您好，您填写的验证码错误或者过期！", 'tip', function() { $("#txtResetCode").focus().select(); });
+						}
+					}
+				});
+			});
+
+		</script>
+
+	</div>
+</div>
+<!--重设问题-->
+<div style="display: none; width: 766px; padding: 20px;" id="cont_setsafe">
+	<div style="text-align: left; overflow: hidden;">
+		<div style="width: 680px; margin: 0 auto; line-height: 21px;">
+			<div>
+				<img src="__ROOT__/Style/M/images/minilogo.gif" alt="anxindai">
+				您尚未设置安全问题或原安全问题设置已取消，请在下面的下拉列表中选择问题，并在答案部分予以回答。
+			</div>
+			<div style="padding-left: 23px;">
+				注意：回答安全问题是您修改手机号码，变更邮箱，找回密码和修改银行账号的必备验证程序，请妥善保存您的安全问题以及答案。谢谢。
+			</div>
+		</div>
+		<div style="width: 750px;" class="alertDiv">
+			<ul style="display: block;">
+			</ul>
+		</div>
+		<div style="width: 100%; margin: 10px 20px 0 15px;">
+			<table style="width: 725px; float: left; margin: 0px;
+				padding: 0px; border-collapse: collapse; text-align: left;" id="formTb" cellpadding="0" cellspacing="0">
+				<tbody><tr>
+					<td class="tdTitle">
+						问题1：
+					</td>
+					<td class="tdContent">
+						<select class="selectStyle" id="ddlQuestion1">
+						<option value="0">选择一个安全提问问题</option><option value="1">您父亲的姓名是？</option><option value="2">您母亲的姓名是？</option><option value="3">您配偶的姓名是？</option><option value="4">您最后就读的学校名是？</option><option value="5">您母亲的生日是？</option><option value="6">您母亲的姓名是？</option><option value="7">您父亲的生日是？</option><option value="8">您是什么时间参加工作的？</option><option value="9">您孩子的生日是？</option><option value="10">您配偶的名字是？</option><option value="11">您配偶的生日是？</option><option value="12">您的出生地是哪里？</option><option value="13">您最喜欢什么颜色？</option><option value="14">您是什么学历？</option><option value="15">您的属相是什么的？</option><option value="16">您小学就读的是哪所学校？</option><option value="17">您最崇拜谁？</option><option value="18">您打字经常用什么输入法？</option></select>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">
+						答案1：
+					</td>
+					<td class="tdContent">
+						<input name="txtquestion1" id="txtquestion1" class="text2" type="text">
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">
+						问题2：
+					</td>
+					<td class="tdContent">
+						<select class="selectStyle" id="ddlQuestion2">
+						<option value="0">选择一个安全提问问题</option><option value="1">您父亲的姓名是？</option><option value="2">您母亲的姓名是？</option><option value="3">您配偶的姓名是？</option><option value="4">您最后就读的学校名是？</option><option value="5">您母亲的生日是？</option><option value="6">您母亲的姓名是？</option><option value="7">您父亲的生日是？</option><option value="8">您是什么时间参加工作的？</option><option value="9">您孩子的生日是？</option><option value="10">您配偶的名字是？</option><option value="11">您配偶的生日是？</option><option value="12">您的出生地是哪里？</option><option value="13">您最喜欢什么颜色？</option><option value="14">您是什么学历？</option><option value="15">您的属相是什么的？</option><option value="16">您小学就读的是哪所学校？</option><option value="17">您最崇拜谁？</option><option value="18">您打字经常用什么输入法？</option></select>
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">
+						答案2：
+					</td>
+					<td class="tdContent">
+						<input name="txtquestion2" id="txtquestion2" class="text2" type="text">
+					</td>
+				</tr>
+				<tr>
+					<td class="tdTitle">&nbsp;
+						
+					</td>
+					<td class="tdContent">
+						<input value=" " class="btnsubupdate" id="btnAdd" type="button">
+						<input value=" " class="btncancel" onclick="location.href=location.href;" id="btn_cancel" type="button">
+					</td>
+				</tr>
+			</tbody></table>
+<script type="text/javascript">
+	function ShowLayer() {
+		$("#cont_safe").show(30);
+		$("#cont_setsafe").hide(30);
+		$("#cont_email").hide(30);
+	}
+	function ShowLayer1() {
+		$("#cont_email").show(30);
+		$("#cont_safe").hide(30);
+		$("#cont_setsafe").hide(30);
+	}
+	function ShowLayer2() {
+		$("#cont_email").show(30);
+		$("#cont_safe").hide(30);
+		$("#cont_setsafe").hide(30);
+	}
+</script>
+			<script type="text/javascript">
+				$("#btnAdd").click(function() {
+					$(".alertDiv").css("display", "none");
+					var q1 = $("#ddlQuestion1").val();
+					var q2 = $("#ddlQuestion2").val();
+					var w1 = $("#txtquestion1").val();
+					var w2 = $("#txtquestion2").val();
+					if (q1 == 0) {
+						$.jBox.tip("您好，请选择第一个安全问题并设置回答！", 'tip');
+						$("#ddlQuestion1").focus();
+						return;
+					}
+					if (q2 == 0) {
+						$.jBox.tip("您好，请选择第二个安全问题并设置回答！", 'tip');
+						$("#ddlQuestion2").focus();
+						return;
+					}
+					if (q1 == q2) {
+						$.jBox.tip("您好，不能设置相同的问题！", 'tip');
+						$("#ddlQuestion2").focus();
+						return;
+					}
+					if (w1 == '') {
+						$.jBox.tip("您好，第一个安全问题答案不能为空！", 'tip');
+						$("#txtquestion1").focus();
+						return;
+					}
+					if (w2 == '') {
+						$.jBox.tip("您好，第二个安全问题答案不能为空！", 'tip');
+						$("#txtquestion2").focus();
+						return;
+					}
+					var xd={
+						'q1': $("#ddlQuestion1").find("option:selected").text(),
+						'q2': $("#ddlQuestion2").find("option:selected").text(),
+						'a1': w1,
+						'a2': w2
+					}
+					$.ajax({
+						url: "__URL__/changesafeact",
+						data: xd,
+						timeout: 5000,
+						cache: false,
+						type: "post",
+						dataType: "json",
+						success: function (d, s, r) {
+							if(d){
+								if (d.status == 1) {
+									alert('恭喜，您的操作成功，感谢您对{$glo.web_name}的支持！');
+									window.location.reload();
+								} else if (d.status == 0) {
+									alert('对不起，操作失败，请重试！', 'fail');
+									window.location.reload();
+								}
+							}
+						}
+					});
+				});
+			  
+
+			</script>
+
+		</div>
+	</div>
+</div>

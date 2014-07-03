@@ -1,0 +1,315 @@
+<include file="Public:_header_common" />
+<title>{$glo.index_title}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<meta property="wb:webmaster" content="37afd1196b6d28b7" />
+<script  type="text/javascript" src="__ROOT__/Style/H/js/backtotop.js"></script>
+<script  type="text/javascript" src="__ROOT__/Style/H/js/index.js"></script>
+<!-- <script type="text/javascript" src="__ROOT__/Style/H/js/banner1.js"></script> -->
+<script type="text/javascript" src="__ROOT__/Style/H/js/banner2.js"></script>
+<script  type="text/javascript">
+
+function LoginSubmit() {
+	$.jBox.tip("登陆中......",'loading');
+	$.ajax({
+		url: "__APP__/member/common/actlogin",
+		data: {"sUserName": $("#uname").val(),"sPassword": $("#upass").val(),"sVerCode": $("#vcode").val(),"Keep":$("#loginstate").val()},
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==0){
+					$.jBox.tip(d.message,"tip");	
+				}else{
+					window.location.href="/member/";
+				}
+			}
+		}
+	});
+}
+
+</script>
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="w980 clearfix">
+  <div class="section">
+    <div class="huadong">
+      <div id="FocusBG">
+        <div id="Focus">
+          <ul>
+            <li><a href='' target='_blank'><img src="/Style/H/images/1.jpg"/></a></li>
+            <li><a href='' target='_blank'><img src="/Style/H/images/2.jpg"/></a></li>
+            <li><a href='' target='_blank'><img src="/Style/H/images/3.jpg"/></a></li>
+            <li><a href='' target='_blank'><img src="/Style/H/images/4.jpg"/></a></li>
+            <li><a href='' target='_blank'><img src="/Style/H/images/5.jpg"/></a></li>
+            <li><a href='' target='_blank'><img src="/Style/H/images/6.jpg"/></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="login_box shadow frt">
+      <if condition="$UID gt 0">
+        <div class="box2">
+          <table width="220">
+            <tr>
+              <td rowspan="4" width="100px;"><div style="background-image:url(/Style/H/images/facebg.jpg); WIDTH: 100px; margin-left:5px; float:left; height:100px; clear:both; display:inline;"><img style=" margin-left:0px; margin-top:10px; width: 80px; height: 80px;" src="{$UID|get_avatar=###}" complete="complete"/></div></td>
+              <td align="left">{:session('u_user_name')}</td>
+            </tr>
+            <tr>
+              <td align="left" style=" width:100px;">{$m_minfo.credits|getLeveIco=###,2}
+                <!--{$UID|getVerify=###}--></td>
+            </tr>
+            <tr>
+              <td align="left"><a href="__APP__/member/msg#fragment-1">{$unread}封未读短信</a></td>
+            </tr>
+            <tr>
+              <td align="left">[<a href="__APP__/member">我的帐户</a>][<a href="__APP__/member/common/actlogout" style="color:#F00">退出</a>]</td>
+            </tr>
+            <tr>
+              <td align="right" valign="middle"><a href="__APP__/member/charge#fragment-1"><img src="__ROOT__/Style/H/images/cz.jpg" /></a></td>
+              <td align="left" valign="middle"><a href="__APP__/member/common/register/"><img src="__ROOT__/Style/H/images/tx.jpg" /></a></td>
+            </tr>
+          </table>
+        </div>
+        <else/>
+        <ul class="box">
+          <li>账&#12288;号:
+            <input class="text" type="text" id="uname" />
+          </li>
+          <li>密&#12288;码:
+            <input class="text" type="password" id="upass" />
+          </li>
+          <li>验证码:
+            <input type="text" class="text" style="width:75px;" size="4" id="vcode" />
+            <img onclick="this.src=this.src+'?t='+Math.random()" id="imVcode" alt="点击换一个校验码" style=" width: auto; height:22px;_width:50px; _height:22px; vertical-align:bottom" src="__APP__/member/common/verify"> </li>
+          <li>记&#12288;住:
+            <select id="loginstate" style="padding:5px 3px;width:140px; margin-top:2px; border:#d0d0d0 1px solid;">
+              <option value="0">不保存登陆状态</option>
+              <option value="1">1天</option>
+              <option value="2">2天</option>
+              <option value="7">7天</option>
+            </select>
+          </li>
+          <li class="loginBtn"> <a href="javascript:;" onclick="LoginSubmit();"><img src="__ROOT__/Style/H/images/yellow/btn_login.png" /></a>&#12288;<a href="__APP__/member/common/register/"><img src="__ROOT__/Style/H/images/yellow/btn_reg.png" /></a> </li>
+        </ul>
+      </if>
+    </div>
+  </div>
+  <!-- 主体内容部分开始-->
+  <div class="wrap">
+    <div class="w_left">
+      <div class="block_title"><span class="oldai_color">进行招标</span></div>
+      <div class="block_content clearfix">
+        <volist name="listBorrow_tj.list" id="vb"> </volist>
+      </div>
+      <div class="block_content">
+        <volist name="listBorrow.list" id="vb">
+          <div class="borrowlist">
+            <table border="0" class="BL_table">
+              <tr>
+                <td width="100" rowspan="5" ><div> <a href="{$vb.id|getInvestUrl=###}"> <img style="margin: 10px; width: 80px; height: 80px;" src="{$vb.uid|get_avatar=###}"  complete="complete"/></a></div></td>
+                <td colspan="4" align="left">{:getIco($vb)} <a href="{$vb.id|getInvestUrl=###}" title="{$vb.borrow_name}" class="BL_name">{$vb.borrow_name|cnsubstr=###,38}&#12288;[{$vb.id}]</a></td>
+              </tr>
+              <tr>
+			   <td width="150px" align="left" valign="bottom" >借款:<span style="color:red;">{$vb.borrow_money|Fmoney=###}元</span> </td>
+			   <td width="130px" align="left" valign="bottom" >利率:<span style="color:red;">{$vb.borrow_interest_rate}%</span> <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></td>
+	           <td width="140px" align="left" valign="bottom" >发标时间： <span class="BL_time">{$vb.add_time|mydate="Y-m-d",###}</span> </td>
+			   
+			   
+                <td width="120px"  align="left" valign="bottom">
+                  <if condition="$vb.borrow_status eq 3"> <a href="{$vb.id|getInvestUrl=###}"><img class="anNiuYLB" src="__ROOT__/Style/H/images/touM.gif" /></a>
+                    <elseif condition="$vb.borrow_status eq 4"/>
+                    <a href="{$vb.id|getInvestUrl=###}"><img class="anNiuDDFS" src="__ROOT__/Style/H/images/touM.gif" /></a>
+                    <elseif condition="$vb.borrow_status eq 6"/>
+                    <a href="{$vb.id|getInvestUrl=###}"><img class="anNiuHKZ" src="__ROOT__/Style/H/images/touM.gif"  /></a>
+                    <elseif condition="$vb.borrow_status gt 6"/>
+                    <a href="{$vb.id|getInvestUrl=###}"><img class="anNiuYWC" src="__ROOT__/Style/H/images/touM.gif" /></a>
+                    <else/>
+                    <a href="{$vb.id|getInvestUrl=###}" onclick="invest({$vo.id});"><img class="anNiuTB" src="__ROOT__/Style/H/images/touM.gif" /></a> </if></td>
+					
+              </tr>
+              <tr>
+
+              </tr>
+              <tr>
+			   <td width="150px" align="left" valign="bottom">完成:<span style="color:red;">￥{$vb.has_borrow}元</span></td>			   
+			   <td width="130px" align="left" valign="bottom">期限:<span style="color:red;">{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></span></td>
+			   <td width="140px" align="left" valign="bottom">投标奖:<span style="color:red;">{$vb.reward_num|default="0.00"}</span><if condition="$vb.reward_type eq 1">%<else/>元</if></td>
+			  	
+              </tr>
+              <tr>
+               <td width="170px" align="left" valign="bottom">信用:{$vb.credits|getLeveIco=###,2}</td>
+               <td colspan="2"><div class="BL_jindu">进度：</div>
+                  <span class="progress"> <span class="precent" style="width:{$vb.progress}%"></span> </span>&#12288;{$vb.progress}%</td>
+              </tr>
+            </table>
+          </div>
+        </volist>
+      </div>
+    </div>
+    <div class="right">
+      <div class="block_title"> <span class=imore><a href="/dfafa/notice.html"><img src="__ROOT__/Style/H/images/touM.gif" class="more"/></a></span><span class="oldai_color">最新公告</span> </div>
+      <div class="block_content">
+	  <ul class="yangshi">
+	  <li><a href="/invests/rhtz/3.html">如何进行充值？</a></li>
+	  <li><a href="/invests/rhtz/2.html">投标所得需要支付哪些费用？</a></li>
+	  <li><a href="/invests/rhtz/1.html">如何降低投资风险？</a></li>
+	  <li><a href="/help/xszn/33.html">什么是网贷？</a></li>
+	  </ul>
+	   </div>
+	  <div class="block_content"> <a href="/index.html"><img class="tuiguang1" alt="软件下载" src="__ROOT__/Style/H/images/fcd.jpg"></a> </div>
+      <!--成功贷款项目开始-->
+      <div class="MTop">
+        <div class="block_title"> <span class="oldai_color">成功借款项目</span> <span class=imore><a href="/invest/index?borrow_status=7"><img src="__ROOT__/Style/H/images/touM.gif" class="more"/> </a></span> </div>
+        <div class=block_content>
+          <div id="cachDiv">
+            <div id="cach">
+              <ul>
+              </ul>
+              <volist name="successBorrow.list" id="vs">
+                <li class="chengGong">
+                  <p class="p_cganimg"><a href="{$vs.id|getInvestUrl=###}"><img src="{$vs.uid|get_avatar=###}" width="62" height="68" /></a></p>
+                  <p class="p_cganhy"><a href="{$vs.id|getInvestUrl=###}"><strong>{$vs.borrow_name|cnsubstr=###,10}</strong></a></p>
+                  <p class="p_cgannr">借款金额：<font style="color:#ea5413;">{$vs.borrow_money||getMoneyFormt=###}</font>元</p>
+                  <p class="p_cgannr">期限：{$vs.borrow_duration}
+                    <if condition="$vs.repayment_type eq 1">天
+                      <else/>
+                      个月</if>
+                  </p>
+                </li>
+              </volist>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--成功贷款项目结束-->
+      <!--逾期借款项目开始-->
+      <!--投资排行榜开始-->
+      <div class="MTop">
+        <div class="rank_title">
+          <table border="0" style="width:300px;">
+            <tr>
+              <td align="left" width="70px;"><span class="oldai_color">投资排行榜</span> </td>
+              <td align="left" width="150px;"><div class="paihang01">
+                  <p class="paihang03" id="pmlist"> <a href="javascript:;"class="hover" onmouseover="showTa('month',this);">月</a> <a href="javascript:;" onmouseover="showTa('week',this);">周</a> <a href="javascript:;" onmouseover="showTa('day',this);">天</a></p>
+                </div></td>
+            </tr>
+          </table>
+        </div>
+        <div class="rank_list">
+          <ul class="paihang02">
+            <li class="eq1">排名</li>
+            <li class="eq2">会员名</li>
+            <li class="eq2">投资金额</li>
+          </ul>
+          <div  id="showMo">
+            <php>foreach($pmMonth as $kx => $vl){</php>
+            <ul class="paihang02<php>if(($kx+1)%2 == 0)echo ' paihang04';</php>">
+              <li class="eq3">{$kx+1}</li>
+              <li class="eq2">{$vl.user_name|hidecard=###,8}</li>
+              <li class="eq2">{$vl.total}元</li>
+            </ul>
+            <php>};$pmMonth=NULL;</php>
+          </div>
+          <div  id="showWeek" style="display:none">
+            <php>foreach($pmWeek as $kx => $vl){</php>
+            <ul class="paihang02<php>if(($kx+1)%2 == 0)echo ' paihang04';</php>">
+              <li class="eq3">{$kx+1}</li>
+              <li class="eq2">{$vl.user_name|hidecard=###,8}</li>
+              <li class="eq2">{$vl.total}元</li>
+            </ul>
+            <php>};$pmWeek=NULL;</php>
+          </div>
+          <div id="showDay" style="display:none">
+            <php>foreach($pmDay as $kx => $vl){</php>
+            <ul class="paihang02<php>if(($kx+1)%2 == 0)echo ' paihang04';</php>">
+              <li class="eq3">{$kx+1}</li>
+              <li class="eq2">{$vl.user_name|hidecard=###,8}</li>
+              <li class="eq2">{$vl.total}元</li>
+            </ul>
+            <php>};$pmDay=NULL;</php>
+          </div>
+        </div>
+      </div>
+      <!--逾期借款项目结束-->
+      <div class="MTop">
+        <div class="block_title"> <span class="oldai_color">新闻中心</span> <span><a href="/indexs/ddd.html"><img src="__ROOT__/Style/H/images/touM.gif" class="more"/> </a></span> </div>
+        <div class="block_content">
+          <table class="diandang_datalist" summary="list of members in EE Studay">
+            <php>$xlist = getArticleList(array("type_id"=>array('in','338,336'),"pagesize"=>10)); foreach($xlist['list'] as $kx => $va){</php>
+            <tr 
+        <php>if(($kx+1)%2 == 0) echo ' class="ddh_bjs"';</php>
+        >
+              <td>{$kx+1}</td>
+              <td><a href="{$va.arturl}" title="{$va.title}">{$va.title|cnsubstr=###,12}</a> <img src="__ROOT__/Style/H/images/dt_tp.gif" complete="complete" /> </td>
+              <td>{$va.art_time|date="Y.m.d",###}</td>
+            </tr>
+            <php>};$xlist=NULL;</php>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+  <!-- 主体内容部分结束-->
+  <div class="w980">
+    <div class="clearfix" id="middle_help">
+      <div class="middle_help_left1">
+        <div class="footer_06"></div>
+        <ul class="middle_help_ul">
+          <li class="middle_help_li">新手入门</li>
+          <li class="middle_help_li1"><a href="/member/common/register/">免费注册</a></li>
+          <li class="middle_help_li1"><a href="/help/xszn.html">新手指南</a></li>
+          <li class="middle_help_li1"><a href="/help/wenti.html">常见问题</a></li>
+          <li class="middle_help_li1"><a href="/dfafa/wzgg.html">网站公告</a></li>
+        </ul>
+      </div>
+      <div class="middle_help_left">
+        <div class="footer_15"></div>
+        <ul class="middle_help_ul">
+          <li class="middle_help_li">我要投资 </li>
+          <li class="middle_help_li1"><a href="/invest/index.html">浏览借款</a></li>
+          <li class="middle_help_li1"><a href="/tools/tool.html">借贷计算机</a></li>
+          <li class="middle_help_li1"><a href="/member/vip.html">成为vip</a></li>
+		  <li class="middle_help_li1"><a href="/invests/rhtz.html">如何投资</a></li>
+        </ul>
+      </div>
+      <div class="middle_help_left">
+        <div class="footer_09"></div>
+        <ul class="middle_help_ul">
+          <li class="middle_help_li">安全体系</li>
+          <li class="middle_help_li1"><a href="/dfafa/mttbd.html" target="_blank">媒体报道</a></li>
+          <li class="middle_help_li1"><a href="/dfafa/zcgd.html" target="_blank">政策法规</a></li>
+          <li class="middle_help_li1"><a href="/help/anquan.html" target="_blank">安全保障</a></li>
+        </ul>
+      </div>
+      <div class="middle_help_left">
+        <div class="footer_12"></div>
+        <ul class="middle_help_ul">
+          <li class="middle_help_li">关于我们</li>
+          <li class="middle_help_li1"><a href="/dfafa/index.html">联系我们</a></li>
+          <li class="middle_help_li1"><a href="/indexs/zc.html">公司证件</a></li>
+          <li class="middle_help_li1"><a href="/dfafa/bghj.html">办公环境</a></li>
+          <li class="middle_help_li1"><a href="/dfafa/gwtd.html">顾问团队</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- 合作伙伴-->
+  <div class="wrap2">
+    <div class="title03">
+      <div>{$glo.web_name}鸣谢单位</div>
+    </div>
+    <div class="list03">
+      <ul class="link_img_ul">
+        <volist name=":get_home_friend(1)" id="vf">
+          <li class="link_img_li1"><a href="{$vf.link_href}" target="_blank"><img src="{$vf.link_img}" class="frind" /></a></li>
+        </volist>
+      </ul>
+    </div>
+  </div>
+  </div>
+<!--中部结束-->
+<include file="Public:_footer" />

@@ -1,0 +1,111 @@
+   <style type="text/css">
+        .btnselall { background-image: url(__ROOT__/Style/H/images/btnselall.jpg); border: 1px solid #ccc; height: 22px; width: 38px; padding: 4px 6px; color: #005B9F; margin: 0px 6px 0PX 0PX; cursor: pointer; }
+        .unread { font-weight: bold; cursor: pointer; }
+        .read { font-weight: normal; cursor: pointer; }
+        DIV.yahoo2 { width: 734px; margin: 0 0 3px; }
+        .tableH { background-color: #F6F6F6; height: 20px; line-height: 20px; padding: 0px; }
+        #infoTr span { margin: 0px 4px; color: #005B9F; font-weight: bold; }
+        .listTr td { border-bottom: 1px solid #C1C8D2; height: 23px; line-height: 23px; text-align: left; text-indent: 20px; }
+        .reading td { border-bottom: 1px solid #fff; height: 23px; line-height: 23px; text-align: left; text-indent: 20px; }
+        .selectall { margin-right: 4px; }
+        .selectone { margin-right: 4px; }
+        .contentTr td { border-bottom: 1px solid #C1C8D2; }
+        .contentTd { background-color: #F6F6F6; padding: 15px 0px; }
+        .contentTd div { width: 670px; margin: 0px auto; text-align: left; line-height: 25px; }
+        .contentTd a { text-decoration: underline; }
+        .tableHeadTr { }
+    </style>
+<table id="listTable_send" style="margin-top: 20px; border: none; border-top: 1px #C1C8D2 solid;
+	border-bottom: 1px solid #C1C8D2; border-collapse: collapse; clear: both; width: 780px;" cellspacing="0">
+	<tbody><tr class="tableHeadTr" style="background-color: #F6F6F6; height: 23px; line-height: 23px;">
+		<td style="width: 30px; text-align: right; border-bottom: 1px solid #C1C8D2;">&nbsp;
+			
+		</td>
+		<td style="width: 30px; text-align: center; border-bottom: 1px solid #C1C8D2;">
+		</td>
+		<td style="width: 40px; text-align: center; border-left: 1px solid #C6C9CA; border-bottom: 1px solid #C1C8D2;">
+			<img src="__ROOT__/Style/M/images/xf1.jpg">
+		</td>
+		<td style="width: 136px; text-align: left; text-indent: 20px; border-left: 1px solid #C6C9CA;
+			border-bottom: 1px solid #C1C8D2;">
+			收件人
+		</td>
+		<td style="width: 410px; text-align: left; text-indent: 20px; border-left: 1px solid #C6C9CA;
+			border-bottom: 1px solid #C1C8D2;">
+			主题
+		</td>
+		<td style="text-align: left; text-indent: 20px; border-left: 1px solid #C6C9CA; border-bottom: 1px solid #C1C8D2;">
+			<a style="color: #000;" href="javascript:void(0)">时间</a>
+		</td>
+		<td style="width: 30px; text-align: right; border-bottom: 1px solid #C1C8D2;">&nbsp;
+			
+		</td>
+	</tr>
+	
+<volist name="list.list" id="vo">
+<tr class="listTr" id="msg_{$vo.id}">
+	<td style="width: 30px; border: none;">&nbsp;</td>
+	<td style="width: 30px; text-align: center; text-indent: 0px;"><input class="selectone" type="checkbox" name="checkbox" id="checkbox2" onclick="checkon(this)" value="{$vo.id}"></td>
+	<td style="width: 40px; text-align: center; text-indent: 0px;"><img src="__ROOT__/Style/M/images/<if condition='$vo.is_read eq 1'>read.jpg<else/>unread.jpg</if>"></td>
+	<td style="width: 136px;">{$vo.to_uname}</td>
+	<td style="width: 410px;" class="read subject" data="{$vo.id}">{$vo.title}</td>
+	<td>{$vo.add_time|date="Y-m-d",###}</td>
+	<td style="width: 30px; border: none;">&nbsp;</td>
+</tr>
+</volist>
+
+</tbody></table>
+<div id="afterTable" class="tableH" style="margin-top: 0px; padding: 10px 0px;">
+	<div style="float: left; width: 160px; text-align: left; height: 20px; line-height: 20px;
+		padding: 0px">
+		<table style="border-collapse: collapse; clear: both; visibility: visible;" cellspacing="0">
+			<tbody><tr>
+				<td style="width: 30px; border: none;">&nbsp;
+					
+				</td>
+				<td style="width: 30px; text-align: center; text-indent: 0px;">
+					<input class="selectall" id="selectall" type="checkbox" onclick="checkAll(this,'listTable_send')">
+				</td>
+				<td style="width: 40px; text-align: center; border: none;">
+					<label for="selectall" style="margin: 0px 8px 0px 0px;">全选</label>
+				</td>
+				<td style="width: 60px; text-align: center; border: none;">
+					<input value="删除" id="deletebtn1" class="btnselall" type="button" onclick="del('listTable_send','from')">
+				</td>
+			</tr>
+		</tbody></table>
+	</div>
+	<div data="fragment-1" class="yahoo2 ajaxpagebar" style="width: 500px; float: right; margin: 0px; padding: 0px;text-align: right; margin-right: 29px;">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+var readimg = "__ROOT__/Style/M/images/read.jpg";
+$(".read").click(function(){
+	id = $(this).attr('data');
+	$.jBox("get:__URL__/viewmsg/?id="+id, {
+		title: "查看信息",
+		width: "auto",
+		buttons: {'阅读完毕': true }
+	});
+});
+
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+
+</script>

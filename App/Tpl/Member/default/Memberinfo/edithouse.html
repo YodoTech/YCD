@@ -1,0 +1,156 @@
+<tagLib name="htmlA" />
+<table cellspacing="0" cellpadding="0" id="formTb" style="width: 685px; float: left; margin: 0px;padding: 0px; border-collapse: collapse; text-align: left;">
+		<tbody><tr class="trBg">
+			<td class="tdTitle">
+				房产地址：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_dizhi" value="{$vo.house_dizhi}" class="text2"/>
+			</td>
+			<td id="dv_company" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				建筑面积：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_mianji" value="{$vo.house_mianji}" class="text2"/>平米
+			</td>
+			<td id="dv_companytel" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				建筑年份：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_nian" value="{$vo.house_nian}" class="text2"/>
+			</td>
+			<td id="dv_companyaddress" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				供款状况：
+			</td>
+			<td class="tdContent">
+			<htmlA:radio id="house_gong" default="按揭中|按揭中,已供完房款|已供完房款" value="key|vo.house_gong" />
+			</td>
+			<td id="dv_workyear" class="tdTip">
+			</td>
+		</tr>
+		<tr class="trBg">
+			<td class="tdTitle">
+				所有权人1：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_suo1" value="{$vo.house_suo1}" class="text2"/>  产权份额<htmlA:input id="house_feng1" value="{$vo.house_feng1}" class="text2"/>%
+			</td>
+			<td id="dv_references" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				所有权人2：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_suo2" value="{$vo.house_suo2}" class="text2"/>  产权份额<htmlA:input id="house_feng2" value="{$vo.house_feng2}" class="text2"/>%
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede; ">
+			<td class="tdTitle" colspan="2" style="text-align:left">
+				若房产尚在按揭中, 请填写
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				贷款年限：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_dai" value="{$vo.house_dai}" class="text2"/>年
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				每月供款：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_yuegong" value="{$vo.house_yuegong}" class="text2"/>元
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				尚欠贷款余额：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_shangxian" value="{$vo.house_shangxian}" class="text2"/>元
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr style=" border-bottom:1px solid #dedede;">
+			<td class="tdTitle">
+				按揭银行：
+			</td>
+			<td class="tdContent">
+				<htmlA:input id="house_anjiebank" value="{$vo.house_anjiebank}" class="text2"/>
+			</td>
+			<td id="dv_referencestel" class="tdTip">
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;
+				
+			</td>
+			<td style="height: 50px;padding-left: 10px;" class="tdContent">
+				<img style="margin-top: 5px; cursor: pointer;" src="__ROOT__/Style/M/images/saveandcon.jpg" onmouseout="this.style.filter = 'alpha(opacity=100)'" onmousemove="this.style.filter = 'alpha(opacity=60)'; this.style.cursor='hand' " onclick="editdepartment();">
+				 <a href="javascript:;" onclick="$('#xtab').find('a[data=info6]').click();"><img src="__ROOT__/Style/M/images/skipandcon.jpg" style="border:none; margin:5px 0 0 20px;"></a>
+			</td>
+			<td id="Td1" class="tdTip">
+			</td>
+		</tr>
+</tbody></table>
+<script type="text/javascript">
+function editdepartment(){
+	p = makevar(['house_dizhi','house_mianji','house_nian','house_gong','house_suo1','house_suo2','house_feng1','house_feng2','house_dai','house_yuegong','house_shangxian','house_anjiebank']);
+	p['_tps'] = "post";
+	var mxs = true;
+	$.each(p,function(i){
+		if(typeof p[i] == "undefined" && i=='house_dizhi' && i=='house_mianji' && i=='house_nian' && i=='house_gong'){
+			mxs=false;
+			$.jBox.tip("所有项目都不能为空");	
+		}
+	});
+	if(mxs===false){
+	  $.jBox.tip("所有项目都不能为空");	
+	  return;
+	}
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/edithouse/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info6]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+}
+</script>

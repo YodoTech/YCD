@@ -1,0 +1,36 @@
+<include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="wrap2">
+	<div id="hy_left">
+		<include file="Public:_left" />
+	</div>
+	<div id="hy_right">
+            <div class="box">
+				<div class="Menubox1" id="rotate">
+					<ul class="menu ajaxdata">
+                        <li><a href="#fragment-1" ajax_href="__URL__/header/">我的头像</a></li>
+                        <li><a href="#fragment-2" ajax_href="__URL__/password/">修改密码</a></li>
+                        <li><a href="#fragment-3" ajax_href="__URL__/pinpass/">修改支付密码</a></li>
+                        <li><a href="#fragment-4" ajax_href="__URL__/msgset/">消息设置</a></li>
+					</ul>
+				</div> 
+				<div class="contentright">
+					<div id="fragment-1" style="display:none">
+						<!--我的头像-->
+					</div>
+					<div id="fragment-2" style="display:none">
+						<!--修改密码-->
+					</div>
+					<div id="fragment-3" style="display:none">
+						<!--修改支付密码-->
+					</div>
+					<div id="fragment-4" style="display:none">
+						<!--消息设置-->
+					</div>
+				</div>
+			</div>
+    </div>
+</div>
+<include file="default:Public:_footer_inner" group="Home" />

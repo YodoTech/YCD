@@ -1,0 +1,114 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.tdHeard, .tdContent { border: solid 1px #ccc; }
+#pager { margin: 10px 4px 3px 0px; }
+.notes_frame { width: 715px; overflow: hidden; margin: 0 auto; height: 30px; margin-top: 10px; }
+.notes_frame div { padding-top: 13px; }
+.operaframe { width: 100%; overflow: hidden; line-height: 27px; padding-left: 25px; margin-top: 20px; }
+.operaframe ul { padding: 0px; margin: 0px; text-align: left; overflow: hidden; line-height: 25px; }
+.operaframe ul li { float: left; line-height: 25px; }
+</style>
+
+<div class="top_account_bg" style="overflow:hidden; height:50px; line-height:25px">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，{$glo.web_name}为您记录和保存了您的资金历史明细.(<!--明细中事件的"类型"如为<奖励类型>则"余额"指奖励帐户余额-->'可用余额','冻结金额','待收金额',都是指此次事件后相应的帐户余额)
+</div>
+<div class="notes_frame">
+	<div style="">
+		<span>资金历史记录了您各种交易产生的支出和收入的明细，请选择事件类型和时间，然后点击“查看”按钮浏览。</span>
+	</div>
+</div>
+<!--选择操作-->
+<div class="operaframe">
+	<ul id="formTb">
+		<li style="width: 70px;"><strong>事件类型：</strong> </li>
+		<li style="width: 160px;">
+			<htmlA:select id="log_type" value="key|search.log_type" datakey='log_type' tip="*"/>
+		</li>
+		<li style="width: 70px;"><strong>起止日期：</strong> </li>
+		<li style="width: 240px;">
+			<input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" readonly="readonly" class="Wdate timeInput_Day" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time\\\')||\\\'2020-10-01\\\'}'})"/>
+			至
+			<input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" readonly="readonly" class="Wdate timeInput_Day" onfocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time\\\')||\\\'2020-10-01\\\'}'})"/>
+		</li>
+		<li style="width: 120px;">
+			<img alt="" src="__ROOT__/Style/M/images/chakan.jpg" id="btn_search" onclick="sdetail()" style="cursor: pointer;">
+		</li>
+		<li style="width: 80px;"><a href="__URL__/export?{$query}" style="vertical-align: bottom;line-height: 20px;">下载<img alt="" src="__ROOT__/Style/M/images/down.jpg"></a> </li>
+	</ul>
+</div>
+<div style="margin-top: 20px; overflow: hidden; text-align: left;">
+	<table id="content" style="width: 740px; border-collapse: collapse;margin-left: 8px;" cellspacing="0">
+		<tbody><tr>
+			<th scope="col" class="tdHeard" style="width: 130px;">发生日期</th>
+			<th scope="col" class="tdHeard" style="width: 100px;">类型</th>
+			<th scope="col" class="tdHeard" style="width: 100px;">影响金额</th>
+			<th scope="col" class="tdHeard" style="width: 100px;">可用余额</th>
+			<th scope="col" class="tdHeard" style="width: 100px;">冻结金额</th>
+			<th scope="col" class="tdHeard" style="width: 100px;">待收金额</th>
+			<th scope="col" class="tdHeard" style="width: 80px;">说明</th>
+		</tr>
+	
+	<volist name="list" id="vo">
+	<tr class="nodatashowtr">
+		<td class="tdContent">{$vo.add_time|date="Y-m-d H:i",###}</td>
+		<td class="tdContent">{$vo.type}</td>
+		<td class="tdContent"><if condition="$vo.affect_money lt 0"><font color="#FF0000"><else/><font color="#009900"></if>{$vo.affect_money}</font></td>
+		<td class="tdContent">{$vo['account_money']+$vo['back_money']}</td>
+		<td class="tdContent">{$vo.freeze_money}</td>
+		<td class="tdContent">{$vo.collect_money}</td>
+		<td class="tdContent">{$vo.info}</td>
+	</tr>
+	</volist>
+	</tbody></table>
+	<div data="fragment-2" id="pager" style="float: right; text-align: right; width: 700px; padding-right: 8px;margin-right: 24px;" class="yahoo2 ajaxpagebar">{$pagebar}</div>
+</div>
+<div style="clear: both; float: none;">
+</div>
+
+<script type="text/javascript">
+//返回数字
+function NumberCheck(t){
+	var num = t.value;
+	var re=/^\d+\.?\d*$/;
+	if(!re.test(num)){
+		isNaN(parseFloat(num))?t.value=0:t.value=parseFloat(num);
+	}
+}
+
+function sdetail(){
+	
+	x = makevar(['log_type','start_time','end_time']);
+	$.ajax({
+		url: "__URL__/detail",
+		data: x,
+		timeout: 5000,
+		cache: false,
+		type: "get",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) $("#fragment-2").html(d.html);//更新客户端信息 作个判断，避免报错
+		}
+	});
+}
+
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+</script>

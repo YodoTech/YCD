@@ -1,0 +1,77 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<script type="text/javascript" src="__ROOT__/Style/My97DatePicker/WdatePicker.js" language="javascript"></script>
+<script type="text/javascript">
+	var delUrl = '__URL__/doDel';
+	var addUrl = '__URL__/add';
+	var editUrl = '__URL__/edit';
+	var editTitle = '审核资料';
+	var isSearchHidden = 1;
+	var searchName = "搜索会员上传资料";
+</script>
+<div class="so_main">
+  <div class="page_tit">会员上传资料管理</div>
+<!--搜索-->
+  <include file="search" />
+<!--搜索-->
+
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="jsfun" action="dosearch();" value="搜索会员上传资料" style="search_action" />
+    <php>foreach($data_status as $kds=>$vds){</php>
+    <htmlA:commonBtn type="href" action="__URL__/index?status={$kds}" value="{$vds}"/>
+    <php>}</php>
+  </div>
+  
+  <div class="list">
+  <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">
+        <input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+        <label for="checkbox"></label>
+    </th>
+    <th class="line_l">ID</th>
+    <th class="line_l">会员名</th>
+    <th class="line_l">所属客服</th>
+    <th class="line_l">资料分类</th>
+    <th class="line_l">资料名称</th>
+    <th class="line_l">上传时间</th>
+    <th class="line_l">审核状态</th>
+    <th class="line_l">操作</th>
+  </tr>
+  <volist id="vo" name="list">
+      <tr overstyle='on' id="list_{$vo.id}">
+        <td><input type="checkbox" name="checkbox" id="checkbox2" onclick="checkon(this)" value="{$vo.id}"></td>
+        <td>{$vo.id}</td>
+        <td><htmlA:user id="vo.uid" uname="vo.uname" /></td>
+        <td>{$vo.customer_name|default="&nbsp;"}</td>
+        <td>{$vo.type}</td>
+        <td>{$vo.data_name}(<a href="__ROOT__/{$vo.data_url}" target="_blank">查看</a>)</td>
+        <td>{$vo.add_time|date="Y-m-d",###}</td>
+        <td>
+        	<if condition="$vo.status eq 0">
+            	<font color="red">{$vo.status_name}</font>
+            <elseif condition="$vo.status eq 1"/>
+            	<font color="#00CC00">{$vo.status_name}</font>
+            <else/>
+            	{$vo.status_name}
+            </if>
+         </td>
+        <td><a href="javascript:void(0);" onclick="edit('?id={$vo['id']}');">审核</a></td>
+      </tr>
+  </volist>
+  </table>
+
+  </div>
+  
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="jsfun" action="dosearch();" value="搜索会员上传资料" style="search_action" />
+    <php>foreach($data_status as $kds=>$vds){</php>
+    <htmlA:commonBtn type="href" action="__URL__/index?status={$kds}" value="{$vds}"/>
+    <php>}</php>
+  </div>
+</div>
+
+
+<include file="Public:_footer" />

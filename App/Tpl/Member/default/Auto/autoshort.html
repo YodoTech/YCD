@@ -1,0 +1,328 @@
+<script type="text/javascript">
+	var regCount = /^(([1-9]{1}[0-9]{0,})|([0-9]{1,}))$/;
+	var newTitle = '{$glo.web_name}提醒您：';
+	$(document).ready(function() {
+		$("input[type='button'].btnsave").click(
+		function() {
+			UpdateMiniAmount($(this));
+		});
+		if (!$("input[type='radio']:checked").length) {
+			$("input[type='radio']:first").attr("checked", "checked");
+		}
+		$("input[type='radio']").each(function() {
+			if ($(this).is(":checked")) {
+				//$(this).parent().parent().css("background-color", "#fff9dd");
+			}
+			$(this).click(function() {
+				if ($(this).is(":checked")) {
+					$(this).parent().parent().css("background-color", "#fff9dd").siblings().css("background-color", "#fff");
+				}
+			});
+		});
+		var vtype = '4';
+		if (vtype != '3') {
+			$("#rdotamount1").attr("disabled", "disabled");
+		}
+	});
+
+	var objectarray =
+	[
+		"您好，您的设置保存成功！",
+		"您好，您没有进行任何设置！",
+		"您好，您的设置保存成功！",
+		"您好，请输入正确的余额！",
+		"您好，请输入正确的利率！",
+		"您好，请输入正确的借款周期！",
+		"您好，请输入正确的投标金额，最低金额为50元！",
+		"您好，余额必须大于投标金额！",
+		"您好，请输入正确的{$glo.web_name}担保并信用等级信用！",
+		"您好，您的设置保存失败，请稍后再试！"
+	];
+	function SettingStr(value, callback) {
+		if (value.indexOf('成功') > -1)
+		{ asyncbox.success(value, newTitle, function(action) { if (callback) callback(); }); }
+		else {
+			asyncbox.alert(value, newTitle, function(action) { if (callback) callback(); });
+		}
+	}
+   
+</script>
+
+<script language="javascript" type="text/javascript">
+	var dateMiniSet = '2012-07-01';
+	$(document).ready(function() {
+		var projectid = '0';
+		var interestrates = '0';
+		var tendamount = '0';
+		var miniamount = '0';
+		var creditrating = '0';
+		var loancycle = '';
+		var prioritytype = '0';
+		var expireddate = '2000-01-01';
+		if (expireddate.indexOf("0001") > -1) { expireddate = ""; }
+		else if (expireddate.indexOf("2000") > -1) { expireddate = ""; }
+		var borrowtype = '0000000000';
+		if (projectid > 0) {
+			$("#chkprojectid").attr("checked", "checked");
+		}
+
+		if (interestrates > 0) {
+			$("#chkinterestrates").attr("checked", "checked");
+			$(":input[name='interestrates']").val(interestrates);
+		}
+		if (loancycle.length > 0) {
+			$("#chkloancycle").attr("checked", "checked");
+			var days = loancycle.split(',');
+			$(":input[name='loancycle']").eq(0).val(days[0]);
+			$(":input[name='loancycle']").eq(1).val(days[1]);
+		}
+		if (miniamount > 0) {
+			$("#chkminiamount").attr("checked", "checked");
+			$(":input[name='miniamount']").val(miniamount);
+		}
+		if (expireddate != "") {
+			$("#chkexpireddate").attr("checked", "checked");
+			$(":input[name='expireddate']").val(expireddate);
+		}
+		$(":input[name='tendamount']").val(tendamount);
+		if ('无' != "无" && tendamount == 0 && vtype == '3') {
+			$("#rdotamount1").attr("checked", "checked");
+		}
+		if (prioritytype > 0) {
+			$("#rdoprioritytype" + prioritytype).attr("checked", "checked")
+			$("#chkLoanAfterReturn").attr("checked", "checked")
+		}
+	});
+
+	//提交设置
+	function updateLoanAuto() {
+		var checklist = $(":checked[name='chkAutoRule']");
+		if (checklist.length == 0 && '无' == "无") {
+			SettingStr("您没有进行任何条件设置", null); return;
+		}
+		else {
+			var projectid = $(":checked[id='chkprojectid']").length; //担保
+			var interest = 0; //年化利率
+			if ($(":checked[id='chkinterestrates']").length > 0) {
+				interest = $(":input[name='interestrates']").val();
+				if (!regCount.test(interest) || interest == 0) { SettingStr(objectarray[4], null); return; }
+			}
+			var tendamount = $(":input[name='tendamount']").val(); //投资金额
+			var tamount = $(":checked[name='tamount']").val();
+			if (tamount == 0 && (!regCount.test(tendamount) || tendamount < 50)) { SettingStr(objectarray[6], null); return; }
+			tendamount = tamount == 1 ? 0 : tendamount;
+			var miniamount = 0; //账户最小余额
+			if ($(":checked[id='chkminiamount']").length > 0) {
+				miniamount = $(":input[name='miniamount']").val();
+				if (!regCount.test(miniamount) || miniamount == 0) { SettingStr(objectarray[3], null); return; }
+				if (parseInt(miniamount) < parseInt(tendamount)) { SettingStr(objectarray[7], null); return; }
+			}
+			var loancycle = ""; //投资期限
+			if ($(":checked[id='chkloancycle']").length > 0) {
+				var start = $(":input[name='loancycle']").val();
+				var end = $(":input[name='loancycle']").eq(1).val();
+				if ((!regCount.test(start) || !regCount.test(end)) || parseInt(start) > parseInt(end) || parseInt(start) < 4 || parseInt(end) > 24) { SettingStr(objectarray[5], null); return; }
+				else { loancycle = start + "," + end; }
+			}
+			var expireddate = ""; //失效日期
+			if ($(":checked[id='chkexpireddate']").length > 0) {
+				expireddate = $(":input[name='expireddate']").val();
+			}
+			$.ajax({
+				url: "/ajax/ajax_autoLoan.ashx",
+				type: "post",
+				dataType: "html",
+				data: "Cmd=addautoloan&prjid=" + projectid + "&interest=" + interest + "&tendAmount=" + tendamount + "&miniamount=" + miniamount + "&loancycle=" + loancycle + "&expireddate=" + expireddate + "&borrowtype=5" + "&prioritytype=" + $('input:checked[name="prioritytype"]').val(),
+				success: function(d) {
+					if (parseInt(d) > 0) { SettingStr(objectarray[2], function() { location.href = location.href; }); }
+				}
+			});
+		}
+	}
+</script>
+
+<style type="text/css">
+	.tdHead { font-size: 12px; font-weight: bold; text-align: left; height: 40px; line-height: 40px; background-color: #F9F9F9; border: #E9E8E7 solid 1px; text-align: center; }
+	.tdContent { font-size: 12px; text-align: left; height: 35px; line-height: 35px; border: #E9E8E7 solid 1px; padding-left: 10px; padding-right: 10px; text-align: left; }
+	.btnsave { border: none; width: 80px; height: 31px; background-image: url(__ROOT__/Style/M/images/b1i.jpg); cursor: pointer; }
+	.text6 { width: 50px; margin: 0 3px; }
+	.line11 { float: left; height: 32px; width: 39px; }
+	.line12 { float: left; height: 22px; width: 669px; padding: 10px 0 0 0; }
+	.line2 { float: left; height: 29px; width: 683px; padding: 5px 0 0 25px; border-width: 1px 0 0 0; border-style: solid; border-color: #e1e1e1; }
+	#line3 { float: left; height: 70px; *height: 90px; width: 683px; padding: 7px 0 0 25px; background-color: #f0f0f0; border-width: 1px 0; border-style: solid; border-color: #e1e1e1; line-height:180%; *line-height:150%; }
+	#line4 { float: left; height: 28px; width: 708px; padding: 20px 0; text-align: right; }
+	#line5 { float: left; height: auto; width: 708px; padding: 10px 0 15px 0; background-color: #fff7f8; border-width: 1px 0 0 0; border-style: solid; border-color: #ef7475; }
+	#line51 { float: left; height: 17px; width: 658px; padding: 0 25px 0 25px; }
+	.line511 { float: left; height: 17px; width: 17px; }
+	.line512 { float: left; height: 15px; width: 639px; padding: 2px 0 0 2px; }
+	#line52 { float: left; height: auto; width: 640px; padding: 8px 25px 0 43px; line-height: 2.1; color: #005B9F; }
+	.line1 { float: left; height: 32px; width: 708px; border-width: 3px 0 0 0; border-style: solid; border-color: #e1e1e1; }
+	.dv_header_8 { background-image: url(); }
+	.dv_account_0 { margin-top: 10px; }
+	.vtexttop { vertical-align: text-top; }
+	.sp_gray { color: #666666; }
+	.errsty { float: left; overflow: hidden; height: 25px; line-height: 20px; }
+	.resetResult { background: url(__ROOT__/Style/M/images/button/zdtb_13.jpg); height: 28px; width: 163px; border: 0px; }
+	.setState0{ background: url(__ROOT__/Style/M/images/button/zanting_queren.gif) 0 -38px; height: 29px; width: 165px; border: 0px; margin-bottom:30px; cursor:pointer; }
+	.setState1{ background: url(__ROOT__/Style/M/images/button/zanting_queren.gif); height: 29px; width: 165px; border: 0px; margin-bottom:30px; cursor:pointer; }
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/F/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，{$glo.web_name}将根据您的设置，自动进行长期担保贷的投标
+</div>
+<div style="margin: 10px 0 0 24px;">
+	<br>
+	<div class="line1">
+		<div class="line12" style="padding-left: 25px;">
+			长期担保贷同时满足以下条件，请进行自动投标：</div>
+	</div>
+	<div class="line2">
+		<label>
+			<input checked="checked" disabled="disabled" name="chkAutoRule" value="ProjectId" id="chkprojectid" style="margin: 3px 15px 0 0;" type="checkbox">{$glo.web_name}提供担保；</label>
+	</div>
+	<div class="line2" style="display: none;">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="CreditRating" id="chkcreditrating" style="margin: 3px 15px 0 0;" type="checkbox">发标人信用积分≥
+			<input class="text6" name="creditrating" id="creditrating" type="text">分；
+		</div>
+		<div id="errsty1" class="errsty">
+		</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="InterestRates" id="chkinterestrates" style="margin: 3px 15px 0 0;" type="checkbox">年化利率≥
+			<input class="text6" name="interestrates" id="interestrates" type="text">%；
+		</div>
+		<div id="errsty2" class="errsty">
+		</div>
+	</div>
+<div class="line2">
+	<div style="float: left; overflow: hidden;">
+		<label>
+		</label>
+		<input type="checkbox" style="margin: 3px 15px 0 0;" id="chkloancycle2" value="LoanCycle" name="chkAutoRule">借款周期在
+		<label><input type="checkbox" class="vtexttop" value="30" id="loancycle30" name="loancycle"> 30天</label>&nbsp;&nbsp;<label><input type="checkbox" value="45" class="vtexttop" id="loancycle45" name="loancycle"> 45天</label>&nbsp;
+		<label><input type="checkbox" value="60" class="vtexttop" id="loancycle60" name="loancycle"> 60天</label>&nbsp;&nbsp;<label><input type="checkbox" value="90" class="vtexttop" id="loancycle90" name="loancycle"> 90天</label>
+	</div>
+	<div class="errsty" id="errsty3">
+	</div>
+</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="MiniAmount" id="chkminiamount" style="margin: 3px 15px 0 0;" type="checkbox">账户余额≥
+			<input class="text6" name="miniamount" id="miniamount" type="text">元；
+		</div>
+		<div id="errsty4" class="errsty">
+		</div>
+	</div>
+	<div class="line2">
+		<div style="float: left; overflow: hidden;">
+			<label>
+			</label>
+			<input name="chkAutoRule" value="ExpiredDate" id="chkexpireddate" style="margin: 3px 15px 0 0;" type="checkbox">自动投标设置于
+			<input name="expireddate" id="expireddate" readonly="readonly" onclick="return returnDateFomartWith_();" size="10" onfocus="WdatePicker({ minDate: dateMiniSet })" type="text">自动取消；
+		</div>
+		<div id="errsty5" class="errsty">
+		</div>
+	</div>
+	<div id="line3">
+		<div style="float: left; overflow: hidden;">
+			<input checked="checked" name="tamount" id="rdotamount" value="0" type="radio">  每次投标<input class="text6" name="tendamount" id="txttendamount" type="text">元或借款标余额小于该金额时，自动补足余额后满标；
+		</div>
+		<div id="errsty6" class="errsty">
+		</div>
+		<div style="clear:both;"></div>
+		<div style="float: left; overflow: hidden;">
+			<input disabled="disabled" name="tamount" id="rdotamount1" value="1" onclick="$('#errsty6').html('');$('#txttendamount').val('0')" type="radio"> 每次投标账户最大余额或借款标余额小于账户最大余额时，自动补足余额后满标（仅特权会员可选）；
+		</div>
+		<div style="clear:both;"></div>
+		<div style="float: left; overflow: hidden;">
+			<input name="loanafterreturn" id="chkLoanAfterReturn" value="1" onmouseup="javascript:if(this.checked){ $('#rdoprioritytype1').removeAttr('checked');$('#rdoprioritytype2').removeAttr('checked');}else{ $('#rdoprioritytype1').attr('checked','checked')}" type="checkbox">  每次回收金额后将余额投标(含已投过的标)              
+			<input name="prioritytype" id="rdoprioritytype1" value="1" onclick="javascript:$('#chkLoanAfterReturn').attr('checked','checked')" type="radio"> 授信额度优先；
+			<input name="prioritytype" id="rdoprioritytype2" value="2" onclick="javascript:$('#chkLoanAfterReturn').attr('checked','checked')" type="radio"> 投标进度优先；
+		</div>
+	</div>
+	<div id="line4">
+		<img style="cursor: pointer;" alt="重置" onclick="window.location=window.location;" src="__ROOT__/Style/M/images/reset.gif">&nbsp;&nbsp;
+		<img style="cursor: pointer;" alt="确定" onclick="updateLoanAuto()" src="__ROOT__/Style/M/images/btn2.gif">
+		&nbsp;&nbsp;&nbsp;
+	</div>
+	<div id="line5">
+		<div id="line51">
+			<div class="line511">
+				<img alt="" src="__ROOT__/Style/M/images/minilogo.gif"></div>
+			<div class="line512">
+				您当前的长期担保贷自动投标设置为：</div>
+		</div>
+		<div id="line52">
+			<table cellpadding="0" cellspacing="0">
+				<tbody><tr>
+					<td style="width: 490px;">
+						无
+					</td>
+					<td>
+						<input value="" class="setState0" onclick="updateSate()" type="button">
+						
+						<input value="" class="resetResult" onclick="ResetResult()" type="button">
+
+						<script type="text/javascript">
+							var state = '0';
+							function updateSate() {
+								var oldstate = state;
+								state = state == 0 ? 1 : 0;
+								asyncbox.confirm('您好，确认要' + (oldstate == 0 ? '启用' : '暂停') + '当前设置吗?', newTitle, function(action) {
+									if (action == 'ok') {
+										if ($(".resetResult").parent().prev().html().indexOf("担保") > 0) {
+											$.post("/ajax/ajax_autoLoan.ashx", { Cmd: "updateAutoLoanState", borrowType: 5, s: state }, function(data) {
+												if (data > 0) {
+													SettingStr(objectarray[0], function() { location.href = location.href; });
+												}
+												else { 
+													SettingStr(objectarray[9], function() {  });
+												}
+											});
+										}
+										else {
+											asyncbox.alert('您好，您目前没有任何设置！', newTitle);
+										}
+									}
+								});
+							}
+						
+							function ResetResult() {
+								asyncbox.confirm('您好，确认要取消当前设置吗?', newTitle, function(action) {
+									if (action == 'ok') {
+										if ($(".resetResult").parent().prev().html().indexOf("担保") > 0) {
+											$.post("/ajax/ajax_autoLoan.ashx", { Cmd: "delAutoLoan", UserId: "176781", borrowType: 5 }, function(data) {
+												if (data > 0) {
+													SettingStr(objectarray[0], function() { location.href = location.href; });
+												}
+											});
+										}
+										else {
+											asyncbox.alert('您好，您目前没有任何设置！', newTitle);
+										}
+									}
+								});
+							}
+						</script>
+
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+					<div style="line-height:180%; margin-top:10px; color:#900000">
+					自动投标的总额最高只能达到标的金额的10%（例如您设置自动投标金额为3万，如果有借款人借款20万，那么您最高投标金额为2万）
+					</div>
+					</td>
+				</tr>
+			</tbody></table>
+		</div>
+	</div>
+</div>

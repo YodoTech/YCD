@@ -1,0 +1,107 @@
+<include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<script type="text/javascript">
+	function displayDiv(num) {
+		var obj = document.getElementById("udiv" + num);
+		var obja = document.getElementById("ulink" + num);
+		var objtop = document.getElementById("utop" + num);
+		var objbottom = document.getElementById("ubottom" + num);
+
+		if (obj.style.display == 'none') {
+			objbottom.style.display = '';
+			obj.style.display = '';
+			objtop.style.backgroundImage = "url(__ROOT__/Style/M/images/account/uctop.jpg)";
+			obja.innerHTML = "-";
+		}
+		else {
+			obj.style.display = 'none';
+			objbottom.style.display = 'none';
+			objtop.style.backgroundImage = "url(__ROOT__/Style/M/images/account/ucall.jpg)";
+			obja.innerHTML = "+";
+		}
+	}
+</script>
+
+<link href="__ROOT__/Style/Swfupload/swfupload.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/M/css/account.css" />
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="wrap2">
+	<div id="hy_left">
+		<include file="Public:_left" />
+	</div>
+	<div id="hy_right">
+            <div class="box">
+				<div class="Menubox1" id="rotate">
+					<ul class="ajaxdata ">
+						<li class="ui-tabs-selected"><a>借入人审核</a></li>
+					</ul>
+				</div> 
+				<div class="contentright">
+					   <div class="top_account_bg">
+							<img src="__ROOT__/Style/M/images/start.jpg" class="member11"/>
+							通过提交您的详细个人资料，工作人员将进行审核
+					   </div>
+					   <div class="member12">
+						   <div class="shenhe_tit se_tit01">
+								<ul id="xtab">
+									<li class="selected"><a href="javascript:;" ajax_href="__URL__/editmemberinfo/" data="info1">个人资料</a></li>
+									<li><a href="javascript:;" ajax_href="__URL__/editcontact/" data="info2">联系方式</a></li>
+									<li><a href="javascript:;" ajax_href="__URL__/editdepartment/" data="info3">单位资料</a></li>
+									<li><a href="javascript:;" ajax_href="__URL__/editfinancial/" data="info4">财务状况</a></li>
+									<li><a href="javascript:;" ajax_href="__URL__/edithouse/" data="info5">房产资料</a></li>
+									<li><a href="javascript:;" ajax_href="__URL__/editensure/" data="info6">联保情况</a></li>
+								</ul>
+							</div>
+							<div class="member13">
+								<div id="info1"></div>
+								<div id="info2"></div>
+								<div id="info3"></div>
+								<div id="info4"></div>
+								<div id="info5"></div>
+								<div id="info6"></div>
+							</div>
+						</div>
+                </div>
+            </div>
+        </div>
+</div>
+<script type="text/javascript">
+
+$("#xtab li a").click(function(){
+	//tab变换
+	$("#xtab li").removeClass('selected');
+	$(this).parent().addClass('selected');
+	var li_index = $("#xtab li").index($("#xtab li.selected"));
+	var cla = "shenhe_tit se_tit0"+parseInt(li_index+1);
+	$("#xtab").parent().attr("class",cla);
+	//tab变换
+	var nowurl = $(this).attr('ajax_href');
+	cindex= parseInt(li_index+1);
+	num = $("#xtab li").size();
+	for(var i=1;i<=num;i++){
+		$("#info"+i).hide();
+	}
+	$("#info"+cindex).show();
+	content = $("#info"+cindex).html();
+	if($.trim(content)==""){
+		var loadhtml = "<div>加载中。。。。。。</div>";
+		$("#info"+cindex).html(loadhtml);
+        $.ajax({
+            url: nowurl,
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#info"+cindex).html(d.content);//更新客户端信息 作个判断，避免报错
+            }
+        });
+	}
+	
+	return false;
+})
+$('#xtab').find('a[data=info1]').click();
+</script>
+<include file="Public:_footer" group="Home" />

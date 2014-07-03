@@ -1,0 +1,43 @@
+<include file="Public:_header_common" />
+<title>{$vo.type_name}-{$glo.web_name}客服中心</title>
+<meta http-equiv="keywords" content="{$vo.type_keyword}" />
+<meta http-equiv="description" content="{$vo.type_info}" />
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div  class="wrap2">
+<div class="bzzx_left"> <include file="left" /> </div>
+    <div class="bzzx_right">
+      <div class="bzzx_right_a">
+        <div class="bznr_tl"></div>
+        <div class="bznr_tr"></div>
+        <div class="bznr_bl"></div>
+        <div class="bznr_br"></div>
+        <ul class="cjwt_a_01 kefu01">
+          <span>客服中心</span>
+        </ul>
+        <ul class="cjwt_b_02">
+          <div class="artcontent">
+            <volist name="kflist" id="vl">
+              <div class="kefu03">
+                <div  class="kefu04"><img src="{$vl.id|get_avatar=###+10000000}" class="kefu05"></div>
+                <div>
+                  <ul  class="kefu06">
+                    <li class="kefu02">{$vl.user_name}</li>
+                    <li class="kefu02">姓名：{$vl.real_name}</li>
+                    <li class="kefu02">电话:{$vl.phone}</li>
+                    <li class="kefu02">
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin={$vl.qq}&amp;site=qq&amp;menu=yes" target="_blank" class="kefu07">
+                    <img border="0" src="__ROOT__/Style/H/images/kf/pa.gif" title="点击这里给我发消息"  alt="点击这里给我发消息">
+                    </a></li>
+                  </ul>
+                </div>
+              </div>
+            </volist>
+          </div>
+        </ul>
+      </div>
+    </div>
+
+</div>
+<!--中部结束--> 
+<include file="Public:_footer_inner" />

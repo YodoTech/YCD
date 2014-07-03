@@ -1,0 +1,51 @@
+<include file="../Public/_header" />
+<script type="text/javascript" src="__ROOT__/Style/My97DatePicker/WdatePicker.js" language="javascript"></script>
+<style type="text/css">
+.tip{color:#000000}
+</style>
+<tagLib name="htmlA" />
+<div class="so_main">
+  <!--列表模块-->
+  <form name="sdf" id="sdf" action="__URL__/index" method="get">
+  <div class="Toolbar_inbox">
+  	<span>客服<htmlA:select datakey="kflist" id="kf" value="key|search.kf"/> 从<htmlA:timer id="start_time" tip='只选开始时间则查询从开始时间往后所有' arg="{maxDate:'#F{$dp.$D(\\\\'end_time\\\\')||\\\\'2020-10-01\\\\'}',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true}"  class="Wdate" value="{$search.start_time|mydate='Y-m-d H:i:s',###}"/>到<htmlA:timer id="end_time" tip='只选结束时间则查询从结束时间往前所有' arg="{minDate:'#F{$dp.$D(\\\\'start_time\\\\')}',maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true}" class="Wdate" value="{$search.end_time|mydate='Y-m-d H:i:s',###}"/></span>
+    <a href="javascript:;" onclick="javascript:document.forms.sdf.submit();" class="btn_a"><span>统计</span></a></div>
+</form>
+  <div class="list">
+  <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th style="width:30px;">&nbsp;
+		
+    </th>
+    <th class="line_l">ID</th>
+    <th class="line_l">用户名</th>
+    <th class="line_l">成功投资</th>
+    <th class="line_l">成功借款</th>
+    <th class="line_l">客服</th>
+  </tr>
+  <php>$cn=$investor_money=$borrow_money=0;</php>
+  <volist id="vo" name="list">
+      <tr overstyle='on' id="list_{$vo.id}">
+        <td>&nbsp;</td>
+        <td>{$vo.id}<php>$cn++;</php></td>
+        <td>{$vo.user_name}</td>
+        <td>￥{$vo.investor_capital|default=0}<php>$investor_money+=$vo['investor_capital'];</php></td>
+        <td>￥{$vo.borrow_money|default=0}<php>$borrow_money+=$vo['borrow_money'];</php></td>
+        <td>{$kfname}</td>
+      </tr>
+  </volist>
+    <tr overstyle='on' id="list_{$vo.id}">
+      <td>&nbsp;</td>
+      <td colspan="5">统计：当前时间段内，有<php>echo $cn;</php>名会员有资金记录,投资金额<php>echo $investor_money+0;</php>,借款金额投资金额<php>echo $borrow_money+0;</php>，共<php>echo $borrow_money+$investor_money+0;</php>，可获得千分之<php>echo $glo['customer_rate']</php>提成，共<php>echo ($borrow_money+$investor_money+0)*$glo['customer_rate']/1000</php>元</td>
+    </tr>
+  </table>
+
+  </div>
+</div>
+<script type="text/javascript">
+function showurl(url,Title){
+	ui.box.load(url, {title:Title});
+}
+</script>
+
+<include file="Public:_footer" />

@@ -1,0 +1,25 @@
+<include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/M/css/account.css" />
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="wrap2">
+	<div id="hy_left">
+		<include file="Public:_left" />
+	</div>
+	<div id="hy_right">
+            <div class="box">
+				<div class="Menubox1" id="rotate">
+					<ul class="menu ajaxdata">
+                        <li><a href="#fragment-1" ajax_href="__URL__/applylog/">额度申请</a></li>
+					</ul>
+				</div> 
+				<div class="contentright">
+                    <div id="fragment-1" style="display:none">
+                        <!--升级会员-->
+                    </div>
+                </div>
+			</div>
+    </div>
+</div>
+<include file="default:Public:_footer" group="Home" />

@@ -1,0 +1,158 @@
+<include file="Public:_header_common" />
+<title>{$glo.index_title}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="wrap2" >
+  <div class="title03"><span class="oldai_color_jk">借款流程</span><span class="borrow01">借款流程&nbsp;注：绿色表示您已完成该操作流程，灰色则表示现在需要完善的过程</span></div>
+  <div class="list05">
+    <div class="content">
+      <div class="lc_bz">
+        <ul>
+          <li><span class=hong_wei></span><a class=hong href="__APP__/member/common/register/">注册会员</a> <span class=hong_tou></span></li>
+          <if condition="$mstatus.phone_status eq 1">
+            <li><span class=hong_wei></span><a class=hong href="__APP__/member/verify">验证中心</a> <span class=hong_tou></span></li>
+            <else/>
+            <li><span class=hui_wei></span><a class=hui href="__APP__/member/verify">验证中心</a> <span class=hui_tou></span></li>
+          </if>
+          <if condition="$mdata.i gt 0">
+            <li><span class=hong_wei></span><a class=hong href="__APP__/member/memberinfo">填写资料</a> <span class=hong_tou></span></li>
+            <else/>
+            <li><span class=hui_wei></span><a class=hui href="__APP__/member/memberinfo">填写资料</a> <span class=hui_tou></span></li>
+          </if>
+          <if condition="($minfo.user_leve gt 0) AND ($minfo.time_limit gt time())">
+            <li><span class="hong_wei"></span><a href="__APP__/member/vip" class="hong">VIP认证</a><span class="hong_tou"></span></li>
+            <else/>
+            <li><span class="hui_wei"></span><a href="__APP__/member/vip" class="hui">VIP认证</a><span class="hui_tou"></span></li>
+          </if>
+          <if condition="$mdata.mdi_id gt 0">
+            <li><span class="hong_wei"></span><a href="__APP__/member/memberinfo" class="hong">上传资料</a><span class="hong_tou"></span></li>
+            <else/>
+            <li><span class="hui_wei"></span><a href="__APP__/member/memberinfo" class="hui">上传资料</a><span class="hui_tou"></span></li>
+          </if>
+          <if condition="$minfo.credit_cuse gt 0">
+            <li><span class="hong_wei"></span><a href="__APP__/member/memberinfo" class="hong">申请额度</a><span class="hong_tou"></span></li>
+            <else/>
+            <li><span class="hui_wei"></span><a href="__APP__/member/memberinfo" class="hui">申请额度</a><span class="hui_tou"></span></li>
+          </if>
+          <if condition="($mstatus.phone_status eq 1) AND ($mdata.i gt 0) and ($minfo.user_leve gt 0) AND ($minfo.time_limit gt time()) and ($mdata.mdi_id gt 0) and ($minfo.credit_cuse gt 0)">
+            <li><span class="hong_wei"></span><a href="__APP__/borrow/index.html" class="hong">发布借款标</a><span class="hong_tou"></span></li>
+            <else/>
+            <li><span class="hui_wei"></span><a href="__APP__/borrow/index.html" class="hui">发布借款标</a><span class="hui_tou"></span></li>
+          </if>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="wrap2">
+  <div class="title03 borrow02"><span class="oldai_color_jk">借款介绍</span></div>
+  <div class="borrow_list01">
+    <div class="fbk">
+      <div class="fbktou"> </div>
+      <div class="fbkzhong">信用标</div>
+      <div class="fbkwei">
+        <ul>
+          <li>推荐等级：<img src="__ROOT__/Style/H/images/touM.gif" class="borrow04"/></li>
+		  <li>信用额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+		  <li>总&nbsp;额&nbsp;度&nbsp;：{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+		  <li>已用额度：{:Fmoney($minfo['borrow_vouch_limit']-$minfo['borrow_vouch_cuse'])}</li>
+		  <li>额度状态：正常</li>
+		  <li><a href="__APP__/borrow/post/vouch.html"><img src="__ROOT__/Style/H/images/touM.gif" class="borrow_f0"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dkjg"></div>
+     <div class="fbk1">
+      <div class="fbktou1"> </div>
+      <div class="fbkzhong1">净值标</div>
+      <div class="fbkwei1">
+        <ul>
+          <li>推荐等级：<img src="__ROOT__/Style/H/images/touM.gif" class="borrow04"/></li>
+		  <li>信用额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+		  <li>总&nbsp;额&nbsp;度&nbsp;：{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+		  <li>已用额度：{:Fmoney($minfo['borrow_vouch_limit']-$minfo['borrow_vouch_cuse'])}</li>
+		  <li>额度状态：正常</li>
+		  <li><a href="__APP__/borrow/post/vouch.html"><img src="__ROOT__/Style/H/images/touM.gif" class="borrow_f1"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dkjg"></div>
+    <div class="fbk2">
+      <div class="fbktou2"> </div>
+      <div class="fbkzhong2">秒还标</div>
+      <div class="fbkwei2">
+        <ul>
+          <li>推荐等级：<img src="__ROOT__/Style/H/images/touM.gif" class="borrow04"/></li>
+		  <li>信用额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+		  <li>总&nbsp;额&nbsp;度&nbsp;：{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+		  <li>已用额度：{:Fmoney($minfo['borrow_vouch_limit']-$minfo['borrow_vouch_cuse'])}</li>
+		  <li>额度状态：正常</li>
+		  <li><a href="__APP__/borrow/post/vouch.html"><img src="__ROOT__/Style/H/images/touM.gif" class="borrow_f2"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dkjg"></div>
+    <div class="fbk3">
+      <div class="fbktou3"> </div>
+      <div class="fbkzhong3">抵押标</div>
+      <div class="fbkwei3">
+        <ul>
+          <li>推荐等级：<img src="__ROOT__/Style/H/images/touM.gif" class="borrow04"/></li>
+		  <li>信用额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+		  <li>总&nbsp;额&nbsp;度&nbsp;：{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+		  <li>已用额度：{:Fmoney($minfo['borrow_vouch_limit']-$minfo['borrow_vouch_cuse'])}</li>
+		  <li>额度状态：正常</li>
+		  <li><a href="__APP__/borrow/post/vouch.html"><img src="__ROOT__/Style/H/images/touM.gif" class="borrow_f3"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dkjg"></div>
+    <div class="fbk4">
+      <div class="fbktou4"> </div>
+      <div class="fbkzhong4">担保标</div>
+      <div class="fbkwei4">
+        <ul>
+          <li>推荐等级：<img src="__ROOT__/Style/H/images/touM.gif" class="borrow04"/></li>
+		  <li>信用额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</li>
+		  <li>总&nbsp;额&nbsp;度&nbsp;：{$minfo.borrow_vouch_limit|Fmoney=###}</li>
+		  <li>已用额度：{:Fmoney($minfo['borrow_vouch_limit']-$minfo['borrow_vouch_cuse'])}</li>
+		  <li>额度状态：正常</li>
+		  <li><a href="__APP__/borrow/post/vouch.html"><img src="__ROOT__/Style/H/images/touM.gif" class="borrow_f5"/></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+<div id="guanggao_05">{:get_ad(5)}</div>
+<div class="wrap2">
+  <div class="title03"><span class="oldai_color_jk">标种说明</span></div>
+  <div class="list05">
+    <ul>
+      <li class="midd_loan_li_01" >
+        <p class="xy_05"> <img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;信用标：信用标是一种以信任额度为借款依据的标的类型 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;担保标：担保标是一种以担保额度为借款依据的标的类型 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;净值标：净值标是一种以帐户净资产来确认发标金额的标的类型 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;秒还标：秒还标是一种自动通过初审和复审并且标满即马上自动还款的标的类型</p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;抵押标：抵押标是一种以固定资产为押低，通过线下审核才能通过初审的标的类型</p>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="wrap2">
+  <div class="title03"><span class="oldai_color_jk">温馨提示</span></div>
+  <div class="list05">
+    <ul>
+      <li class="midd_loan_li_01" >
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;提交更多的资料证明，将会提高您的信用额度，将会加快您的借款进度。 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;您只需要花费不到15分钟通过 <a href="#" >视频认证</a>、<a href="#"> 会员实名认证</a>、<a href="#"> 身份认证</a>、<a href="#"> 手机认证</a>、<a href="#">现场认证</a> 就能立刻发布借款标进行借款。 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;您将不得将所借到的借款用于任何违法活动(包括但不限于赌博、吸毒、贩毒、卖淫嫖娼等)及一切高风险投资(如证券期货、彩票等)。 </p>
+        <p class="xy_05"><img src="__ROOT__/Style/H/images/touM.gif" />&nbsp;您将不得进行信用卡套现或其他洗钱等不正当交易行为,否则投资者或本网站有权向公安等有关行政机关举报并追究相关法律责任。 </p>
+      </li>
+    </ul>
+  </div>
+</div>
+<!--中部结束-->
+<include file="Public:_footer" />

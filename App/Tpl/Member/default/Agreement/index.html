@@ -1,0 +1,62 @@
+<style>
+	div{font-size:20px; z-index:-1}
+	table.first {
+		color: #005CA0;
+		font-family: helvetica;
+		font-size: 8pt;
+		border-left: 3px solid red;
+		border-right: 3px solid #FF00FF;
+		border-top: 3px solid green;
+		border-bottom: 3px solid blue;
+		background-color: #ccffcc;
+	}
+	td {
+		border: 2px solid blue;
+		background-color: #ffffee;
+	}
+	td.second {
+		border: 2px dashed green;
+	}
+	div.test {
+		color: #CC0000;
+		background-color: #FFFF66;
+		font-family: helvetica;
+		font-size: 10pt;
+		border-style: solid solid solid solid;
+		border-width: 2px 2px 2px 2px;
+		border-color: green #FF00FF blue red;
+		text-align: center;
+	}
+	#content td,#content th{border:0 none}
+</style>
+<DIV class="content">
+第一条：借款详情<BR />&nbsp;&nbsp;&nbsp;&nbsp;{$mBorrow.real_name} 向 {$mInvest.real_name} 借款人民币￥{$iinfo.investor_capital}元，借款开始日期为:{$binfo.add_time|date="Y-m-d",###},借款限期为{$binfo.borrow_duration}<if condition="$binfo.repayment_type eq 1">天<else/>个月</if>,借款到期日期为：{$iinfo.deadline|date="Y-m-d",###},借款年利率为：{$binfo.borrow_interest_rate}%,还款方式为：{$binfo.repayment_name},<if condition="($binfo.repayment_type eq '2') OR ($binfo.repayment_type eq '3')">每月偿还金额为：￥{$iinfo.repay}元<else/>一次性偿还金额为：￥{$iinfo['investor_capital']+$iinfo['investor_interest']}元</if><BR />
+还款明细如下：<br />
+	<table id="content" style="width:100%; border:1px solid;" cellspacing="0" cellpadding="0">
+		<tbody><tr>
+			<td>
+				应还日期
+			</td>
+			<td>
+				应还本金
+			</td>
+			<td>
+				应还利息
+			</td>
+			<td>
+				当前/总(期)
+			</td>
+		</tr>
+	
+	<volist name="detail_list" id="ve">
+	<tr>
+		<td>{$ve.deadline|date="Y-m-d",###}</td>
+		<td>{$ve.capital}</td>
+		<td>{$ve['interest']-$ve['interest_fee']}</td>
+		<td>{$ve.sort_order}/{$ve.total}</td>
+	</tr>
+	</volist>
+	</tbody></table>
+
+<STRONG>第二条：还款</STRONG> <SPAN class="textbook5"><BR />&nbsp;&nbsp;&nbsp;&nbsp;1、借款人承诺按照本协议第一条约定的时间和金额按期足额向出借人还款。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、借款人的最后一期还款必须包含全部剩余本金、利息及其他根据本协议产生的全部费用。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;3、借款人的每一期还款的还款金额计算公式为：每月须还款总金额=每月须还利息+每月须还本金。</SPAN> <BR /><STRONG>第三条：逾期还款 </STRONG><SPAN class="textbook5"><BR />&nbsp;&nbsp;&nbsp;&nbsp;1、若借款人逾期仍未还款,借款人除向出借人支付正常利息以外,还应每天向本网站支付逾期罚息(金额为未偿还本息的千分之<SPAN id="ctl00_ContentPlaceHolder1_lblLateFee">八</SPAN>)。出借人和借款人均同意并认可，本网站可通过短信、电话、上门催收等方式对借款人逾期未偿还的本息进行催收,且本网站有权按照前述标准向借款人收取催收服务费用，暂不公开个人隐私资料。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、借款人同意，其逾期还款造成出借人因此支付的费用(包括但不限于律师费)由借款人承担； <BR />&nbsp;&nbsp;&nbsp;&nbsp;3、借款人同意，如借款人逾期未偿还任何一期还款，本网站有权采取以下措施之一项或几项：<BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（1）将借款人的有关身份资料及其他个人信息通过本网站“逾期黑名单”等栏目对外公开； <BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（2）将借款人的有关身份资料及其他个人信息正式备案在“不良信用记录”,列入全国个人信用评级体系的黑名单(“不良信用记录”数据将为银行、电信、担保公司、人才中心等有关机构提供个人不良信用信息)； <BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（3）对借款人采取法律措施,由此所产生的所有法律后果将由借款人来承担。<BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出借人同意授权并支持本网站采取以上措施。<BR />&nbsp;&nbsp;&nbsp;&nbsp;4、出借人和借款人均同意，如借款人逾期30天仍未清偿借款本息,则出借人将本协议项下的债权转让给本网站合作商；转让价格为不超过借款人逾期仍未偿还的借款本息（具体金额视出借人在本网站的会员级别不同而有所不同），本网站合作商向出借人支付借款人逾期仍未偿还的本金即可取得出借人在本协议项下的债权；本网站合作商将依法自行承担清收费用，向借款人追收借款本金、利息、逾期罚息等，坏账风险由本网站合作商承担。但是，本网站合作商作为独立的营利性组织机构也有可能在某些情况下拒绝受让出借人在本协议项下的债权，在这种情况下，借款本息不能完全收回的风险由出借人自行承担。<BR />&nbsp;&nbsp;&nbsp;&nbsp;5、本网站对逾期仍未还款的借款人收取逾期罚息作为催收费用、采取多种方式进行催收、将借款人的相关信息对外公开或列入“不良信用记录”或采取法律措施等各项行为，均只是本网站根据本协议为出借人提供的一种服务，该等服务的法律后果均由借款人和出借人自行承担，并不表示本网站对该等借款本息之清偿承担任何担保责任或追收责任。 </SPAN><BR /><STRONG>第四条：借款的支付和还款方式 </STRONG><SPAN class="textbook5"><BR />&nbsp;&nbsp;&nbsp;&nbsp;1、出借人在同意向借款人出借相应款项时,已委托本网站在本借款协议生效时将该笔借款直接划付至借款人帐户。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、借款人已委托本网站将还款直接划付至出借人帐户。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;3、借款人和出借人均同意，本网站接受借款人或出借人委托所采取的划付款项行为，所产生的法律后果均由相应委托方借款人或出借人自行承担。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;4、若借款人的任何一期还款不足以偿还应还本金、利息和违约金,则出借人之间同意按照各自出借金额在出借金额总额中的比例收取还款。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;5、本协议的履行地为本网站的住所地(山东省济南市)。</SPAN> <BR /><STRONG>第五条：提前到期和提前偿还</STRONG><SPAN class="textbook5"> <BR />&nbsp;&nbsp;&nbsp;&nbsp;1、双方同意,若借款人出现如下任何一种情况,则本协议项下的全部借款自动提前到期,借款人在收到本网站发出的借款提前到期通知后，应立即清偿全部本金、利息、逾期利息及根据本协议产生的其他全部费用： <BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)借款人因任何原因逾期支付任何一期还款超过30天的； <BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)借款人的工作单位、职务或住所变更后，未在30天内通知本网站； <BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)借款人发生影响其清偿本协议项下借款的其他不利变化，未在30天内通知本网站。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、双方同意,借款人有权提前清偿全部或者部分借款而不承担任何的违约责任(借款超过1日不足1个月者利息按足月计算)。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;3、本借款协议中的每一出借人与借款人之间的借款均是相互独立的,一旦借款人逾期未归还借款本息,任何一出借人有权单独对该出借人未收回的借款本息向借款人追索或者提起诉讼。</SPAN> <BR /><STRONG>第六条：法律适用和管辖</STRONG> <SPAN class="textbook5"><BR />&nbsp;&nbsp;&nbsp;&nbsp;本协议的签订、履行、终止、解释均适用中华人民共和国法律,并由协议履行地的当地人民法院管辖。</SPAN> <BR /><STRONG style="COLOR: red; FONT-WEIGHT: bold">第七条：特别条款</STRONG><SPAN style="COLOR: red"> <BR />&nbsp;&nbsp;&nbsp;&nbsp;1、借款人保证，借款人的借款用于合法用途，不将所借款项用于任何违法活动(包括但不限于赌博、吸毒、贩毒、卖淫嫖娼等)及一切高风险投资(如证券期货、彩票等)。如借款人违反前述保证或有违反前述保证的嫌疑，则出借人有权采取下列措施：<BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（1）宣布提前收回全部借款；<BR />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（2）出借人向公安等有关行政机关举报,追回此款并追究借款人的刑事责任，出借人和借款人均同意并授权本网站采取前述措施。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、本网站仅作为网友之间小额资金互助平台,借款人和出借人均不得利用本网站平台进行信用卡套现和其他洗钱等不正当交易行为,否则出借人、借款人和/或本网站有权向公安等有关行政机关举报,追究其相关法律责任。</SPAN> <BR /><STRONG>第八条：其他</STRONG> <BR /><SPAN class="textbook5">&nbsp;&nbsp;&nbsp;&nbsp;1、本协议采用电子文本形式制成,并通过站内信的形式发送至协议各方本网站信箱。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;2、本协议自借款人在本网站发布的借款标的审核成功之日即本协议题头标明的签订日起生效,借款人、出借人、本网站各执一份,并具同等法律效力。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;3、借款人、出借人在履行本协议过程中，应遵守本网站的各项规定。 <BR />&nbsp;&nbsp;&nbsp;&nbsp;4、出借人、借款人同意、授权或认可，本网站作为网络借款的中间平台根据本协议的规定和本网站的其他规定行使各项权利、发出各项通知或采取各项措施，一切法律后果和风险均由借款人或出借人承担。 <BR />5、本网站拥有对本协议的最终解释权。</SPAN> 
+</DIV>

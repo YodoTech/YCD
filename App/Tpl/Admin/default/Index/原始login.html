@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__ROOT__/Style/A/css/adminlogin.css" rel="stylesheet" type="text/css" />
+<title>管理员登陆</title>
+</head>
+
+<body>
+<form method="post" action="__URL__/login" name="form" id="form">
+	<div class="bodybox">
+		<div class="loginbox">
+			<div class="logn1">用户名：<input type="text" class="unpa" id="admin_name" name="admin_name" /></div>
+            
+			<div class="logn2">密&#12288;码：<input type="password" class="unpa" id="admin_pass" name="admin_pass" /></div>
+            <div class="logn2">口&#12288;令：<input type="text" class="unpa" id="user_word" name="user_word" /></div>
+			<div class="logn2">验证码：<input type="text" class="code" id="code" name="code" maxlength="4" />
+            <img src="__URL__/verify" onclick="javascript:this.src='__URL__/verify?'+new Date().getTime()" />
+            </div>
+			<div class="logn4"><a href="javascript:void(0);" onclick="javascript:subform();" onFocus="this.blur();" title="登陆">登陆</a></div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	function subform(){
+		var frm = document.forms['form'];
+			frm.submit();
+	}
+	document.onkeydown = keydown;
+	function  keydown(s)
+	{
+		var e =13;
+		var s=s||event;
+		currKey=s.keyCode||s.which||s.charCode;
+		if(currKey==13) subform();
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<style type="text/css">
+.msgbox dl{overflow:hidden; line-height:25px}
+.msgbox dl dt{float:left; width:100px; text-align:right; color:#F90; font-weight:bold}
+.msgbox dl dd{float:left; width:290px; text-align:left; padding-left:10px}
+.msgerror{font-weight:bold; text-align:center; line-height:50px; font-size:18px}
+</style>
+<div style="width:500px; padding:20px" class="msgbox">
+
+<dl><dt>发件人:</dt><dd>{$vo.from_uname}</dd></dl>
+<dl><dt>收件人:</dt><dd>{$vo.to_uname}</dd></dl>
+<dl><dt>发送时间:</dt><dd>{$vo.add_time|date="Y-m-d H:i",###}</dd></dl>
+<dl><dt>标题:</dt><dd>{$vo.title}</dd></dl>
+<dl><dt>内容:</dt><dd>{$vo.msg}</dd></dl>
+
+</div>
+<script type="text/javascript">
+var mid = "{$vo.id}";
+$("#msg_"+mid).find("img").attr("src",readimg);
+</script>

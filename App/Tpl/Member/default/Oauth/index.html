@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="__ROOT__/Style/JBox/Skins/Blue/jbox.css"/>
+<script type="text/javascript" src="__ROOT__/Style/Js/jquery.js"></script>
+<SCRIPT src="__ROOT__/Style/JBox/jquery.jBox.min.js" type=text/javascript></SCRIPT>
+<SCRIPT src="__ROOT__/Style/JBox/jquery.jBoxConfig.js" type=text/javascript></SCRIPT>
+<title>帐号绑定</title>
+<style type="text/css">
+body{background:url(__ROOT__/Style/H/images/bg.png) repeat}
+.box{margin:0 auto; background:none; width:500px; height:500px}
+</style>
+</head>
+<body>
+<div class="box">
+<script type="text/javascript">
+function closeAction(){
+	window.location.href="__APP__/member";
+}
+$.jBox("get:__URL__/appbind/", {
+	title: "第三方登陆绑定",
+	width: "auto",
+	buttons: {'已有帐户绑定':"jfun_bindOld()",'新用户绑定帐户':"jfun_bind()",'关闭': true }
+});
+
+function jfun_bindOld(){
+	var uname = $("#uname").val();
+	var pass= $("#pass").val();
+	if(uname=="" || pass==""){
+		alert("用户名和密码都不能为空");
+		return;
+	}
+	$.jBox.tip('提交中....','loading');
+	$.ajax({
+		url: "__URL__/appbindold/",
+		data: {"uname":uname,"pass":pass},
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					alert("绑定成功，现在转向会员中心");
+					window.location.href="/member/";
+				}
+				else $.jBox.tip(d.message,"fail");
+			}
+		}
+	});
+}
+
+
+function jfun_bind(){
+	var uname = $("#uname").val();
+	var pass= $("#pass").val();
+	var email= $("#email").val();
+	if(uname=="" || pass=="" || email==""){
+		alert("用户名,密码和邮箱都不能为空");
+		return;
+	}
+	$.jBox.tip('提交中....','loading');
+	$.ajax({
+		url: "__URL__/appbind/",
+		data: {"uname":uname,"pass":pass,"email":email},
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					alert("绑定成功，现在转向会员中心");
+					window.location.href="/member/";
+				}
+				else $.jBox.tip(d.message,"fail");
+			}
+		}
+	});
+}
+</script>
+</div>
+</body>
+</html>

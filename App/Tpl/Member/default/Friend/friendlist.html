@@ -1,0 +1,96 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.operaframe { width: 600px; text-align: left; overflow: hidden; margin-left: 20px; line-height: 27px; padding-left: 28px; float: left; margin-top: 20px; }
+        .operaframe ul { padding: 0px; margin: 0px; text-align: left; overflow: hidden; line-height: 25px; }
+        .operaframe ul li { float: left; line-height: 25px; }
+	.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; }
+	.tdContent1 { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 535px; }
+	.tdContent { line-height: 28px; border: 1px solid #ccc; }
+	.tdHeard { border: 1px solid #ccc; }
+.txtInput{   background-color: #FFFFFF;
+                    background-position: right center;
+                    background-repeat: no-repeat;
+                    border: 1px solid #CCCCCC;
+                    font-size: 12px;
+                    height: 15px;
+                    margin-right: 4px;
+                    padding: 2px;
+                    text-align: left;
+                    vertical-align: middle;
+                    width: 95px;
+                }
+</style>
+<div class="divtitle" style="width: 100%;">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}会员，以下是您在{$glo.web_name}的好友列表
+</div>
+<div style="width: 100%; margin-top:30px">
+	<table id="content" style="width: 708px; margin-left: 24px; float: left;
+		border-collapse: collapse;" cellspacing="0">
+		<tbody><tr id="tdHead">
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				会员名称
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				添加时间
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				操作
+			</th>
+		</tr>
+	
+	<volist name="list.list" id="vo">
+	<tr>
+	<td class="tdContent" style="width: 180px;">{$vo.user_name}{$vo.credits|getLeveIco=###,2}</td>
+	<td class="tdContent" style="width: 180px;">{$vo.add_time|date="Y-m-d H:i",###}</td>
+	<td class="tdContent" style="width: 280px;"><a href="javascript:;" onclick="InnerMsg({$vo.friend_id})">发送站内信</a> | <a href="javascript:;" onclick="dofriendm({$vo.friend_id},3)">加入黑名单</a>| <a href="javascript:;" onclick="dofriendm({$vo.friend_id},2)">删除好友</a></td>
+	</tr>
+	</volist>
+	
+	</tbody></table>
+	<div style="clear: both; height: 0px;">
+	</div>
+	<div style=" float:left; margin:10px 30px 10px 25px;">
+	</div>
+	<div data="fragment-1" id="pager" style="float: right; text-align: right; width: 500px; padding-right: 8px;margin-right: 24px;" class="yahoo2 ajaxpagebar">{$list.page}</div>
+	<div style="clear: both; height: 0px;">
+	</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+function dofriendm(uid,type){
+	  $.ajax({
+		  url: "__URL__/dofriendm",
+		  data: {"uid":uid,"type":type},
+		  timeout: 5000,
+		  cache: false,
+		  type: "post",
+		  dataType: "json",
+		  success: function (d, s, r) {
+			  if(d){
+				  if(d.status==1) $.jBox.tip("操作成功,网页刷新后更新列表","success");	
+				  else  $.jBox.tip("操作失败，请重试","fail");	
+			  }
+		  }
+	  });
+}
+
+</script>

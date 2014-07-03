@@ -1,0 +1,132 @@
+<style type="text/css">
+  .dv_header_8 { background-image: url(); }
+.tdTitle { text-align: center; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; border: #ccc solid 1px; }
+.tdContent { text-align: left; padding-left: 10px; font-size: 12px; height: 40; height: 28px; vertical-align: middle; border: #ccc solid 1px; text-align: center; }
+.fontred { color: #005B9F; }
+.grayfont { color: #666; }
+.grayfont span { color: #000; }
+#buylist li { width: 112px; height: auto; overflow: hidden; text-align: center; float: left; margin: 20px 10px; }
+.tdContent1 { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 535px; }
+#pager { padding-right: 0px; }
+.numRed { color: #FF0000; font-weight: bold; }
+.numRedNormal { color: #FF0000; }
+.dv_account_0 { margin-top: 10px; }
+.mouseOn { border: solid 1px #ff9933; }
+.mouseOut { border: solid 1px #e3e1d4; }
+</style>
+
+<script type="text/javascript">
+$(function() {
+	$("div table.mouseOut").mousemove(function() {
+		$(this).addClass("mouseOn").removeClass("mouseOut");
+	}).mouseout(function() { $(this).removeClass("mouseOn").addClass("mouseOut"); });
+});
+</script>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/F/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，{$glo.web_name}将根据您的设置，自动进行投标
+</div>
+<div style="padding: 20px 20px 5px 20px; text-align: left;">
+	<table class="mouseOut" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td style="width: 160px; text-align: right; background-color:#f6f6f6;">
+							<a href="javascript:;" onclick="$('#x2').click();">
+					<img alt="" src="__ROOT__/Style/M/images/account/changshangdai1.jpg"></a>
+			</td>
+			<td style="width: 490px; padding-left: 10px;">
+				<table style="width: 100%; height: 100%; line-height: 18px;">
+					<tbody><tr>
+						<td colspan="2">
+							您当前的长期担保贷自动投标设置为：
+						</td>
+					</tr>
+					
+					<tr id="trLongNone">
+<td style="vertical-align: top; text-align: left; padding: 10px 20px;">
+							无
+						</td>
+<td style="text-align: right; padding-right: 30px; vertical-align: top; ">
+							<a href="javascript:;" onclick="$('#x2').click();">
+								<img src="__ROOT__/Style/M/images/account/edit.jpg"></a>
+						</td>
+</tr>
+
+				</tbody></table>
+			</td>
+		</tr>
+	</tbody></table>
+</div>
+<div style="padding: 5px 20px 20px 20px; text-align: left;">
+<table class="mouseOut" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td style="width: 160px; text-align: right;">
+				<a href="__APP__/member/auto/autotransferindex#fragment-2">
+					<img alt="" src="__ROOT__/Style/M/images/account/duanshangdai2.jpg"></a>
+			</td>
+			<td style="width: 490px; padding-left: 10px;">
+				<table style="width: 100%; height: 100%; line-height: 18px;">
+					<tbody><tr>
+						<td colspan="2">
+							您当前的流转担保贷自动投标设置为：
+						</td>
+					</tr>
+					<tr id="tr1">
+<td>
+							您没有进行设置流转贷投标规则
+						</td>
+<td style="text-align: right; padding-right: 30px; vertical-align: top; padding-top: 9px;">
+							<a href="__APP__/member/auto/autotransferindex#fragment-2">
+								<img src="__ROOT__/Style/M/images/account/edit.jpg"></a>
+						</td>
+</tr>
+
+					
+				</tbody></table>
+			</td>
+		</tr>
+	</tbody></table>
+<div style="height: 20px; width: 720px; margin: 0 auto; border-top: solid 1px #e3e1d4;">
+	&nbsp;
+</div>
+<div style="padding: 0 20px 20px 20px;" id="cont_safe">
+	<div style="text-align: left; padding-left: 20px;">
+		<div style="overflow: hidden;">
+			<img alt="" src="__ROOT__/Style/M/images/minilogo.gif">
+			<strong>{$glo.web_name}自动投标优先级说明：</strong>
+		</div>
+		<div style="line-height: 24px; padding: 0 25px; margin-top: 10px;">
+			<table>
+				<tbody><tr>
+					<td>
+						1、
+					</td>
+					<td>
+						特权用户优先于非特权用户。
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">
+						2、
+					</td>
+					<td>
+						在特权用户中，在同等条件下，自动投标成功的概率和可用资金余额成正比。比如，A用户在帐户可用资金余额是2万， B用户在帐户可用资金余额是1万，那在同等条件下，A用户自动投标成功概率是B用户的2倍。
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">
+						3、
+					</td>
+					<td>
+						自动投标程序会在每次新标投标后重新计算各个用户的可用资金余额以确保可用资金多的用户不会因为资金闲置而产生过多的成本。
+					</td>
+				</tr>
+			</tbody></table>
+		</div>
+	</div>
+	<div style="margin: 0 20px; line-height:180%; margin-top:10px; color:#900000">
+					自动投标的总额最高只能达到标的金额的10%（例如您设置自动投标金额为3万，如果有借款人借款20万，那么您最高投标金额为2万）
+	</div>
+</div>
+<div style="clear: both;">
+</div>
+</div>
