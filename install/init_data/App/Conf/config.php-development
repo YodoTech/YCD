@@ -19,18 +19,18 @@ return array(
 	'TMPL_ACTION_SUCCESS' =>str_replace("\\", '/', substr(str_replace('\\Conf\\', '/', dirname(__FILE__)),0,-8))."/Style/tip/tip.html",//操作正确提示
 	'ERROR_PAGE'	=>'/Public/error.html',
 	//cookie
-	'COOKIE_PREFIX'	=>'lzh_',
+	'COOKIE_PREFIX'	=>'ycd_',
 	'COOKIE_PATH'	=>'/',
-	'COOKIE_DOMAIN'	=>'.lushangdai.cn',
+	'COOKIE_DOMAIN'	=>'.yodo.com',
 	//cookie
 	//数据库配置
 	'DB_TYPE'           => 'mysql',
 	'DB_HOST'           => 'localhost',
-	'DB_NAME'           =>'data',//'jichu',				//数据库名称
-	'DB_USER'           =>'root',				//数据库用户名
-	'DB_PWD'            =>'ytdw23101988a',				//数据库密码
-	'DB_PORT'           =>'3306',
-	'DB_PREFIX'         =>'lzh_',
+	'DB_NAME'           => 'ycd',		//数据库名称
+	'DB_USER'           => 'root',		//数据库用户名
+	'DB_PWD'            => '123456',	//数据库密码
+	'DB_PORT'           => '3306',
+	'DB_PREFIX'         => 'ycd_',
 	//'DB_PARAMS'			=>array('persist'=>true),
 	//数据库配置
 	//子域名配置
