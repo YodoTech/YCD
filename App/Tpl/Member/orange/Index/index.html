@@ -1,0 +1,118 @@
+<php>$member_orange_page = 'index';</php>
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>会员中心 - {$glo.web_name}</title>
+<!--{$uclogin}-->
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;会员中心</div>
+    <div class="gywm fn-clear">
+        <div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx1 fn-clear">
+                <div class="hyxx1L fn-left"><a href="__APP__/member/user#fragment-1" title="点击进行头像更换"><img id="photo" alt="点击进行头像更换" src="{$UID|get_avatar=###}" title="点击进行头像更换" /></a></div>
+                <div class="hyxx1R fn-right">
+                    <h2>{:session('u_user_name')}</h2>
+                    <p>
+                        <span>会员等级：</span>
+                        <span title="积分：{$minfo.credits|default=0}分">{$minfo.credits|getLeveName=###}</span>&nbsp;&nbsp;
+                        <span>资产总额：{:Fmoney($minfo['account_money']+$minfo['back_money']+$minfo['money_collect']+$minfo['money_freeze'])}</span>
+                    </p>
+                    <p class="p1 fn-clear"><span><a href="__APP__/member/charge#fragment-1" title="充值">充&nbsp;值</a></span><span><a href="__APP__/member/withdraw#fragment-1" title="提现" class="a1">提&nbsp;现</a></span></p>
+                    <p class="p2 fn-clear">
+                        <if condition="$verifyStatus['phone_status'] eq 1 ">
+                        <span><a href="__APP__/member/verify"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
+                        <else />
+                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
+                        </if>
+                        <if condition="$verifyStatus['id_status'] eq 1 ">
+                        <span><a href="__APP__/member/verify"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
+                        <else />
+                        <span><a class="a1" href="__APP__/member/verify"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
+                        </if>
+                        <if condition="$memberinfo.pin_pass eq ''">
+                        <span><a class="a1" href="__APP__/member/user#fragment-3"><img title="支付密码，未设置" alt="支付密码未设置" src="__ROOT__/Style/Orange/images/hyxxicon_3h.jpg" /></a></span>
+                        <else/>
+                        <span><a href="__APP__/member/user#fragment-3"><img title="支付密码，已设置" alt="支付密码已设置" src="__ROOT__/Style/Orange/images/hyxxicon_3.jpg" /></a></span>
+                        </if>
+                        <if condition="$verifyStatus['email_status'] eq 1 ">
+                        <span><a href="__APP__/member/verify"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
+                        <else />
+                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
+                        </if>
+                        <span class="sp1" style="width:auto;">冻结金额：{$minfo.money_freeze|Fmoney=###}</span>
+                        <span class="sp1" style="width:auto;">可用金额：{:Fmoney($minfo['account_money']+$minfo['back_money'])}</span>
+                    </p>
+                </div>
+            </div>
+            <ul class="hyxx2 fn-clear">
+                <li>账户净资产</li>
+                <li>理财资产</li>
+                <li>借款负债</li>
+                <li>账户余额</li>
+                <li class="li1">0.00元</li>
+                <li class="li2">=</li>
+                <li class="li1">0.00元</li>
+                <li class="li2">+</li>
+                <li class="li1">-0.00元</li>
+                <li class="li2">+</li>
+                <li class="li1">0.00元</li>
+            </ul>
+            <div class="hyxx2h">理财账户<!--   已赚总金额：0.00元  <a href="#">回账查询</a> --></div>
+            <ul class="hyxx3 fn-clear">
+                <li>理财方式</li>
+                <li>账户资产</li>
+                <li>已赚金额</li>
+                <li>加权平均收益率</li>
+                <li>持有数量</li>
+                <li></li>
+                <li class="li1">债权投资</li>
+                <li class="li1">0.00元</li>
+                <li class="li1">0.00元</li>
+                <li class="li1">0.0%</li>
+                <li class="li1">0</li>
+                <li class="li2"><a href="#">查看</a></li>
+                <li class="li3">债权投资</li>
+                <li class="li3">0.00元</li>
+                <li class="li3">0.00元</li>
+                <li class="li3">0.0%</li>
+                <li class="li3">0</li>
+                <li class="li4"><a href="#">查看</a></li>
+            </ul>
+            <div class="hyxx2h">借款账户<!--   待还总金额：0.00元  <a href="#">申请查询</a> --></div>
+            <ul class="hyxx4 fn-clear">
+                <li>借款标题</li>
+                <li>待还本金</li>
+                <li>待还利息/管理费</li>
+                <li>逾期费用</li>
+                <li class="li1"></li>
+                <li class="li2 fn-text-overflow">帮老婆筹款开分店</li>
+                <li class="li2">0.00元</li>
+                <li class="li2">0.00元</li>
+                <li class="li2">0</li>
+                <li class="li3"><a href="#">查看</a></li>
+                <li class="li4 fn-text-overflow">国企员工兼职伙伴创业</li>
+                <li class="li4">0.00元</li>
+                <li class="li4">0.00元</li>
+                <li class="li4">0</li>
+                <li class="li5"><a href="#">查看</a></li>
+            </ul>
+            <div class="hyxx5h">理财推荐</div>
+            <ul class="hyxx6 fn-clear">
+                <volist name="listBorrow_tj.list" id="vb">
+                <li>
+                    <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+                    <h4 title="{$vb.borrow_name}">{$vb.borrow_name|cnsubstr=###,8}</h4>
+                    <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
+                    <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
+                    <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
+                    <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
+                    <p class="btn"><a href="{$vb.id|getInvestUrl=###}">我要投标</a></p>
+                </li>
+                </volist>
+            </ul>
+        </div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />

@@ -1,7 +1,11 @@
 ﻿<?php
 // 本类由系统自动生成，仅供测试用途
 class InvestAction extends HCommonAction {
-    public function index(){
+	public function index() {
+		$this->display();
+	}
+	//散标投资列表
+    public function loanlist(){
 		static $newpars;
 		$Bconfig = require C("APP_ROOT")."Conf/borrow_config.php";
 		$per = C('DB_PREFIX');
@@ -44,7 +48,7 @@ class InvestAction extends HCommonAction {
 			$searchMap['borrow_status']=array("in",'2,4,6,7');
 		}
 		$parm['map'] = $searchMap;
-		$parm['pagesize'] = 10;
+		$parm['pagesize'] = 4;
 		//排序
 		(strtolower($_GET['sort'])=="asc")?$sort="desc":$sort="asc";
 		unset($surl['orderby'],$surl['sort']);
@@ -634,6 +638,11 @@ class InvestAction extends HCommonAction {
 		if($newid) ajaxmsg();
 		else ajaxmsg("发送失败",0);
 		
+	}
+
+	public function plan() {
+		//...
+		$this->display();
 	}
 
 }

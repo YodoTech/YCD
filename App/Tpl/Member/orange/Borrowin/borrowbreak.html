@@ -1,0 +1,114 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx7,.hyxx8 {width: auto;border: none;border-top: 5px solid #fa6f15;}
+.hyxx7 li.w200 {width: 200px;}
+.hyxx7 li.h100 {height: 100px;}
+.hyxx7 li.c {width: 625px;text-align: left;}
+
+.hyxx10 li.w60 {width: 60px;}
+.hyxx10 li.w80 {width: 80px;}
+.hyxx10 li.w130 {width: 130px;}
+.hyxx10 li.s {text-align:left;width:100%;text-indent: 8px;height: 30px;line-height: 15px;}
+</style>
+<div style="padding:10px;">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+    已逾期还未还的借款
+</div>
+<ul class="hyxx7 fn-clear">
+    <li class="li1 w200">起止日期：</li>
+    <li class="li3 c">&nbsp;&nbsp;
+        <input type="text" id="start_time1" value="<php>if($search['start_time1']){echo date('Y-m-d',$search['start_time1']);}</php>" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time1\\\')||\\\'2020-10-01\\\'}'})"/>
+        至
+        <input type="text" value="<php>if($search['end_time1']){echo date('Y-m-d',$search['end_time1']);}</php>" id="end_time1" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time1\\\')||\\\'2020-10-01\\\'}'})"/>
+    </li>
+</ul>
+<div style="margin:auto;width:100px;">
+    <span class="btn"><a id="btn_search" href="javascript:;" onclick="sdetail1();" onmousemove="this.style.cursor='hand'" style="margin:-15px 0 0;">查看</a></span>
+</div>
+<div class="hyxx8 fn-clear">
+    <ul class="hyxx10 fn-clear">
+        <li class="w130">借款标题</li>
+        <li class="w80">待还本金</li>
+        <li class="w80">待还利息</li>
+        <li class="w80">待付罚息</li>
+        <li class="w80">待付催收费</li>
+        <li class="w80">待付总金额</li>
+        <li class="w80">应还日期</li>
+        <li class="w80">当前/总(期)</li>
+        <li class="w60">逾期天数</li>
+        <li class="w60">还款</li>
+    </ul>
+    <div id="content">
+        <volist name="list" id="vo">
+        <ul class="hyxx10 fn-clear" style="height: auto;">
+            <li class="w130"><a href="#" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,8}</a></li>
+            <li class="w80">{$vo.capital}</li>
+            <li class="w80">{$vo.interest}</li>
+            <li class="w80">{$vo.expired_money|default=0.00}</li>
+            <li class="w80">{$vo.call_fee|default=0.00}</li>
+            <li class="w80">{$vo.allneed}</li>
+            <li class="w80">{$vo.deadline|date="Y-m-d",###}</li>
+            <li class="w80">{$vo.sort_order}/{$vo.total}</li>
+            <li class="w60">{$vo.breakday}</li>
+            <li class="w60"><a href="javascript:;" onclick="repayment({$vo.borrow_id},{$vo.sort_order})">还款</a></li>
+        </ul>
+        </volist>
+    </div>
+    <div id="pager" data="fragment-4" class="ajaxpagebar hyxx12 fn-right" style="padding: 10px;">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+function repayment(bid,sort_order){
+    x = {"bid":bid,"sort_order":sort_order};
+    $.jBox.tip("还款中......",'loading');
+    $.ajax({
+        url: "__URL__/doexpired",
+        data: x,
+        timeout: 15000,
+        cache: false,
+        type: "post",
+        dataType: "json",
+        success: function (d, s, r) {
+            if(d){
+                if(d.status==1) $.jBox.tip("还款成功",'success');
+                else $.jBox.tip(d.message,'fail');
+            }
+        }
+    });
+}
+
+
+function sdetail1(){
+    x = makevar(['start_time1','end_time1']);
+    $.ajax({
+        url: "__URL__/borrowbreak",
+        data: x,
+        timeout: 5000,
+        cache: false,
+        type: "get",
+        dataType: "json",
+        success: function (d, s, r) {
+            if(d) $("#fragment-4").html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+        }
+    });
+}
+
+$('.ajaxpagebar a').click(function(){
+    try{    
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    }catch(e){};
+    return false;
+})
+</script>

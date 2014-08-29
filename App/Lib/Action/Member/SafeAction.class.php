@@ -22,7 +22,7 @@ class SafeAction extends MCommonAction {
 			$this->assign("vo",$vo);
 			$data['html'] = $this->fetch();
 		}
-		else  $data['html'] = '<script type="text/javascript">alert("您还未完成身份验证，请先进行实名认证");window.location.href="'.__APP__.'/member/verify?id=1#fragment-3";</script>';
+		else  $data['html'] = '<script type="text/javascript">alert("您还未完成身份验证，请先进行实名认证");window.location.href="'.__APP__.'/member/verify#fragment-3";</script>';
 		exit(json_encode($data));
     }
 

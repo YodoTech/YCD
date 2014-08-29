@@ -8,15 +8,15 @@ if(isset($_SERVER['HTTP_X_REWRITE_URL'])){
 }
 ?>
 <?php
-    define('THINK_PATH',dirname(__FILE__).'./CORE/');
+    define('THINK_PATH',dirname(__FILE__).DIRECTORY_SEPARATOR.'CORE'.DIRECTORY_SEPARATOR);
     define('APP_NAME',dirname(__FILE__).'App');
-    define('APP_PATH',dirname(__FILE__).'./App/');
+    define('APP_PATH',dirname(__FILE__).DIRECTORY_SEPARATOR.'App'.DIRECTORY_SEPARATOR);
     define('APP_DEBUG',false);
-    define('APP_PUBLIC_PATH',dirname(__FILE__).'./Public');
+    define('APP_PUBLIC_PATH',dirname(__FILE__).DIRECTORY_SEPARATOR.'Public');
 
 	define('BUILD_DIR_SECURE',true); 
 	define('DIR_SECURE_FILENAME', 'default.html'); 
 	define('DIR_SECURE_CONTENT', 'deney Access!'); 
 
-    require(THINK_PATH.'/Core.php');
+    require(THINK_PATH.'./Core.php');
 ?>

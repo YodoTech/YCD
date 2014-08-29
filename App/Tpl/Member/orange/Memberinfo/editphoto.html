@@ -1,0 +1,165 @@
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/handlers.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/swfupload.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		//swf上传图片
+		swfu = new SWFUpload(
+		{
+			// Backend Settings
+			upload_url: "swfupload",
+			post_params: {"PHPSESSID": "<php> echo session_id(); </php>", "dopost" : ""},
+
+			// File Upload Settings
+			file_size_limit : "2 MB",	// 2MB
+			file_types : "*.jpg; *.gif; *.png",
+			file_types_description : "选择 JPEG/GIF/PNG 格式图片",
+			file_upload_limit : "0",
+
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			button_image_url : "../images/SmallSpyGlassWithTransperancy_17x18.png",
+			button_placeholder_id : "spanButtonPlaceholder",
+			button_width: 250,
+			button_height: 18,
+			button_text : '<span class="button">选择本地图片 <span class="buttonSmall">(单图最大为 2 MB，支持多选)</span></span>',
+			button_text_style : '.button { font-family: "宋体", sans-serif; font-size: 12px; } .buttonSmall { font-size: 10pt; }',
+			button_text_top_padding: 0,
+			button_text_left_padding: 18,
+			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+			button_cursor: SWFUpload.CURSOR.HAND,
+			
+			// Flash Settings
+			flash_url : "__ROOT__/Style/Swfupload/swfupload.swf",
+
+			custom_settings : {
+				upload_target : "divFileProgressContainer"
+			},
+			
+			// Debug Settings
+			debug: false
+		});
+		//swf上传图片
+	});
+
+</script>
+<script type="text/javascript">
+//swf上传后排序
+function rightPic(o){
+	 var o = $("#albCtok"+o);
+	 if( o.next().length > 0) {
+		  var tmp = o.clone();
+		  var oo = o.next();
+		  o.remove();
+		  oo.after(tmp);
+	 }else{
+		alert("已经是最后一个了"); 
+	 }
+}
+//swf上传后排序
+function leftPic(o){
+	 var o = $("#albCtok"+o);
+	 if( o.prev().length > 0) {
+		  var tmp = o.clone();
+		  var oo = o.prev();
+		  o.remove();
+		  oo.before(tmp);
+	 }else{
+		alert("已经是第一个了"); 
+	 }
+}
+//swf上传后删除图片start
+function delPic(id){
+	var imgpath = $("#albCtok"+id).find("input[type='hidden']").eq(0).val();
+	var datas = {'picpath':imgpath,'oid':id};
+	$.post("__URL__/swfupload?delpic", datas, picdelResponse,'json');
+}
+
+function picdelResponse(res){
+	var imgdiv = $("#albCtok"+res.data);
+		imgdiv.remove();
+		ui.success(res.info);
+		ui.box.close();
+}
+//swf上传后删除图片end
+</script>
+<style type="text/css">
+.swfupload {
+    vertical-align: middle;
+}
+.albCt img{width:200px;}
+.albCt{overflow:hidden; width:200px; height:200px}
+</style>
+<div class="divtitle">
+	我的相册：<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;"><span id="spanButtonPlaceholder"></span></div>
+</div>
+<div style="overflow: hidden; float: left; width: 100%;">
+	<table cellpadding="0" cellspacing="0" width="100%">
+    <tr id="handfield">
+      <td colspan="4" class="bline" style="background:url(images/albviewbg.gif) #fff 0 20px no-repeat;">
+       	<table width='100%' height='160' style="margin:0 0 20px 0">
+       		<tr>
+       			<td>
+       				<div id="divFileProgressContainer" style="height:75px;"></div>
+			 		<div id="thumbnails">
+				<php>$x=1000;foreach($vo['photo'] as $v){ $x--;</php>
+						<div class="albCt" id="albCtok<php>echo $x;</php>">
+							<img width="120" height="120" src="__ROOT__/<php>echo get_thumb_pic($v['img']);</php>"><a onclick="javascript:delPic(<php>echo $x;</php>)" href="javascript:;">[删除]</a><a onclick="javascript:leftPic(<php>echo $x;</php>)" href="javascript:;">[前移]</a><a onclick="javascript:rightPic(<php>echo $x;</php>)" href="javascript:;">[后移]</a><div style="margin-top:10px">注释：<input type="text" style="width:190px;" value="<php>echo $v['info'];</php>" name="picinfo[]"><input type="hidden" value="__ROOT__/<php>echo $v['img'];</php>" name="swfimglist[]"></div>
+						</div>				
+				<php> } </php>
+					</div>
+				</td>
+			</tr>
+		</table>
+      </td>
+    </tr>
+	</table>
+	<div>
+	<img style="margin-top: 5px; cursor: pointer;" src="__ROOT__/Style/M/images/saveandcon.jpg" onmouseout="this.style.filter = 'alpha(opacity=100)'" onmousemove="this.style.filter = 'alpha(opacity=60)'; this.style.cursor='hand' " onclick="editPhoto();">
+	<a href="javascript:;" onclick="$('#xtab').find('a[data=info6]').click();"><img src="__ROOT__/Style/M/images/skipandcon.jpg" style="border:none; margin:5px 0 0 20px;"></a>
+	</div>
+</div>
+<script type="text/javascript">
+function editPhoto(){
+	var pimg = $("input[name='swfimglist[]']");
+	var pimglist = {};
+	var pinfo = $("input[name='swfimglist[]']");
+	var pinfolist = {};
+	$("input[name='swfimglist[]']").each(function(i,n){
+			pimglist[i] = $(this).val();
+	})
+	$("input[name='picinfo[]']").each(function(i,n){
+			pinfolist[i] = $(this).val();
+	})
+	if(typeof pimglist[0] =="undefined"){
+		alert("最少上传一张图片");
+		return false;
+	}
+	var p={};
+	p.swfimglist = pimglist;
+	p.infolist = pinfolist;
+
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/editphoto/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info6]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+}
+</script>

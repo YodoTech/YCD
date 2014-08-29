@@ -1,0 +1,198 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.tdContent{text-align:left; border:none; width:auto}
+.textarea1{font-size:12px}
+.tip{color:#FF0000}
+</style>
+<script type="text/javascript">
+var p={'borrow_interest_rate':false,'borrow_money':false,'borrow_duration':false,'repayment_type':false,'borrow_name':false,'borrow_info':false};
+var arrWrong = "<img  src='__ROOT__/Style/M/images/zhuce2.gif'/>&nbsp";
+function SetError(id, val, cont) {
+		$("#tip_"+id).html(val + cont);
+}
+function SetOk(id) {
+		$("#tip_"+id).html("<img  src='__ROOT__/Style/M/images/zhuce3.gif'/>&nbsp");
+}
+function testAmount(obj) {
+	var id = $(obj).attr("id");
+	var testreuslt = true;
+	var minRate = <php>$rate_lixt = explode("|",$glo['rate_lixi']);echo $rate_lixt[0];</php>;
+	var maxRate = <php>echo $rate_lixt[1];</php>;
+	var minDuration = <php>$borrow_duration = explode("|",$glo['borrow_duration']);echo $borrow_duration[0];</php>;
+	var maxDuration = <php>echo $borrow_duration[1];</php>;
+	switch(id){
+		case 'borrow_money':
+			if ($(obj).val() == '') {
+				SetError(id,arrWrong, "请输入借款金额，如10000。");
+				testreuslt = false;
+			}
+			if (!(/^\d+(.)?\d{1,2}$/.test($(obj).val()))) {
+				SetError(id,arrWrong, "请输入正确的借款金额，如10000。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) < 500) {
+				SetError(id,arrWrong, "借款金额不能小于500。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) > {$vo.credit_canb_money}) {
+				SetError(id,arrWrong, "借款金额不能大于您的可用授信额度{$vo.credit_canb_money}。");
+				testreuslt = false;
+			}
+		break;
+		case 'borrow_interest_rate':
+			if ($(obj).val() == '') {
+				SetError(id,arrWrong, "请输入年化利率，如16.00。");
+				testreuslt = false;
+			}
+			if (!(/^\d+(.)?\d{1,2}$/.test($(obj).val()))) {
+				SetError(id,arrWrong, "请输入正确的年化利率，如16.00。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) < minRate) {
+				SetError(id,arrWrong, "年化利率不能小于"+minRate+"%。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) > maxRate) {
+				SetError(id,arrWrong, "年化利率不能大于"+maxRate+"%。");
+				testreuslt = false;
+			}
+			//if (parseFloat($("#currentMoeny").html()) < parseFloat($(obj).val())) {
+			//	SetError(id,arrWrong, "您的账户余额不足以提现。");
+			//	testreuslt = false;
+			//}
+		break;
+		case 'borrow_duration':
+			if ($(obj).val() == '') {
+				SetError(id,arrWrong, "请输入借款期限，如8。");
+				testreuslt = false;
+			}
+			if (!(/^\d{1,2}$/.test($(obj).val()))) {
+				SetError(id,arrWrong, "请输入借款期限，如8。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) < minDuration) {
+				SetError(id,arrWrong, "借款期限不能小于"+minDuration+"个月。");
+				testreuslt = false;
+			}
+			if (parseFloat($(obj).val()) > maxDuration) {
+				SetError(id,arrWrong, "借款期限不能大于"+maxDuration+"个月。");
+				testreuslt = false;
+			}
+			//if (parseFloat($("#currentMoeny").html()) < parseFloat($(obj).val())) {
+			//	SetError(id,arrWrong, "您的账户余额不足以提现。");
+			//	testreuslt = false;
+			//}
+		break;
+	}
+	if (testreuslt) {
+		p[id]=true;
+		SetOk(id);
+	}else{
+		p[id]=false;
+	}
+}
+
+</script>
+<div class="divtitle" style="width: 100%;">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	请认真填写各项资料，以便顺利通过审核
+</div>
+<div style="padding: 10px 50px; text-align: left; line-height: 22px;">
+	<p><!--1、用户头像能直观的向其他用户展示自己，推荐使用真实照片以作为头像，也可以使用系统推荐头像。--></p>
+	<p><!--2、使用上传图片时请不要小于200 * 200 像素，不要大于512KB。--></p>
+</div>
+<table cellspacing="0" cellpadding="0" id="formTb" style="width: 100%;margin: 0px;padding: 0px; border-collapse: collapse; text-align: left;">
+	<tbody>
+	<tr class="trBg">
+		<td class="tdTitle">
+			借款金额：
+		</td>
+		<td class="tdContent">
+			<htmlA:input id="borrow_money" addstr='onblur="testAmount(this)"' value="" class="text2" tip="*"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="tdTitle">
+			借款限期：
+		</td>
+		<td class="tdContent">
+			<htmlA:input id="borrow_duration" addstr='onblur="testAmount(this)"'  value="" class="text2" tip="*填入整数，表示借款时间为几个月，如填12则表示借款时间为12个月"/>
+		</td>
+	</tr>
+	<tr class="trBg">
+		<td class="tdTitle">
+			年化利率：
+		</td>
+		<td class="tdContent">
+			<htmlA:input id="borrow_interest_rate" addstr='onblur="testAmount(this)"' value="" tip="*填入整数或者小数，表示百分数，如填12则表示12%" class="text2"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="tdTitle">
+			还款方式：
+		</td>
+		<td class="tdContent radioPos">
+			<htmlA:select id="repayment_type" datakey="re_type" tip="*"/>
+		</td>
+	</tr>
+	<tr class="trBg">
+		<td class="tdTitle">
+			借款标题：
+		</td>
+		<td class="tdContent">
+			<htmlA:input id="borrow_name" style="width:260px" value=""  class="text2" tip="*"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="tdTitle">
+			借款说明：
+		</td>
+		<td style="height: 100px;" class="tdContent">
+			<htmlA:text style="height:80px;width:423px;" id="borrow_info" value="" class="textarea1" tip="*让借出者知道你借款的意图"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="tdTitle">&nbsp;
+			
+		</td>
+		<td style="height: 50px; padding-left: 10px;" class="tdContent">
+				<img style="margin-top: 5px; cursor: pointer;" src="__ROOT__/Style/M/images/saveandcon.jpg" onmouseout="this.style.filter = 'alpha(opacity=100)'" onmousemove="this.style.filter = 'alpha(opacity=60)'; this.style.cursor='hand' " onclick="submitborrow();">
+		</td>
+	</tr>
+</tbody></table>
+<script type="text/javascript">
+function submitborrow(){
+	var xa = ['borrow_interest_rate','borrow_money','borrow_duration','repayment_type','borrow_name','borrow_info'];
+	var x = makevar(xa);
+	(typeof x.repayment_type != 'undefined')?p.repayment_type=true:p.repayment_type=false;
+	(typeof x.borrow_name != 'undefined' && x.borrow_name != "")?p.borrow_name=true:p.borrow_name=false;
+	(typeof x.borrow_info != 'undefined' && x.borrow_info != "")?p.borrow_info=true:p.borrow_info=false;
+	
+	
+	for(var i=0;i<xa.length;i++){
+		if(p[xa[i]]===false){
+			$("#"+xa[i]).focus();
+			$.jBox.tip('请先正确填写所有必填项目','fail');
+			return false;
+		}
+	}
+	$.jBox.tip('提交中......','loading');
+	$.ajax({
+		url: "__URL__/addborrow",
+		data: x,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip('借款添加成功，请耐心等待审核','success');
+				}
+				else $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+}
+
+</script>

@@ -74,16 +74,17 @@ class HelpAction extends HCommonAction {
 		
 		$this->assign("leftlist",$leftlist);
 		$this->assign("cid",$typeid);
-		
-		if($_GET['type']=="subsite"){
-			$vop = D('Aacategory')->field('type_name,parent_id')->find($typeid);
-			if($vop['parent_id']<>0) $this->assign('cname',D('Aacategory')->getFieldById($vop['parent_id'],'type_name'));
-			else $this->assign('cname',$vop['type_name']);
-		}else{
-			$vop = D('Acategory')->field('type_name,parent_id')->find($typeid);
-			if($vop['parent_id']<>0) $this->assign('cname',D('Acategory')->getFieldById($vop['parent_id'],'type_name'));
-			else $this->assign('cname',$vop['type_name']);
+
+		$curl = '';
+		$cname = '';
+		foreach ($leftlist as $v) {
+			if ($v['id'] == $typeid) {
+				$curl = $v['turl'];
+				$cname = $v['type_name'];
+			}
 		}
+		$this->assign('cname',$cname);
+		$this->assign('curl', $curl);
 
 		$this->display();
 	}
@@ -127,5 +128,41 @@ class HelpAction extends HCommonAction {
 		
 		$this->display();
 	}
-	
+
+	//联系我们
+	public function contact() {
+		//left
+		$typeid = 365;//...
+		$listparm['type_id'] = $typeid;
+		$listparm['limit'] = 20;
+		if ($_GET['type']=="subsite") {
+			$listparm['area_id'] = $this->siteInfo['id'];
+			$leftlist = getAreaTypeList($listparm);
+		} else {
+			$leftlist = getTypeList($listparm);
+		}
+		$this->assign("leftlist", $leftlist);
+		$this->assign("cid",$typeid);
+
+		//content
+		$vo = M('article_category')->field('type_name,type_keyword,type_info,type_content')->find($typeid);
+		$this->assign('vo', $vo);
+
+		//map
+		$list = M("map")->field('id, title, map_lng, map_lat, map_content')->order('id desc')->select();
+		$mapData = array();
+		foreach ($list as $k => $v) {
+			array_push($mapData, array(
+				'sId' => $v['id'],
+				'lng' => $v['map_lng'],
+				'lat' => $v['map_lat'],
+				'sTitle' => $v['title'],
+				'sContent' => $v['map_content']
+			));
+		}
+		$mapData = json_encode($mapData);
+		$this->assign('mapData', $mapData);
+
+		$this->display();
+	}
 }

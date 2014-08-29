@@ -1,0 +1,61 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx24ul li.w200 {width: 200px;}
+.hyxx24ul li.w300 {width: 300px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+	<!-- <h2>借款申请查询</h2> -->
+    <ul class="hyxx24ul fn-clear">
+        <li class="w200">会员名称</li>
+        <li class="w300">操作</li>
+    </ul>
+    <div>
+    	<volist name="list.list" id="vo">
+    	<ul class="hyxx24ul fn-clear">
+    	    <li class="w200">{$vo.user_name}</li>
+    	    <li class="w300"><a href="javascript:;" onclick="dofriendx({$vo.friend_id})">从黑名单上删除</a></li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-4" class="ajaxpagebar hyxx12 fn-right">{$list.page}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+});
+function dofriendx(uid) {
+	$.ajax({
+		url: "__URL__/removeblock",
+		data: {"uid":uid},
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) {
+				if(d.status==1) {
+					$.jBox.tip("操作成功,网页刷新后更新列表","success");	
+				} else {
+					$.jBox.tip("操作失败，请重试","fail");
+				}
+			}
+		}
+	});
+}
+</script>

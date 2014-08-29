@@ -547,8 +547,6 @@ DIV.yahoo2 A.prev:hover { BORDER-RIGHT:#2b55af 2px solid; BORDER-TOP:#2b55af 2px
 /*****************************************shishicaiwu结束*******************************************************************/
 /*****************************************login*******************************************************************/
 .dv_left { background-image:url(../../M/images/login_left_bg.jpg); background-repeat:no-repeat; width:412px; height:453px; float:left; }
-.dv_right { background:url(../../M/images/login_right_bg1.jpg); background-repeat:no-repeat; width:560px; height:453px; float:right; }
-.dv_right1 { background:url(../../M/images/login_right_bg.jpg); background-repeat:no-repeat; width:560px; height:453px; float:right; }
 .lele { WIDTH:100px; float:left; height:100px; text-align:center; font-size:15px }
 .login_content { width:980px; margin:10px auto; height:453px; }
 .dv_l_4_2 { height:30px; line-height:30px; float:left; width:200px; text-align:left; font-size:12px; color:#666; font-family:宋体; }

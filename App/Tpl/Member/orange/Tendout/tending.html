@@ -1,0 +1,57 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx24ul li.w89 {width: 89px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+    <div class="hyxx10" style="text-indent:8px;">
+        您目前竞标中的投资总额是：&nbsp;<span class="red">￥{$total|default="0.00"}</span>&nbsp;，共&nbsp;<span class="red">{$num|default="0"}</span>&nbsp;笔投标。
+    </div>
+    <ul class="hyxx24ul fn-clear">
+        <li class="w89">借款标号</li>
+        <li class="w89">标题</li>
+    	<li class="w89">借入人</li>
+        <li class="w89">投标日期</li>
+        <li class="w89">借款金额</li>
+        <li class="w89">年化利率</li>
+        <li class="w89">借款期限</li>
+        <li class="w89">我的投资金额</li>
+        <li class="w89">预期本息</li>
+    </ul>
+    <div id="content">
+    	<volist name="list" id="vo">
+    	<ul class="hyxx24ul fn-clear" id="noinfotip">
+    	    <li class="w89">{$vo.borrow_id}</li>
+    	    <li class="w89"><a target="_blank" href="{$vo.borrow_id|getInvestUrl=###}" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,10}</a></li>
+    		<li class="w89">{$vo.borrow_user}{$vo.credits|getLeveName=###}</li>
+    	    <li class="w89">{$vo.invest_time|date="Y-m-d",###}</li>
+    	    <li class="w89">{$vo.borrow_money}</li>
+    	    <li class="w89">{$vo.borrow_interest_rate}%</li>
+    	    <li class="w89">{$vo.borrow_duration}<if condition="$vo.repayment_type eq 1">天<else/>个月</if></li>
+    	    <li class="w89">{$vo.investor_capital}</li>
+    	    <li class="w89">{$vo['investor_capital'] + $vo['investor_interest']}</li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-2" class="ajaxpagebar hyxx12">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+</script>

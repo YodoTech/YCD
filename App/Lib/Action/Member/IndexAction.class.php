@@ -14,7 +14,6 @@ class IndexAction extends MCommonAction {
 		$this->assign("capitalinfo", getMemberBorrowScan($this->uid));
 		$this->assign("memberinfo", M('members')->find($this->uid));
 		$this->assign("memberdetail", M('member_info')->find($this->uid));
-		$_SX = M('investor_detail')->field('deadline,interest,capital')->where("investor_uid = {$this->uid} AND status=7")->order("deadline ASC")->find();
 		$toubiaojl =M('borrow_investor')->where("borrow_uid={$this->uid}")->sum('reward_money');//支付投标奖励
 		$this->assign("toubiaojl", $toubiaojl);//支付投标奖励
 		
@@ -46,18 +45,12 @@ class IndexAction extends MCommonAction {
 		$this->assign("outtotal",$outtotal);
 		/////////////////////////////////
 		
-		$lastInvest['gettime'] = $_SX['deadline'];
-		$lastInvest['interest'] = $_SX['interest'];
-		$lastInvest['capital'] = $_SX['capital'];
-		$this->assign("lastInvest",$lastInvest);
-		
-		$_SX="";
-		$_SX = M('investor_detail')->field('deadline,sum(interest) as interest,sum(capital) as capital')->where("borrow_uid = {$this->uid} AND status=7")->group("borrow_id,sort_order")->order("deadline ASC")->find();
-		$lastBorrow['gettime'] = $_SX['deadline'];
-		$lastBorrow['interest'] = $_SX['interest'];
-		$lastBorrow['capital'] = $_SX['capital'];
-		$this->assign("lastBorrow",$lastBorrow);
-		
+		//理财
+		$investList = M('investor_detail')->field('deadline,interest,capital')->where("investor_uid = {$this->uid}")->order("deadline ASC")->select();
+		$this->assign("investList", $investList);
+		//借款
+		$borrowList = M('investor_detail')->field('deadline,interest,capital')->where("borrow_uid = {$this->uid}")->order("deadline ASC")->select();
+		$this->assign("borrowList", $borrowList);echo '<pre>';print_r($investList);
 		
 		$this->assign("kflist",get_admin_name());
 		$list=array();
@@ -69,6 +62,22 @@ class IndexAction extends MCommonAction {
 		}
 		$this->assign("kfs",$list);
 		
+		//认证信息
+		$verifyStatus = m("members m")->field("m.id,m.user_leve,m.time_limit,s.id_status,s.phone_status,s.email_status,s.video_status,s.face_status")->join("{$pre}members_status s ON s.uid=m.id")->where("m.id={$this->uid}")->find();
+	    $this->assign('verifyStatus', $verifyStatus);
+
+	    //推荐的贷款
+		$searchMap = array();
+		$searchMap['borrow_status']=array("in",'2,4,6,7');
+		$searchMap['is_tuijian']=1;
+		//$searchMap['collect_time']=array('gt',time());
+		$parm=array();
+		$parm['map'] = $searchMap;
+		$parm['limit'] = 3;
+		$parm['orderby']="b.id DESC";
+		$listBorrowtj = getBorrowList($parm);
+		$this->assign("listBorrow_tj",$listBorrowtj);
+		//推荐的贷款
 		
 		$this->display();
     }

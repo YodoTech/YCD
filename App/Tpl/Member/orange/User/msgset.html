@@ -1,0 +1,150 @@
+<script type="text/javascript">
+var nowset = "{$vo.tipset}";
+function Initstate(id) {
+    var ids1 = "#" + id;
+    $(ids1).attr("checked","checked");
+}
+</script>
+<div class="hyxx32 fn-clear" style="border:none;">
+    <h2>基本设置</h2>
+    <ul class="hyxx32ul fn-clear">
+    	<li class="fn-clear">
+        	<span class="sp1">操作</span>
+            <span>系统消息</span>
+            <span>邮件提醒</span>
+        </li>
+        <li class="li1 fn-clear">
+        	<span class="sp1">修改密码</span>
+            <span><input name="chk1_1" id="chk1_1" type="checkbox"></span>
+            <span><input name="chk1_2" id="chk1_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+        	<span class="sp1">修改银行帐号</span>
+            <span><input name="chk2_1" id="chk2_1" type="checkbox"></span>
+            <span><input name="chk2_2" id="chk2_2" type="checkbox"></span>
+        </li>
+        <li class="li1 fn-clear">
+        	<span class="sp1">资金提现</span>
+            <span><input name="chk6_1" id="chk6_1" type="checkbox"></span>
+            <span><input name="chk6_2" id="chk6_2" type="checkbox"></span>
+        </li>
+    </ul>
+    <h2>借款相关</h2>
+    <ul class="hyxx32ul fn-clear">
+    	<li class="fn-clear">
+        	<span class="sp1">操作</span>
+            <span>系统消息</span>
+            <span>邮件提醒</span>
+        </li>
+        <li class="li1 fn-clear">
+        	<span class="sp1">借款标发标成功</span>
+            <span><input name="chk9_1" id="chk9_1" type="checkbox"></span>
+            <span><input name="chk9_2" id="chk9_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+        	<span class="sp1">借款标满标</span>
+            <span><input name="chk10_1" id="chk10_1" type="checkbox"></span>
+            <span><input name="chk10_2" id="chk10_2" type="checkbox"></span>
+        </li>
+        <li class="li1 fn-clear">
+        	<span class="sp1">借款标流标</span>
+            <span><input name="chk11_1" id="chk11_1" type="checkbox"></span>
+            <span><input name="chk11_2" id="chk11_2" type="checkbox"></span>
+        </li>
+    </ul>
+    <h2>投资相关</h2>
+    <ul class="hyxx32ul fn-clear">
+    	<li class="fn-clear">
+        	<span class="sp1">操作</span>
+            <span>系统消息</span>
+            <span>邮件提醒</span>
+        </li>
+        <li class="li1 fn-clear">
+        	<span class="sp1">自动投标借出完成</span>
+            <span><input name="chk27_1" id="chk27_1" type="checkbox"></span>
+            <span><input name="chk27_2" id="chk27_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+            <span class="sp1">借出成功</span>
+            <span><input name="chk14_1" id="chk14_1" type="checkbox"></span>
+            <span><input name="chk14_2" id="chk14_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+            <span class="sp1">借出流标</span>
+            <span><input name="chk15_1" id="chk15_1" type="checkbox"></span>
+            <span><input name="chk15_2" id="chk15_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+            <span class="sp1">收到还款</span>
+            <span><input name="chk16_1" id="chk16_1" type="checkbox"></span>
+            <span><input name="chk16_2" id="chk16_2" type="checkbox"></span>
+        </li>
+        <li class="fn-clear">
+            <span class="sp1">{$glo.web_name}代为偿还</span>
+            <span><input name="chk18_1" id="chk18_1" type="checkbox"></span>
+            <span><input name="chk18_2" id="chk18_2" type="checkbox"></span>
+        </li>
+    </ul>
+    <div class="hyxx32_2">
+    	<p>
+            <span class="btn"><a href="#" id="btnSubmit">保存设置</a></span>
+        </p>
+        <h3>温馨提示</h3>
+        <p>若您设置了不接收有关通知或提醒，则您有可能收不到某些与您切身有关的重要信息，请您慎重选择。</p>
+        <p>您同意在设置不接收后，您不会以您未收到或未阅读该等通知信息为由主张相关通知未送达于您。</p>
+    </div>
+</div>
+<script type="text/javascript">
+    var newTitle = '{$glo.web_name}提醒您：';
+    for(var w=0;w<30;w++) {
+        $("body").find("#chk"+w+"_2").removeAttr("checked").attr('disabled',true);
+    }
+    $(document).ready(function() {
+        $("#btnSubmit").click(function() {
+            var arrays = new Array();
+            var objs = document.getElementsByTagName("input");
+            for (var i = 0; i < objs.length; i++) {
+                if (objs.item(i).type == 'checkbox') {
+                    var id = "#" + objs.item(i).id;
+                    if ($(id).attr("checked") == 'checked') {
+                        arrays.push(objs.item(i).id);
+                    }
+                }
+            }
+            var str = '';
+            for (var j = 0; j < arrays.length; j++) {
+                str += arrays[j] + ",";
+            }
+            $.post("__URL__/savetip", {Params: str }, function(data) {
+                if (data > 0) {
+                    $.jBox.tip('您好，您的操作保存成功！','success', newTitle);
+                }
+                else {
+                    $.jBox.tip('您好，您的操作失败，请重新尝试！','fail', newTitle);
+                }
+            });
+            return false;
+        });
+    });
+    
+    function Initial() {
+        var arr = nowset.split(",");
+        var size = arr.length;
+        for (var i = 0; i < size; i++) {
+            Initstate(arr[i]);
+        }
+    }
+    Initial();
+    $("#btnclear").click(function() {
+        var arrays = new Array();
+        var objs = document.getElementsByTagName("input");
+        for (var i = 0; i < objs.length; i++) {
+            if (objs.item(i).type == 'checkbox') {
+                var id = "#" + objs.item(i).id;
+                $(id).removeAttr("checked");
+            }
+        }
+        return false;
+    });
+    
+</script>

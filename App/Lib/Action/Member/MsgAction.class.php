@@ -11,7 +11,7 @@ class MsgAction extends MCommonAction {
 		//分页处理
 		import("ORG.Util.Page");
 		$count = M('inner_msg')->where($map)->count('id');
-		$p = new Page($count, 15);
+		$p = new Page($count, 10);
 		$page = $p->show();
 		$Lsql = "{$p->firstRow},{$p->listRows}";
 		//分页处理
@@ -33,14 +33,12 @@ class MsgAction extends MCommonAction {
 		$vo = M("inner_msg")->field('msg')->where("id={$id} AND uid={$this->uid}")->find();
 		if(!is_array($vo)){
 			$this->assign("msg","数据有误");
-			$data['content'] = $this->fetch();
-			exit(json_encode($data));
+		} else {
+			M("inner_msg")->where("id={$id} AND uid={$this->uid}")->setField("status",1);
+			$this->assign("mid",$id);
+			$this->assign("msg",$vo['msg']);
 		}
-		M("inner_msg")->where("id={$id} AND uid={$this->uid}")->setField("status",1);
-		$this->assign("mid",$id);
-		$this->assign("msg",$vo['msg']);
-		$data['content'] = $this->fetch();
-		exit(json_encode($data));
+		$this->display();
 	}
 	
 	public function delmsg(){

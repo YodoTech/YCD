@@ -1,7 +1,7 @@
 <?php
 // 本类由系统自动生成，仅供测试用途
 class BorrowAction extends HCommonAction {
-    public function index(){
+	public function index() {
 		$per = C('DB_PREFIX');
 		if($this->uid){
 			$this->assign("mstatus", M('members_status')->field(true)->find($this->uid));
@@ -220,6 +220,22 @@ class BorrowAction extends HCommonAction {
 			$_SESSION['imgfiles'][$_SESSION['count_file']] = $data['product_thumb'];
 			echo "{$_SESSION['count_file']}:".__ROOT__."/".$data['product_thumb'];//返回给前台显示缩略图
 		}
+	}
+
+	//工薪贷
+	public function prodwork() {
+		//...
+		$this->display();
+	}
+	//生意贷
+	public function prodbiz() {
+		//...
+		$this->display();
+	}
+	//网商贷
+	public function prodecomm() {
+		//...
+		$this->display();
 	}
 
 }

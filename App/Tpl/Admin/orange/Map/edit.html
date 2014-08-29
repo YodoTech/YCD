@@ -1,0 +1,97 @@
+<include file="Public:_header" />
+<!-- map start -->
+<style>
+#allmap { height: 500px; width: 780px; overflow: hidden;}
+</style>
+<!-- map end -->
+<tagLib name="htmlA" />
+<div class="so_main">
+	<div class="page_tit">编辑网点</div>
+	<div class="form2">
+		<form method="post" action="__URL__/doEdit" onsubmit="return subcheck();">
+			<input type="hidden" name="id" value="{$vo.id}" />
+			<input type="hidden" name="map_lng" value="{$vo.map_lng}" />
+			<input type="hidden" name="map_lat" value="{$vo.map_lat}" />
+			<dl class="lineD"><dt>名称：</dt><dd><htmlA:input id="title" value="{$vo.title}" tip="*"/></dd></dl>
+			<dl class="lineD"><dt>位置：</dt><dd>
+				<!-- map start -->
+				<div id="allmap"></div>
+				<!-- map end -->
+			</dd></dl>
+			<dl class="lineD"><dt>内容：</dt>
+			    <dd>
+					<include file="./Style/Editor/kissy.html" />
+					<htmlA:editor id="map_content" value="{$vo.map_content}" w='780px' type='kissy'/>
+			    </dd>
+			</dl>
+			<div class="page_btm">
+				<input type="submit" class="btn_b" value="确定" />
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=LmjzAB4cxX3u6UvPE65B4kVc"></script>
+<script src="http://api.map.baidu.com/library/EventWrapper/1.2/src/EventWrapper.js"></script>
+<script>
+//submit check
+var cansub = true;
+function subcheck() {
+	if(!cansub) {
+		alert("请不要重复提交，如网速慢，请等待！");
+		return false;
+	}
+	var map_lng = $(":hidden[name=map_lng]").val();
+	var map_lat = $(":hidden[name=map_lat]").val();
+	if(map_lng == '0' || map_lat == '0') {
+		ui.error("请标注地理位置！");
+		return false;
+	}
+	cansub = false;
+	return true;
+}
+
+//map
+var mapOper = function() {
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});//右上角，仅包含平移和缩
+	map.addControl(top_right_navigation);
+
+	var icon = new BMap.Icon('http://api.map.baidu.com/mapCard/img/location.gif', new BMap.Size(14, 23), {
+	    anchor: new BMap.Size(7, 21)
+	});
+	//创建标注
+	var marker = new BMap.Marker(map.getCenter(), {
+		icon: icon,
+		enableDragging: true,
+		raiseOnDrag: true
+	});
+	//添加说明
+	var label = new BMap.Label("拖动标注");
+	label.setOffset(new BMap.Size(15, -15));//设置文本偏移量
+	label.setStyle({
+		color : "red",
+		fontSize : "12px",
+		height : "20px",
+		lineHeight : "20px",
+		fontFamily:"微软雅黑"
+	});
+	marker.setLabel(label);
+	//停止拖拽地图时触发
+	marker.addEventListener("dragend", function(e) {
+		$(':hidden[name=map_lng]').val(e.point.lng);
+		$(':hidden[name=map_lat]').val(e.point.lat);
+	});
+	map.addOverlay(marker);//将标注添加到地图中
+};
+var map = new BMap.Map("allmap");
+<if condition="($vo.map_lng eq '0') OR ($vo.map_lat eq '0') ">
+map.centerAndZoom("南安", 12);//初始化地图,用城市名设置地图中心点
+map.addEventListener("load", function() {
+	mapOper();
+});
+<else />
+var poi = new BMap.Point({$vo.map_lng}, {$vo.map_lat});
+map.centerAndZoom(poi, 12);
+mapOper();
+</if>
+</script>
+<include file="Public:_footer" />

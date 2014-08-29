@@ -1,0 +1,134 @@
+<include file="Public:_header_common" />
+<title>{$vo.type_name}-{$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$vo.type_keyword}" />
+<meta http-equiv="description" content="{$vo.type_info}" />
+<script src="/Style/Orange/js/underscore.min.js"></script>
+<script src="/Style/A/js/jquery.autocomplete.js"></script>
+<!-- map start -->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=LmjzAB4cxX3u6UvPE65B4kVc"></script>
+<script src="http://api.map.baidu.com/library/EventWrapper/1.2/src/EventWrapper.js"></script>
+<style>
+/*map*/
+#allmap { height: 600px; width: 100%; overflow: hidden;}
+/*autocomplete*/
+.ac_results { border-color: #BEBBBB; border-style: solid; border-width: 0px 1px 0px 1px; padding: 0; margin: 3px -1px 0px -1px; z-index: 999; background-color: #fff;}
+.ac_results li { padding: 5px; float: none; border-bottom: 1px solid #BEBBBB;}
+.ac_over { background-color: #EBEBEB;}
+/*search*/
+#searchRst li { float: none;}
+</style>
+<!-- map end -->
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;关于我们</div>
+    <div class="gywm fn-clear">
+      <ul class="gywmL fn-clear fn-left">
+        <include file="left" />
+      </ul>
+      <div class="gywmR fn-right">
+        <div class="gywm12 fn-clear">
+          <div class="gywm12L fn-left">世界地图</div>
+          <div class="gywm12R fn-left fn-clear">
+            <div class="gywm12R_L fn-left"><input id="searchTxt" type="text" /></div>
+            <div class="gywm12R_R fn-left">
+              <a href="#" id="searchBtn"><img src="/Style/Orange/images/sousuo_icon.jpg" /></a>
+            </div>
+          </div>
+        </div>
+        <div class="gywm12_1">
+          <!-- map start -->
+          <div id="allmap"></div>
+          <!-- map end -->
+        </div>
+        <div class="gywm12" id="searchRst"></div>
+        <div class="gywm12">{$vo.type_content}</div>
+      </div>
+    </div>
+</div>
+<script>
+var mapData = {$mapData};
+
+//百度地图API功能
+var map = new BMap.Map("allmap");
+map.centerAndZoom("南安", 12);//初始化地图,用城市名设置地图中心点
+map.addEventListener("load", function() {
+  map.enableScrollWheelZoom();
+
+  var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});//右上角，仅包含平移和缩
+  map.addControl(top_right_navigation);
+
+  var overView = new BMap.OverviewMapControl();
+  map.addControl(overView);//添加默认缩略地图控件
+
+  var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+  map.addControl(overViewOpen);//右下角，打开
+
+  var data_info = mapData;
+  var opts = {
+    enableMessage: true//设置允许信息窗发送短息
+  };
+  var vArr = new Array();
+  var kArr = new Array();
+  for (var i = 0; i < data_info.length; i++) {
+    var marker = new BMap.Marker(new BMap.Point(data_info[i].lng, data_info[i].lat));//创建标注
+    var content = data_info[i].sContent;
+    map.addOverlay(marker);//将标注添加到地图中
+    BMapLib.EventWrapper.addListener(marker, 'click', openInfo.bind(null, content));
+    kArr.push(data_info[i].sId);
+    vArr.push(marker);
+  }
+  var markerArr = _.object(kArr, vArr);
+  // console.dir(markerArr);
+
+  function openInfo(content, e) {
+    var p = e.target;
+    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+    var infoWindow = new BMap.InfoWindow(content, opts);//创建信息窗口对象 
+    map.openInfoWindow(infoWindow, point);//开启信息窗口
+    //图片加载完毕重绘infowindow
+    $('.lazyload').on('load', function() {infoWindow.redraw();});//防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+  }
+
+  //地图搜索
+  $('#searchBtn').on('click', function() {
+    var local = new BMap.LocalSearch(map, {
+      renderOptions: {map: map, panel: "searchRst"}
+    });
+    local.search($.trim($('#searchTxt').val()));
+    return false;
+  });
+
+  //autocomplete
+  $("#searchTxt").autocomplete(mapData, {
+    resultsClass: "ac_results",
+    loadingClass: "ac_loading",
+    minChars: 0,
+    selectFirst: false,
+    multiple: false,
+    dataType:"json",
+    parse: function(data) {
+      return $.map(data, function(row) {
+        return {
+          data: row,
+          value: row.sTitle,
+          result: row.sTitle
+        }
+      });
+    },
+    formatItem: function(item, i, max) {
+      return '<div>'+item.sTitle+'</div>';
+    },
+    formatMatch: function(item) {
+      return item.sTitle;
+    },
+    formatResult: function(item, i, max) {
+      return item.sTitle;
+    }
+  }).result(function(e, item, formatted) {
+    var marker = _.result(markerArr, item.sId);
+    BMapLib.EventWrapper.trigger(marker, 'click', {'type': 'onclick', target: marker});
+  });
+});
+</script>
+<include file="Public:_footer" />

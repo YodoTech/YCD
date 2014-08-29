@@ -1,0 +1,121 @@
+<tagLib name="htmlA" />
+
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>月均收入：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_monthin" value="{$vo.fin_monthin}" />
+    </div>
+    <div id="dv_fin_monthin" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>收入构成描述：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:text class="inp1" style="height:80px;width:423px;" id="fin_incomedes" value="{$vo.fin_incomedes}" />
+    </div>
+    <div id="dv_fin_incomedes" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>月均支出：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_monthout" value="{$vo.fin_monthout}" />
+    </div>
+    <div id="dv_fin_monthout" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>支出构成描述：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:text class="inp1" style="height:80px;width:423px;" id="fin_outdes" value="{$vo.fin_outdes}" />
+    </div>
+    <div id="dv_fin_outdes" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>住房条件：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:radio id="fin_house" default="有商品房|有商品房,有其他（非商品房）|有其他（非商品房）,无房|无房" value="key|vo.fin_house" />
+    </div>
+    <div id="dv_fin_house" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>房产价值：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_housevalue" value="{$vo.fin_housevalue}" />
+    </div>
+    <div id="dv_fin_housevalue" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>是否购车：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:radio id="fin_car" default="是|是,否|否" value="key|vo.fin_car" />
+    </div>
+    <div id="dv_fin_car" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>车辆价值：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_carvalue" value="{$vo.fin_carvalue}" />
+    </div>
+    <div id="dv_fin_carvalue" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>参股企业名称：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_stockcompany" value="{$vo.fin_stockcompany}" />
+    </div>
+    <div id="dv_fin_stockcompany" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>参股企业出资额：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:input class="inp1" id="fin_stockcompanyvalue" value="{$vo.fin_stockcompanyvalue}" />
+    </div>
+    <div id="dv_fin_stockcompanyvalue" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>其他资产描述：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:text class="inp1" style="height:80px;width:423px;" id="fin_otheremark" value="{$vo.fin_otheremark}" />
+    </div>
+    <div id="dv_fin_otheremark" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L">&nbsp;</div>
+    <div class="hyxx25_2R_1C">
+		<div class="hyxx25_1R"><span class="btn"><a href="javascript:;" onclick="editfinancial();" onmousemove="this.style.cursor='hand'">修改信息</a></span></div>
+    </div>
+</div>
+<script type="text/javascript">
+function editfinancial() {
+	p = makevar(['fin_monthin','fin_incomedes','fin_monthout','fin_outdes','fin_house','fin_housevalue','fin_car','fin_carvalue','fin_stockcompany','fin_stockcompanyvalue','fin_otheremark']);
+	p['_tps'] = "post";
+	var mxs = true;
+	$.each(p,function(i){
+		if(p[i] == ""){
+			mxs=false;
+            return false;
+		}
+	});
+	if(mxs===false){
+	  $.jBox.tip("所有项目都不能为空");	
+	  return false;
+	}
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/editfinancial/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info5]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+    return false;
+}
+</script>

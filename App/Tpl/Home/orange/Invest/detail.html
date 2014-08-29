@@ -1,0 +1,651 @@
+<include file="Public:_header_common" />
+<title>{$vo.borrow_name} - 我要投资 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/fancybox/jquery.fancybox-1.3.2.css" media="screen" />
+<script>
+<!--
+/*第一种形式 第二种形式 更换显示样式*/
+function invest(id) {
+  $.getJSON('__URL__/ajax_invest', {id:id}, function(d, textStatus) {
+    if(d){
+      if(d.status==1) {
+        $.jBox.info(d.content, "立即投标--{$glo.web_name}", {
+          width: "auto",
+          buttons: {'关闭': true }
+        });
+      } else {
+        $.jBox.tip(d.message,'fail');
+      }
+    }
+  });
+}
+
+function vouch(id){
+  $.getJSON('__URL__/ajax_vouch', {id:id}, function(d, textStatus) {
+    if(d){
+      if(d.status==1) {
+        $.jBox.info(d.content, '立即担保--{$glo.web_name}', {
+          width: "auto",
+          buttons: {'关闭': true }
+        });
+      } else {
+        $.jBox.tip(d.message,'fail');
+      }
+    }
+  });
+}
+function addFriend(type){
+  var uid = {$minfo.uid};
+  $.ajax({
+    url: "__URL__/addfriend",
+    data: {"fuid":uid,"type":type},
+    timeout: 5000,
+    cache: false,
+    type: "post",
+    dataType: "json",
+    success: function (d, s, r) {
+      if(d){
+        if(d.status==1)  $.jBox.tip(d.message,'success');
+        else $.jBox.tip(d.message,'fail');
+      }
+    }
+  });
+}
+function InnerMsg(){
+  var uid = {$minfo.uid};
+  $.jBox("get:__URL__/innermsg?uid="+uid, {
+    title: "发送站内信",
+    width: "auto",
+    buttons: {'关闭': true }
+  });
+}
+//-->
+</script>
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="nyconter">
+  <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="/invest/index.html">我要理财</a>&nbsp;>&nbsp;<a href="/invest/loanlist.html">散标投资列表</a>&nbsp;>&nbsp;借款详情</div>
+  <div class="nybt">{$vo.borrow_name}</div>
+  <div class="licai1 fn-clear">
+    <div class="listL fn-left">
+      <ul class="fn-clear">
+        <li class="fn-clear"><span class="sp2">标的总额（元）</span><span class="sp2">年利率</span><span class="sp2">还款期限</span></li>
+          <li class="fn-clear"><span class="sp2 wzsize">{$vo.borrow_money|Fmoney=###}</span><span class="sp2 wzsize">
+            {$vo.borrow_interest_rate}%
+              <if condition="$vo.repayment_type eq 1">/天</if>
+          </span><span class="sp2 wzsize">{$vo.borrow_duration}
+            <if condition="$vo.repayment_type eq 1">天
+            <else/>
+            个月</if></span></li>
+          <li class="fn-clear"><span class="sp1">可获利息</span><span class="sp2">￥{$repay_detail['repayment_money'] - 100}</span><span class="sp3">最小投标金额</span><span class="sp4">{$vo.borrow_min|Fmoney=###}</span></li>
+          <li class="fn-clear"><span class="sp1">还款方式</span><span class="sp2">{$Bconfig['REPAYMENT_TYPE'][$vo['repayment_type']]}</span><span class="sp3">借款用途</span><span class="sp4">{$Bconfig['BORROW_USE'][$vo['borrow_use']]}</span></li>
+          <li class="fn-clear">
+            <span>投标进度</span>
+            <span class="basic-progress-bg"><b class="basic-percent" style="width: {$vo.progress}%"></b></span>
+            <span class="basic-progress-value"><em>{$vo.progress}%</em></span>
+            <span class="basic-progress-time"><span id="endtime"><span class="fn-left">剩余时间：</span><span id="loan_time"><em class='value'>--</em>天<em class='value'>--</em>时<em class='value'>--</em>分<em class='value'>--</em>秒</span></span></span>
+          </li>
+          <li class="fn-clear">
+            <if condition="$vo.borrow_status eq 3">
+              <span class="btn"><a href="javascript:;">已流标</a></span>
+            <elseif condition="$vo.borrow_status eq 4"/>
+              <a href="javascript:;">等待复审</a>
+            <elseif condition="$vo.borrow_status eq 6"/>
+              <a href="javascript:;">还款中</a>
+            <elseif condition="$vo.borrow_status gt 6"/>
+              <a href="javascript:;">已完成</a>
+            <else/>
+              <div style="width:200px;margin:auto;">
+                <span class="btn mb10" style="height:auto;float:none;"><a style="color:#fff;" href="javascript:;" onclick="invest({$vo.id});">投标</a></span>
+              </div>
+            </if>
+            <if condition="$vo.borrow_type eq 2">
+              <if condition="$vo.vouch_progress eq '100'">
+                <a href="javascript:;">担保已完成</a>
+              <elseif condition="$vo.borrow_status eq 3 || $vo.borrow_status eq 4 || $vo.borrow_status eq 6 || $vo.borrow_status gt 6 "/>
+              <else/>
+                <a href="javascript:;" onclick="vouch({$vo.id});">立即担保</a>
+              </if>
+            </if>
+          </li>
+        </ul>
+    </div>
+    <div class="listR fn-right">
+      <h2>用户信息</h2>
+      <if condition="$UID gt 0">
+        <ul class="fn-clear">
+          <li><span>用户名：</span><span>{$minfo.user_name}</span></li>
+          <li><span>会员等级：</span><span class="bg fn-left">{$minfo.credits|getLeveName=###}</span></li>
+          <li><span>居住城市：</span><span>{$minfo.location_now}</span></li>
+          <li><span>认证信息：</span><span>{$minfo.id|getVerify=###}</span></li>
+        </ul>
+        <div class="listR_btn fn-clear">
+          <p class="btn"><a href="javascript:;" onclick="InnerMsg();">发送信息</a></p>
+          <p class="btn"><a href="javascript:;" onclick="addFriend(1);">加为好友</a></p>
+          <p class="btn"><a href="javascript:;" onclick="jubao({$vo.borrow_uid});">举报此人</a></p>
+          <p class="p1 btn"><a href="javascript:;" onclick="addFriend(2)">列入我的黑名单</a></p>
+        </div>
+      <else/>
+        <div class="listR_btn fn-clear">请 <a href="/member/login/">登录</a> 或 <a href="/member/register/">注册</a> 后查看</div>
+      </if>
+    </div>
+  </div>
+  <input id="hid" type="hidden" value="{$vo.lefttime}" />
+  <script type="text/javascript">
+  function showht(){
+    var status = '{$invid}';
+    if(status=="no"){
+      $.jBox.tip("您未投此标");
+    }else if(status=="login"){
+      $.jBox.tip("请先登陆");
+    }else{
+      window.location.href="__APP__/member/agreement/downfile?id="+status;
+    }
+  }
+
+  var seconds;
+  var pers = {$vo.progress|default=0}/100;
+  var timer=null;
+  function setLeftTime() {
+    seconds = parseInt($("#hid").val(), 10);
+    timer = setInterval(showSeconds,1000);
+  }
+  
+  function showSeconds() {
+    var day1 = Math.floor(seconds / (60 * 60 * 24));
+    var hour = Math.floor((seconds - day1 * 24 * 60 * 60) / 3600);
+    var minute = Math.floor((seconds - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+    var second = Math.floor(seconds - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+    if (day1 < 0) {
+      clearInterval(timer);
+      $("#endtime").html("投标已经结束！");
+    } else if (pers >= 1) {
+      clearInterval(timer);
+      $("#endtime").html("投标已经结束！");
+    } else {
+      $("#loan_time").html(day1 + " 天 " + hour + " 小时 " + minute + " 分 " + second + " 秒");
+    }
+    seconds--;
+  }                
+  if (pers >= 1) {
+              $("#endtime").html("投标已经结束！");
+          }else{
+    setLeftTime();
+  }
+  $(document).ready(function(){
+    if($("#dodo2").length==0){ 
+      $('#dodo1').hide();
+    }
+            
+  });
+  </script>
+  <div class="list2">
+    <ul class="list2ul fn-clear">
+      <li id="li_menu_1" onclick="changeDIV(1)" class="a1"><a href="javascript:;" class="a1">借款详情</a></li>
+      <li id="li_menu_2" onclick="changeDIV(2)"><a href="javascript:;">投标记录</a></li>
+      <li id="li_menu_3" onclick="changeDIV(3)"><a href="javascript:;">账户详情</a></li>
+      <li id="li_menu_4" onclick="changeDIV(4)"><a href="javascript:;">还款信用</a></li>
+      <li id="li_menu_5" onclick="changeDIV(5)"><a href="javascript:;">待还款记录</a></li>
+    </ul>
+    <div class="list3">
+        <div id="detail_menu_1">
+          <h2>用户资料</h2>
+          <if condition="$UID gt 0">
+            <ul class="com_ul fn-clear">
+              <li class="w100">性别：</li>
+              <li class="w100">{$minfo.sex}</li>
+              <li class="w100">年龄：</li>
+              <li class="w100">{$minfo.age|getAgeName=###}</li>
+              <li class="w100">婚姻状况：</li>
+              <li class="w100">{$minfo.marry}</li>
+              <li class="w100">文化程度：</li>
+              <li class="w100">{$minfo.education}</li>
+            </ul>
+            <ul class="com_ul fn-clear">
+              <li class="w100">职业：</li>
+              <li class="w100">{$minfo.zy}</li>
+              <li class="w100">每月收入：</li>
+              <li class="w100">{$minfo.fin_monthin|Fmoney=###}</li>
+              <li class="w100">住房条件：</li>
+              <li class="w100">{$minfo.fin_house}</li>
+              <li class="w100">是否购车：</li>
+              <li class="w100">{$minfo.fin_car}</li>
+            </ul>
+          <else/>
+            <p style="text-align:center; line-height:50px;">请 <a href="/member/login/">登录</a> 或 <a href="/member/register/">注册</a> 后查看</p>
+          </if>
+          <if condition="$vo.borrow_type eq 2">
+            <strong>担保奖励与担保信息</strong>（一旦借款者逾期十天以上未还款,将由担保人垫付本息给投标者）
+            <if condition="!is_array($vouch_list)">
+              <strong>没有任何担保信息</strong>
+            <else/>
+              <ul class="com_ul fn-clear">
+                <li class="w100">序号</li>
+                <li class="w100">担保人</li>
+                <li class="w100">担保金额</li>
+                <li class="w100">担保奖励</li>
+                <li class="w100">担保时间</li>
+                <li class="w100">状态</li>
+              </ul>
+              <volist name="vouch_list" id="vv">
+              <ul class="com_ul fn-clear">
+                <li class="w100">{$vv.id}</li>
+                <li class="w100">{$vv.uname}</li>
+                <li class="w100">{$vv.vouch_money|Fmoney=###}</li>
+                <li class="w100">{$vv.vouch_reward_money|Fmoney=###}</li>
+                <li class="w100">{$vv.vouch_time|date="Y-m-d H:i",###}</li>
+                <li class="w100">{$Vstatus[$vv['status']]}</li>
+              </ul>
+              </volist>
+            </if>
+          </if>
+        </div>
+        <div id="detail_menu_2" style="display:none;">
+          <if condition="$UID gt 0">
+            <if condition="!is_array($paying_list)">
+              暂时还没有投标!
+            <else/>
+              <ul class="com_ul fn-clear">
+                <li class="w100">投标人</li>
+                <li class="w100">当前利率</li>
+                <li class="w100">投标金额</li>
+                <li class="w200">投标时间</li>
+                <li class="w100">投标类型</li>
+                <li class="w100">状态</li>
+              </ul>
+              <volist name="investinfo" id="vi">
+              <ul class="com_ul fn-clear">
+                <li class="w100">{$vi.user_name}</li>
+                <li class="w100">{$vo.borrow_interest_rate}%/<if condition="$vo.repayment_type eq 1">天<else/>年</if></li>
+                <li class="w100">{$vi.investor_capital|Fmoney=###}元</li>
+                <li class="w200">{$vi.add_time|date="Y-m-d H:i",###}</li>
+                <li class="w100"><if condition="$vi.is_auto eq 1">自动<else/>手动</if></li>
+                <li class="w100"><img src="__ROOT__/Style/H/images/zhangtai.png" /></li>
+              </ul>
+              </volist>
+            </if>
+          <else/>
+            <p style="text-align:center; line-height:50px;">请 <a href="/member/login/">登录</a> 或 <a href="/member/register/">注册</a> 后查看</p>
+          </if>
+        </div>
+        <div id="detail_menu_3" style="display:none;">
+          <ul class="com_ul fn-clear">
+            <li class="w100">账户总额：</li>
+            <li class="w100">{:Fmoney(getFloatValue($mainfo['account_money']+$mainfo['money_collect']+$mainfo['money_freeze'],2))}</li>
+            <li class="w200">借款总额：</li>
+            <li class="w100">{$capitalinfo.tj.jkze|Fmoney=###}</li>
+            <li class="w100">&nbsp;</li>
+            <li class="w200">&nbsp;</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">已还总额：</li>
+            <li class="w100">{$capitalinfo.tj.yhze|Fmoney=###}</li>
+            <li class="w200">待还总额：</li>
+            <li class="w100">{$capitalinfo.tj.dhze|Fmoney=###}</li>
+            <li class="w100">负债情况：</li>
+            <li class="w200"><if condition="$capitalinfo['tj']['fz'] lt 0">借出小于借入({$capitalinfo.tj.fz|Fmoney=###})<else/>借出大于借入({$capitalinfo.tj.fz|Fmoney=###})</if></li>
+          </ul>
+          <if condition="$vo.is_show_invest eq 1">
+          <ul class="com_ul fn-clear">
+            <li class="w100">投资总额：</li>
+            <li class="w100">{$capitalinfo.tj.jcze|Fmoney=###}</li>
+            <li class="w200">已收总额：</li>
+            <li class="w100">{$capitalinfo.tj.ysze|Fmoney=###}</li>
+            <li class="w100">待收总额：</li>
+            <li class="w200">{$capitalinfo.tj.dsze|Fmoney=###}</li>
+          </ul>
+          </if>
+          <ul class="com_ul fn-clear">
+            <li class="w100">借款信用额度：</li>
+            <li class="w100">{$mainfo.credit_limit|Fmoney=###}</li>
+            <li class="w200">可用信用额度：</li>
+            <li class="w100">{$mainfo.credit_cuse|Fmoney=###}</li>
+            <li class="w100">&nbsp;</li>
+            <li class="w200">&nbsp;</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">借款担保总额：</li>
+            <li class="w100">{$mainfo.borrow_vouch_limit|Fmoney=###}</li>
+            <li class="w200">可用借款担保额度：</li>
+            <li class="w100">{$mainfo.borrow_vouch_cuse|Fmoney=###}</li>
+            <li class="w100">&nbsp;</li>
+            <li class="w200">&nbsp;</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">投资担保总额：</li>
+            <li class="w100">{$mainfo.invest_vouch_limit|Fmoney=###}</li>
+            <li class="w200">可用投资担保额度：</li>
+            <li class="w100">{$mainfo.invest_vouch_cuse|Fmoney=###}</li>
+            <li class="w100">&nbsp;</li>
+            <li class="w200">&nbsp;</li>
+          </ul>
+        </div>
+        <div id="detail_menu_4" style="display:none;">
+          <ul class="com_ul fn-clear">
+            <li class="w100">还款状态</li>
+            <li class="w100">最近一周</li>
+            <li class="w100">最近1月</li>
+            <li class="w100">最近6月</li>
+            <li class="w100">6个月前</li>
+            <li class="w100">历史合计</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">提前还款</li>
+            <li class="w100">{$history.history1.tq|default=0}</li>
+            <li class="w100">{$history.history2.tq|default=0}</li>
+            <li class="w100">{$history.history3.tq|default=0}</li>
+            <li class="w100">{$history['history4']['tq'] - $history['history3']['tq']+0}</li>
+            <li class="w100">{$history.history4.tq|default=0}</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">准时还款</li>
+            <li class="w100">{$history.history1.zc|default=0}</li>
+            <li class="w100">{$history.history2.zc|default=0}</li>
+            <li class="w100">{$history.history3.zc|default=0}</li>
+            <li class="w100">{$history['history4']['zc'] - $history['history3']['zc']+0}</li>
+            <li class="w100">{$history.history4.zc|default=0}</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">迟还</li>
+            <li class="w100">{$history.history1.ch|default=0}</li>
+            <li class="w100">{$history.history2.ch|default=0}</li>
+            <li class="w100">{$history.history3.ch|default=0}</li>
+            <li class="w100">{$history['history4']['ch'] - $history['history3']['ch']+0}</li>
+            <li class="w100">{$history.history4.ch|default=0}</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">逾期还款</li>
+            <li class="w100">{$history.history1.yq|default=0}</li>
+            <li class="w100">{$history.history2.yq|default=0}</li>
+            <li class="w100">{$history.history3.yq|default=0}</li>
+            <li class="w100">{$history['history4']['yq'] - $history['history3']['yq']+0}</li>
+            <li class="w100">{$history.history4.yq|default=0}</li>
+          </ul>
+          <ul class="com_ul fn-clear">
+            <li class="w100">逾期未还</li>
+            <li class="w100">{$history.history1.wh|default=0}</li>
+            <li class="w100">{$history.history2.wh|default=0}</li>
+            <li class="w100">{$history.history3.wh|default=0}</li>
+            <li class="w100">{$history['history4']['wh'] - $history['history3']['wh']+0}</li>
+            <li class="w100">{$history.history4.wh|default=0}</li>
+          </ul>
+        </div>
+        <div id="detail_menu_5" style="display:none;">
+          <if condition="!is_array($paying_list)">
+            <ul class="ul2 fn-clear"><li>没有任何资料审核通过!</li></ul>
+          <else/>
+            <ul class="com_ul fn-clear">
+              <li class="w200">借款标题</li>
+              <li class="w100">期数</li>
+              <li class="w100">还款本息</li>
+              <li class="w100">实际到期日期</li>
+              <li class="w100">还款状态</li>
+            </ul>
+            <volist name="paying_list.list" id="vp">
+            <ul class="com_ul fn-clear">
+              <li class="w200"><a href="{$vp.borrow_id|getInvestUrl=###}" target="_blank">{$vp.borrow_name}</a></li>
+              <li class="w100">{$vp.sort_order}/{$vp.total}</li>
+              <li class="w100">{:Fmoney(getFloatValue($vp['capital']+$vp['interest'],2))}</li>
+              <li class="w100">{$vp.deadline|date="Y-m-d",###}</li>
+              <li class="w100">待还款</li>
+            </ul>
+            </volist>
+          </if>
+        </div>
+        <h3>审核状态</h3>
+        <if condition="!is_array($data_list)">
+          <ul class="ul2 fn-clear"><li>没有任何资料审核通过!</li></ul>
+        <else/>
+          <ul class="com_ul fn-clear">
+            <li class="w100">资料类型</li>
+            <li class="w100">上传数量</li>
+            <li class="w200">更新时间</li>
+            <li class="w100">获得积分</li>
+            <li class="w100">状态</li>
+          </ul>
+          <volist name="data_list" id="vd">
+          <ul class="com_ul fn-clear">
+            <li class="w100">{$Bconfig['DATA_TYPE'][$vd['type']]}</li>
+            <li class="w100">{$vd.num}</li>
+            <li class="w200">{$vd.add_time|date="Y-m-d H:i",###}</li>
+            <li class="w100">{$vd.credits}</li>
+            <li class="w100"><img src="__ROOT__/Style/H/images/zhangtai.png" /></li>
+          </ul>
+          </volist>
+        </if>
+        <ul class="ul2 fn-clear">
+          <li>圆创贷及其合作机构将始终秉持客观公正的原则，严控风险，最大程度的尽力确保借入者信息的真实性，但不保证审核信息100%无误。</li>
+            <li>借入者若长期逾期，其个人信息将被公布。</li>
+        </ul>
+        <h3>借款描述</h3>
+        <ul class="ul2 fn-clear">
+          <li>{$vo.borrow_info}</li>
+        </ul>
+        <!-- comment start -->
+        <h3>发表评论</h3>
+        <ul class="list5ul fn-clear" id="scomment">
+          <volist name="commentlist" id="vc">
+          <li>
+            <h3 class="fn-clear">
+                <span>{$vc.uname}</span>
+                <span class="sj">{$vc.add_time|date="Y-m-d H:i:s",###}</span>
+              </h3>
+              <p>{$vc.comment}</p>
+          </li>
+          </volist>
+          <div class="fn-right mb10 ajaxpagebar" data="scomment">{$commentpagebar}</div>
+        </ul>
+        <div class="list4">
+          <textarea name="comments" id="comments"></textarea>
+          <p><span class="btn"><a href="javascript:;" onclick="addComment();">发表评论</a></span></p>
+        </div>
+        <!-- comment end -->
+    </div>
+  </div>
+</div>
+<script language="javaScript" type="text/javascript" src="__ROOT__/Style/H/js/backtotop.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/fancybox/jquery.fancybox-1.3.2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $("a[rel=img_group]").fancybox({
+    'transitionIn'    : 'none',
+    'transitionOut'   : 'none',
+    'titlePosition'   : 'over',
+    'titleFormat'   : function(title, currentArray, currentIndex, currentOpts) {
+      return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+    }
+  });
+});
+
+//DIV隐显
+function changeDIV(num){
+  for(var id = 1;id<=5;id++)
+    {
+      if(id==num)
+      {
+        $("#detail_menu_"+id).attr('style','display: block');
+        $("#li_menu_"+id).children('a').addClass('a1');
+      }
+      else
+      {
+        $("#detail_menu_"+id).attr('style','display: none');
+        $("#li_menu_"+id).children('a').removeClass();
+      }
+    }
+}
+
+bindpage();
+function refreshComment(){
+  var geturl = "{$vo.id|getInvestUrl=###}?type=commentlist&id={$vo.id}&p=1";
+  var id = "scomment";
+  var x={};
+  $.ajax({
+    url: geturl,
+    data: x,
+    timeout: 5000,
+    cache: false,
+    type: "get",
+    dataType: "json",
+    success: function (d, s, r) {
+      if(d) $("#"+id).html(d.html);//更新客户端 作个判断，避免报错
+    }
+  });
+}
+function bindpage(){
+  $('.ajaxpagebar a').click(function(){
+    try{  
+      var geturl = $(this).attr('href');
+      var id = $(this).parent().attr('data');
+      var x={};
+      $.ajax({
+        url: geturl,
+        data: x,
+        timeout: 5000,
+        cache: false,
+        type: "get",
+        dataType: "json",
+        success: function (d, s, r) {
+          if(d) $("#"+id).html(d.html);//更新客户端 作个判断，避免报错
+        }
+      });
+    }catch(e){};
+    return false;
+  })
+}
+function addComment(){
+  var tid = {$vo.id|default=0};
+  var cm = $("#comments").val();
+  if(cm=="") {
+    $.jBox.tip("留言内容不能为空",'tip');
+    return;
+  }
+  $.jBox.tip("提交中......","loading");
+  $.ajax({
+    url: "__URL__/addcomment",
+    data: {"comment":cm,"tid":tid},
+    timeout: 5000,
+    cache: false,
+    type: "post",
+    dataType: "json",
+    success: function (d, s, r) {
+      if(d){
+        if(d.status==1){
+          refreshComment();
+          $.jBox.tip('留言成功');
+          $("#comments").val('');
+        }else{
+          $.jBox.tip(d.message,'fail');
+        }
+      }
+    }
+  });
+}
+
+function jubao(id){
+  var uxid = "{$UID}"||0;
+  if(!(parseInt(uxid)>0)){
+    $.jBox.tip("请先登陆");
+    return;
+  }
+  $.jBox("get:__URL__/jubao/?id="+id, {
+    title: "举报会员",
+    width: "auto",
+    top:'15%',
+    buttons: {'关闭': true }
+  });
+}
+
+var investmoney = 0;
+var borrowidMS = 0;
+var borrow_min = 0;
+var borrow_max = 0;
+function PostData(id) {
+  var tendValue = parseFloat($("#invest_money").val());
+  var pin = $("#pin").val();
+  var borrow_pass = (typeof $("#borrow_pass").val()=="undefined")?"":$("#borrow_pass").val();
+  var borrow_id = $("#borrow_id").val();
+      tendValue = isNaN(tendValue)?0:tendValue;
+  if(pin==""){
+  $.jBox.tip("请输入支付密码");  
+  return false;
+  }
+  if(tendValue<borrow_min){
+  $.jBox.tip("本标最低投标金额为"+borrow_min+"元，请重新输入投标金额");  
+  return false;
+  }else if(tendValue>borrow_max && borrow_max!=0){
+  $.jBox.tip("本标最大投标总金额为"+borrow_max+"元，请重新输入投标金额");  
+  return false;
+  }
+  $.ajax({
+    url: "__URL__/investcheck",
+    type: "post",
+    dataType: "json",
+    data: {"money":tendValue,'pin':pin,'borrow_id':borrow_id,"borrow_pass":borrow_pass},
+    success: function(d) {
+        if (d.status == 1) {
+          investmoney = tendValue;
+          $.jBox.confirm(d.message, "会员投标提示", isinvest, { buttons: { '确认投标': true, '暂不投标': false},top:'40%' });
+        }
+        else if(d.status == 2)// 无担保贷款多次提醒
+        {
+          $.jBox.confirm(d.message, "会员投标提示", ischarge, { buttons: { '去冲值': true, '暂不冲值': false},top:'40%' });
+        }
+        else if(d.status == 3)// 无担保贷款多次提醒
+        {
+          $.jBox.alert(d.message, '会员投标提示',{top:'40%'});
+        }else{
+          $.jBox.tip(d.message);  
+        }
+    }
+  });
+}
+
+function ischarge(d){
+  if(d===true) window.location.href="__APP__/member/charge#fragment-1";
+}
+function isinvest(d){
+  if(d===true) document.forms.investForm.submit();
+}
+function PostDataVouch(id) {
+  var tendValue = parseFloat($("#vouch_money").val());
+  var pin = $("#pin").val();
+      tendValue = isNaN(tendValue)?0:tendValue;
+  if(pin==""){
+  $.jBox.tip("请输入支付密码");  
+  return false;
+  }
+  if(tendValue<50){
+  $.jBox.tip("最低担保额度50元");  
+  return false;
+  }
+
+  $.ajax({
+    url: "__URL__/vouchcheck",
+    type: "post",
+    dataType: "json",
+    data: {"vouch_money":tendValue,'pin':pin},
+    success: function(d) {
+        if (d.status == 1) {
+          investmoney = tendValue;
+          $.jBox.confirm(d.message, "会员投标提示", isvouch, { buttons: { '确认担保': true, '暂不担保': false},top:'40%' });
+        }
+        else if(d.status == 2)// 无担保贷款多次提醒
+        {
+          $.jBox.confirm(d.message, "会员投标提示", isapply, { buttons: { '去申请额度': true, '暂不申请额度': false},top:'40%' });
+        }else{
+          $.jBox.tip(d.message);  
+        }
+    }
+  });
+}
+
+function isapply(d){
+  if(d===true) window.location.href="__APP__/member/moneylimit#fragment-1";
+}
+function isvouch(d){
+  if(d===true) document.forms.vouchForm.submit();
+}
+
+</script>
+<include file="Public:_footer" />

@@ -35,15 +35,15 @@ function MU($url, $type, $vars = array(), $domain = false)
     $action = isset($path[2]) ? strtolower($path[2]) : "";
     $http = ud($path, $domain);
 
+    $isRouter = c("URL_ROUTER_ON");
     switch ($type) {
-        case
-        "article" :
+        case "article" :
             if (!isset($vars['id'])) {
                 unset($path[0]);
                 $url = implode("/", $path) . "/";
                 $newurl = $url;
             } else {
-                if ($UN_1 || strtolower(GROUP_NAME) == strtolower(c("DEFAULT_GROUP"))) {
+                if ($UN_1 || strtolower(GROUP_NAME) == strtolower(c("DEFAULT_GROUP")) || $isRouter) {
                     unset($path[0]);
                     $url = implode("/", $path) . "/";
                 }
@@ -51,7 +51,7 @@ function MU($url, $type, $vars = array(), $domain = false)
             }
             break;
         case "typelist" :
-            if ($UN_1 || strtolower(GROUP_NAME) == strtolower(c("DEFAULT_GROUP"))) {
+            if ($UN_1 || strtolower(GROUP_NAME) == strtolower(c("DEFAULT_GROUP")) || $isRouter) {
                 unset($path[0]);
                 $url = implode("/", $path);
             }
@@ -1287,6 +1287,16 @@ function getLeveIco($num, $type = 1)
     }
 }
 
+function getLeveName($num)
+{
+    $leveconfig = fs("Webconfig/leveconfig");
+    foreach ($leveconfig as $key => $v) {
+        if ($v['start'] <= $num && $num < $v['end']) {
+            return $v['name'];
+        }
+    }
+}
+
 function getAgeName($num)
 {
     $ageconfig = fs("Webconfig/ageconfig");
@@ -1439,20 +1449,41 @@ function notice($type, $uid, $data = array())
     $smsTxt = de_xie($smsTxt);
     $msgTxt = de_xie($msgTxt); 
 
-    import("ORG.Net.Email");
-    $port = 25;
-    $smtpserver = $msgconfig['stmp']['server'];
-    $smtpuser = $msgconfig['stmp']['user'];
-    $smtppwd = $msgconfig['stmp']['pass'];
-    $mailtype = "HTML";
-    $sender = $msgconfig['stmp']['user'];
-    $smtp = new smtp($smtpserver, $port, true, $smtpuser, $smtppwd, $sender);
+    $isPhpmailer = true;
+    if ($isPhpmailer) {
+        require C("APP_ROOT").'Lib/Phpmailer/PHPMailerAutoload.php';
+        $smtp = new PHPMailer;
+        $smtp->isSMTP();// Set mailer to use SMTP
+        $smtp->Host = $msgconfig['stmp']['server'];// Specify main and backup SMTP servers
+        $smtp->SMTPAuth = true;// Enable SMTP authentication
+        $smtp->Username = $msgconfig['stmp']['user'];// SMTP username
+        $smtp->Password = $msgconfig['stmp']['pass'];// SMTP password
+        $smtp->SMTPSecure = 'tls';// Enable encryption, 'ssl' also accepted
+
+        $smtp->From = $msgconfig['stmp']['user'];
+        $smtp->FromName = $datag['web_name'];
+        
+        $smtp->isHTML(true);// Set email format to HTML
+    } else {
+        import("ORG.Net.Email");
+        if (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" || $_SERVER["HTTPS"] == "") {
+            $port = 25;
+        } else {
+            $port = 994;
+        }
+        $smtpserver = $msgconfig['stmp']['server'];
+        $smtpuser = $msgconfig['stmp']['user'];
+        $smtppwd = $msgconfig['stmp']['pass'];
+        $mailtype = "HTML";
+        $sender = $msgconfig['stmp']['user'];
+        $smtp = new smtp($smtpserver, $port, true, $smtpuser, $smtppwd, $sender);
+    }
 	$minfo = m("members")->field("user_email,user_name,user_phone")->find($uid);
     $uname = $minfo['user_name'];
     switch ($type) {
         case 1 :
             $vcode = rand_string($uid, 32, 0, 1);
-            $link = "<a href=\"" . c("WEB_URL") . "/member/common/emailverify?vcode=" . $vcode . "\">点击链接验证邮件</a>";
+            $link = "<a href=\"" . c("WEB_URL") . "/member/common/regsuccess?vcode=" . $vcode . "\">点击链接验证邮件</a>";
             $body = str_replace(array(
                 "#UserName#"
             ), array(
@@ -1468,7 +1499,17 @@ function notice($type, $uid, $data = array())
                 $link
             ), $emailTxt['regsuccess']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             return $send;
         case 2 :
             $vcode = rand_string($uid, 10, 3, 3);
@@ -1480,7 +1521,17 @@ function notice($type, $uid, $data = array())
                 $vcode
             ), $emailTxt['safecode']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             $content = str_replace(array(
                 "#CODE#"
             ), array(
@@ -1515,7 +1566,17 @@ function notice($type, $uid, $data = array())
                 $vcode
             ), $emailTxt['changephone']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             return $send;
         case 6 :
             $subject = "恭喜，你在" . $datag['web_name'] . "发布的借款审核通过";
@@ -1525,7 +1586,17 @@ function notice($type, $uid, $data = array())
                 $uname
             ), $emailTxt['verifysuccess']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             $body = str_replace(array(
                 "#UserName#"
             ), array(
@@ -1545,7 +1616,17 @@ function notice($type, $uid, $data = array())
                 $link
             ), $emailTxt['getpass']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             return $send;
         case 8 :
             $vcode = rand_string($uid, 32, 0, 1);
@@ -1559,7 +1640,17 @@ function notice($type, $uid, $data = array())
                 $link
             ), $emailTxt['regsuccess']);
             $to = $minfo['user_email'];
-            $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            if ($isPhpmailer) {
+                $smtp->Subject = $subject;
+                $smtp->Body    = $body;
+                $smtp->addAddress($to);
+                $send = $smtp->send();
+                if(!$send) {
+                    // echo 'Mailer Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $send = $smtp->sendmail($to, $sender, $subject, $body, $mailtype);
+            }
             return $send;
     }
 }
@@ -3399,37 +3490,40 @@ function getVerify($uid)
 {
     $pre = c("DB_PREFIX");
     $vo = m("members m")->field("m.id,m.user_leve,m.time_limit,s.id_status,s.phone_status,s.email_status,s.video_status,s.face_status")->join("{$pre}members_status s ON s.uid=m.id")->where("m.id={$uid}")->find();
-    $str = "";
+    $str = "<div class=\"verify\">";
     if ($vo['id_status'] == 1) {
-        $str .= "<a href=\"" . __APP__ . "/member/verify\"><img alt=\"实名认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/id.gif\"/></a>";
+        $str .= "<span><img alt=\"实名认证通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_2.jpg\"/></span>";
     } else {
-        $str .= "<a href=\"" . __APP__ . "/member/verify\"><img alt=\"实名认证未通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/id_0.gif\"/></a>";
+        $str .= "<span class=\"a1\"><img alt=\"实名认证未通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_2h.jpg\"/></span>";
     }
     if ($vo['phone_status'] == 1) {
-        $str .= "<img alt=\"手机认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/phone.gif\"/>";
+        $str .= "<span><img alt=\"手机认证通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_1.jpg\"/></span>";
     } else {
-        $str .= "<a href=\"" . __APP__ . "/member/verify\"><img alt=\"手机认证未通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/phone_0.gif\"/></a>";
+        $str .= "<span class=\"a1\"><img alt=\"手机认证未通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_1h.jpg\"/></span>";
     }
     if ($vo['email_status'] == 1) {
-        $str .= "<a href=\"" . __APP__ . "/member/verify\"><img alt=\"邮件认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/email.gif\"/></a>";
+        $str .= "<span><img alt=\"邮件认证通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_4.jpg\"/></span>";
     } else {
-        $str .= "<a href=\"" . __APP__ . "/member/verify\"><img alt=\"邮件认证未通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/email_0.gif\"/></a>";
+        $str .= "<span class=\"a1\"><img alt=\"邮件认证未通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_4h.jpg\"/></span>";
     }
-    if ($vo['user_leve'] != 0 && time() < $vo['time_limit']) {
-        $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip.gif\"/></a>";
-    } else {
-        $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"不是VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip_0.gif\"/></a>";
+    if (false) {//暂停使用
+        if ($vo['user_leve'] != 0 && time() < $vo['time_limit']) {
+            $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip.gif\"/></a>";
+        } else {
+            $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"不是VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip_0.gif\"/></a>";
+        }
+        if ($vo['video_status'] == 1) {
+            $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过视频认证');\"><img alt=\"视频认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/video.gif\"/></a>";
+        } else {
+            $str .= "<a href=\"javascript:;\" onclick=\"videoverify();\"><img alt=\"未进行视频认证\" src=\"" . __ROOT__ . "/Style/H/images/icon/video_0.gif\"/></a>";
+        }
+        if ($vo['face_status'] == 1) {
+            $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过现场认证');\"><img alt=\"现场认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/place.gif\"/></a>";
+        } else {
+            $str .= "<a href=\"javascript:;\" onclick=\"faceverify();\"><img alt=\"未进行现场认证\" src=\"" . __ROOT__ . "/Style/H/images/icon/place_0.gif\"/></a>";
+        }
     }
-    if ($vo['video_status'] == 1) {
-        $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过视频认证');\"><img alt=\"视频认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/video.gif\"/></a>";
-    } else {
-        $str .= "<a href=\"javascript:;\" onclick=\"videoverify();\"><img alt=\"未进行视频认证\" src=\"" . __ROOT__ . "/Style/H/images/icon/video_0.gif\"/></a>";
-    }
-    if ($vo['face_status'] == 1) {
-        $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过现场认证');\"><img alt=\"现场认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/place.gif\"/></a>";
-    } else {
-        $str .= "<a href=\"javascript:;\" onclick=\"faceverify();\"><img alt=\"未进行现场认证\" src=\"" . __ROOT__ . "/Style/H/images/icon/place_0.gif\"/></a>";
-    }
+    $str .= "</div>";
     return $str;
 }
 
@@ -3589,5 +3683,25 @@ function setBackUrl($per = "", $suf = "")
     $query = $per . "?1=1&" . $urlArr['query'] . $suf;
     session("listaction", $query);
 }
- 
+
+
+class MY_FUNC {
+    /*
+     * 获取整数值
+     * @param $var 数值或字符串
+     * @param $arr 允许的数值数组
+     * @return $var 处理后的数值
+     */
+    static function intval($var, $arr = array()) {
+        if (isset($var) && strcmp($var, intval($var)) === 0) {
+            $var = intval($var);
+        }
+        if (!in_array($var, $arr, true)) {
+            $tmp = $arr;
+            reset($tmp);
+            $var = current($tmp);
+        }
+        return $var;
+    }
+}
 ?>

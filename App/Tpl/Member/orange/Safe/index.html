@@ -1,0 +1,38 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>安全中心 - 会员中心 - {$glo.web_name}</title>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/member/">会员中心</a>&nbsp;>&nbsp;安全中心</div>
+    <div class="gywm fn-clear">
+    	<div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx30">
+                <div id="rotate">
+                	<ul class="ajaxdata hyxx30ul fn-clear">
+                	    <li><a href="#fragment-1" ajax_href="__URL__/idcard/">身份验证</a></li>
+                        <li><a href="#fragment-2" ajax_href="__URL__/safequestion/">安全问题</a></li>
+                        <li><a href="#fragment-3" ajax_href="__URL__/cellphone/">手机验证</a></li>
+                        <!-- <li><a href="#fragment-4" ajax_href="__URL__/email/">邮箱修改</a></li> -->
+                	</ul>
+                </div>
+                <div class="hyxx31">
+					<div class="fn-clear" id="fragment-1" style="display:none">
+                        <!--长担贷自动投标设置-->
+                    </div>
+                    <div class="fn-clear" id="fragment-2" style="display:none">
+                        <!--短担贷自动投标设置-->
+                    </div>
+                    <div class="fn-clear" id="fragment-3" style="display:none">
+                        <!--流转贷自动投标设置-->
+                    </div>
+                    <!-- <div class="fn-clear" id="fragment-4" style="display:none"> -->
+                        <!--邮箱设置-->
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />

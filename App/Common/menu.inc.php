@@ -25,6 +25,9 @@ $menu_left[$i][$i."-".$j][] = array('后台模板',U('/admin/global/cleantemplet
 $menu_left[$i][$i."-".$j][] = array('会员中心',U('/admin/global/cleantemplet?acahe=3'),1);
 $menu_left[$i][$i."-".$j][] = array('数据缓存',U('/admin/global/cleandata'),1);
 $menu_left[$i][$i."-".$j][] = array('所有缓存',U('/admin/global/cleanall'),1);
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('地图设置','#',1);
+$menu_left[$i][$i."-".$j][] = array('网点管理',U('/admin/map/'),1);
 
 $i++;
 $menu_left[$i]= array('借款管理','#',1);

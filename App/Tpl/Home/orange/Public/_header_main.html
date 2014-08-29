@@ -1,0 +1,116 @@
+<script type="text/javascript">
+function videoverify(){
+	$.jBox.confirm("申请视频认证后会直接从帐户扣除认证费用{$glo.fee_video|default=0}元，然后客服会联系您进行认证。<br/><font style='color:red'>确定要申请认证吗?</font>", "视频认证", dovideo, { buttons: { '确认申请': true, '暂不申请': false} });
+}
+function dovideo(v, h, f) {
+	if (v == true){
+        $.ajax({
+            url: "__APP__/common/video",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1) $.jBox.tip(d.message, 'success');
+					else $.jBox.tip(d.message, 'fail');
+				}
+            }
+        });
+	}
+	return true;
+};
+// 自定义按钮
+function faceverify(){
+	$.jBox.confirm("<font style='color:red'>确定要申请现场认证吗?</font>", "现场认证", doface, { buttons: { '确认申请': true, '暂不申请': false} });
+}
+function doface(v, h, f) {
+	if (v == true){
+        $.ajax({
+            url: "__APP__/common/face",
+            data: {},
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1) $.jBox.tip(d.message, 'success');
+					else $.jBox.tip(d.message, 'fail');
+				}
+            }
+        });
+	}
+	return true;
+};
+<!--经典导航-->
+//简单的URL判定导航
+$(document).ready(function() {
+    $('.navigation>li').css('height', '38px').hover(
+        function () {
+            $('ul', this).show();
+        },
+        function () {
+            $('ul', this).hide();
+        }
+    );
+});
+</script>
+</head>
+<body>
+<header>
+    <div class="topnav">
+        <ul class="fn-clear">
+            <li><a href="/service/index.html">在线客服</a></li>
+            <li><a href="javascript:addBookmark('{$glo.web_name}','__APP__/')">加入收藏</a></li>
+            <li><a href="/member/">我的账户</a></li>
+            <li><a href="#">移动客户端</a></li>
+        </ul>
+    </div>
+    <div class="top2 fn-clear">
+        <div class="mainnav fn-clear">
+            <div class="logo fn-left"><a href="__APP__/"><img src="/Style/Orange/images/logo.jpg"></a></div>
+            <ul class="navigation fn-left fn-clear">
+            	<php>$typelist = getTypeList(array('type_id'=>0,'limit'=>9));foreach($typelist as $va){</php>
+            	<li>
+            		<php>$sontypelist = getTypeList(array('type_id'=>$va['id'],'limit'=>8,'notself'=>true));</php>
+            		<a id="{$va.type_nid}" href="{$va.turl}">{$va.type_name}<php>if(!empty($sontypelist)){</php>▼<php>}</php></a>
+            		<php>if(!empty($sontypelist)){</php>
+            			<ul class="fn-clear fn-hide">
+            				<li class="ui-nav-dropdown-angle"><span></span></li>
+		            		<php>foreach($sontypelist as $vb){</php>
+							<li><a href="{$vb.turl}">{$vb.type_name}</a></li>
+							<php>}</php>
+						</ul>
+					<php>}</php>
+            	</li>
+            	<php>}</php>
+            </ul>
+            <!--注册和登陆-->
+            <div class="denglv fn-right">
+                <if condition="$UID gt 0">
+                    <ul class="navigation fn-clear">
+                        <li>
+                            <a href="__APP__/member">您好，{:session('u_user_name')}▼</a>
+                            <ul class="fn-clear fn-hide">
+                                <li class="ui-nav-dropdown-angle"><span></span></li>
+                                <li><a href="__APP__/member/charge#fragment-1">充值</a></li>
+                                <li class="xian"><a href="__APP__/member/withdraw#fragment-1">提现</a></li>
+                                <li><a href="__APP__/member/capital#fragment-1">资金管理</a></li>
+                                <li><a href="__APP__/member/tendout#fragment-1">理财管理</a></li>
+                                <li class="xian"><a href="__APP__/member/borrowin#fragment-1">借款管理</a></li>
+                                <li><a href="__APP__/member/common/actlogout">退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                <else/>
+                    <ul class="zc_dl fn-clear">
+                        <li class="li1 fn-left"><a href="__APP__/member/common/register/">注 册</a></li>
+                        <li class="li2 fn-right"><a href="__APP__/member/common/login/">登 录</a></li>
+                    </ul>
+                </if>
+            </div>
+        </div>
+    </div>
+</header>

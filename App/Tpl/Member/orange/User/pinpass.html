@@ -1,0 +1,132 @@
+<style type="text/css">
+body { margin: 0; _height: 100%; }
+.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; border: #E9E8E7 solid 1px; }
+.tdContent { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; border: #E9E8E7 solid 1px; }
+.alertDiv_pin { margin: 0px auto; background-color: #FEFACF; border: 1px solid green; line-height: 25px; }
+.alertDiv_pin li { margin: 5px 0; list-style-type: decimal; color: #005B9F; padding: 0px; line-height: 20px; width: 100%; }
+.alertDiv_pin ul { text-align: left; list-style-type: decimal; display: block; padding: 0px; margin: 0px 0px 0px 75px; }
+.font666 { color: #666; }
+.dv_header_8 { background-image: url(); }
+.dv_account_0 { margin-top: 8px; }
+</style>
+<script type="text/javascript">
+function showErr_pin() {
+	$(".alertDiv_pin").css("display", "");
+}
+function clearErr_pin() {
+	$(".alertDiv_pin ul").html("");
+}
+function addErr_pin(err) {
+	$(".alertDiv_pin ul").append("<li>" + err + "</li>");
+}
+function hideErr_pin() {
+	$(".alertDiv_pin").css("display", "none");
+}
+function hasErr_pin() {
+	return $(".alertDiv_pin ul li").length > 0;
+}
+</script>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	您可以通过经常性修改支付密码更好的保护您的账号安全，以避免您受到意外损失
+</div>
+<div style="padding: 15px 0 0 50px; text-align: left; line-height: 24px;">
+	1、经常性修改支付密码能有效的保护您的帐号安全<br>
+	2、涉及到您的资金安全，请勿设置简单的支付密码，不要设置和其它网站相同的支付密码
+</div>
+<div style="display: none;" class="alertDiv_pin fn-clear">
+	<ul style="display: block;"></ul>
+</div>
+<div style="width: 100%; height: 167px; margin-top: 15px;">
+	<table style="width: 710px; float: left; margin: 0px 20px;
+		padding: 0px; border-collapse: collapse; text-align: left;" id="formTb" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td class="tdTitle">
+				用户名：
+			</td>
+			<td class="tdContent">
+				<span id="name">
+					{:session('u_user_name')}
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				请输入原支付密码：
+			</td>
+			<td class="tdContent">
+				<input id="oldpassword_pin" name="oldpassword_pin" class="inp1" type="password"><span class="font666">(如未修改过，则与原登陆密码相同)</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				请输入新支付密码：
+			</td>
+			<td class="tdContent">
+				<input id="newpassword_pin" name="newpassword_pin" class="inp1" type="password">
+				<span class="font666">(输入您的新支付密码)</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdTitle">
+				请再输入新支付密码：
+			</td>
+			<td class="tdContent">
+				<input id="newpassword_pin1" name="newpassword_pin1" class="inp1" type="password">
+				<span class="font666">(再输入一次您的新支付密码)</span>
+			</td>
+		</tr>
+	</tbody></table>
+</div>
+<div class="hyxx32_2" style="padding:10px;">
+	<p>
+        <span class="btn"><a href="#" id="btn_set" onclick="UpdatePwd_pin()">保存设置</a></span>
+    </p>
+</div>
+<script type="text/javascript">
+	var newTitle = '{$glo.web_name}提醒您：';
+
+	function UpdatePwd_pin() {
+		var oldpwd = $("#oldpassword_pin").val();
+		var newspwd1 = $("#newpassword_pin").val();
+		var newspwd2 = $("#newpassword_pin1").val();
+		clearErr_pin();
+		hideErr_pin();
+		if (oldpwd == '') {
+			addErr_pin('原支付密码必须填写！');
+		}
+		if (newspwd1 == '') {
+			addErr_pin('新支付密码必须填写！');
+		}
+		if (newspwd2 == '') {
+			addErr_pin('确认新支付密码必须填写！');
+		}
+		if (newspwd2 != newspwd1) {
+			addErr_pin('两次支付密码不一致！');
+		}
+		if (hasErr_pin()) {
+			showErr_pin();
+			return false;
+		}
+		else {
+			$.ajax({
+				url: "__URL__/changepin/",
+				type: "post",
+				dataType: "json",
+				data: {"oldpwd":oldpwd,"newpwd1":newspwd1,"newpwd2":newspwd2},
+				success: function(d) {
+					if (d.status == "2") {
+						addErr_pin(d.message);
+						showErr_pin();
+						return;
+					} else if (d.status == "1") {
+						$.jBox.tip('恭喜，支付密码修改成功！','success');
+					} else {
+						$.jBox.tip(d.message,'fail');
+					}
+				}
+			})
+		}
+	}
+</script>
+

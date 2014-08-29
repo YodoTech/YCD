@@ -1,0 +1,28 @@
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;"> 通过身份验证，能够有效的提高资金的安全性
+</div>
+<div style=" padding:15px 0 0 50px; text-align:left; line-height:24px;">
+	尊敬的{$glo.web_name}会员，通过身份验证，可以为您在{$glo.web_name}的投资和借款提供有效的安全保障。
+</div>
+
+<div style="padding: 10px 20px;; text-align: left;">
+	<table cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td style="width:160px; text-align:right;">
+				<img alt="" src="__ROOT__/Style/M/images/account/idcard.jpg">
+			</td>
+			<td style=" width:490px;padding-left:10px; border-bottom:1px solid #e5e5e5;border-top:1px solid #e5e5e5;border-right:1px solid #e5e5e5;">
+				<span style="color:#005B9F">温馨提示：你已经完成了身份验证，你的身份信息如下。</span>
+				<div style="margin-top: 10px;"><strong>真实姓名：</strong><span id="my_name">{$vo.real_name}</span></div>
+				<div style="margin-top: 10px;"><strong>身份证号：</strong><span id="my_card">{$vo.idcard|hidecard=###,1}</span></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div style="padding-left: 20px; padding-top:20px;">
+				* 如果你在公安机关修改了名字，请联系我们的客服，凭有关公安机关改名的核证材料修改您的身份信息。谢谢!
+				</div>
+			</td>
+		</tr>
+	</tbody></table>
+</div>

@@ -1,0 +1,53 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx24ul li.w70 {width: 70px;}
+.hyxx24ul li.w110 {width: 110px;}
+.hyxx24ul li.w200 {width: 200px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+    <div class="hyxx10" style="text-indent:8px;">
+        您目前已回收的投资总额是：&nbsp;<span class="red">￥{$total|default="0.00"}</span>&nbsp;，共&nbsp;<span class="red">{$num|default="0"}</span>&nbsp;笔投标。
+    </div>
+    <ul class="hyxx24ul fn-clear">
+        <li class="w70">借款标号</li>
+        <li class="w200">借款标题</li>
+    	<li class="w110">借入人</li>
+        <li class="w110">年化利率</li>
+        <li class="w110">已收本金</li>
+        <li class="w110">已收利息</li>
+    </ul>
+    <div id="content">
+    	<volist name="list" id="vo">
+    	<ul class="hyxx24ul fn-clear">
+    	    <li class="w70">{$vo.borrow_id}</li>
+    		<li class="w200"><a href="{$vo.borrow_id|getInvestUrl=###}" target="_blank">{$vo.borrow_name}</a></li>
+    	    <li class="w110">{$vo.borrow_user}</li>
+    	    <li class="w110">{$vo.borrow_interest_rate}%<if condition="$vo.borrow_type eq 1">/天<else/>/年</if></li>
+    	    <li class="w110">{$vo.receive_capital}</li>
+    	    <li class="w110">{$vo.receive_interest}</li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-5" class="ajaxpagebar hyxx12 fn-right">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+    try{    
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    }catch(e){};
+    return false;
+})
+</script>

@@ -1,0 +1,30 @@
+<include file="Public:_header_common" />
+<title>{$vo.type_name}-{$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$vo.type_keyword}" />
+<meta http-equiv="description" content="{$vo.type_info}" />
+
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;关于我们</div>
+    <div class="gywm fn-clear">
+    	<ul class="gywmL fn-clear fn-left">
+        	<include file="left" />
+        </ul>
+        <div class="gywmR fn-right">
+        	<h2>{$vo.type_name}</h2>
+            <ul class="gywmlist fn-clear">
+                <volist name="list" id="vl">
+                <li>
+                    <a href="{$vl.arturl}" class="fn-clear">
+                        <span class="fn-left"><b>■</b>{$vl.title}</span>
+                        <span class="sj fn-right">{$vl.art_time|date="Y.m.d",###}</span>
+                    </a>
+                </li>
+                </volist>
+            </ul>
+            <ul class="gywmlistym fn-clear">{$pagebar}</ul>
+        </div>
+    </div>
+</div>
+<include file="Public:_footer" />

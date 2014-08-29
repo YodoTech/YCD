@@ -1,0 +1,33 @@
+<div class="hyxx24 fn-clear" style="border:none;">
+    <div class="hyxx10" style="text-indent:8px;">
+        截止&nbsp;<span class="red"><php>echo date("Y-m-d H:i:s",time());</php></span>&nbsp;您成功邀请的会员有：
+    </div>
+    <ul class="hyxx24ul fn-clear">
+        <li>会员名单</li>
+        <li>注册时间</li>
+    </ul>
+    <div id="content">
+    	<volist name="vi" id="vi">
+    	<ul class="hyxx24ul fn-clear" id="noinfotip">
+    	    <li>{$vi.user_name}</li>
+    	    <li>{$vi.reg_time|date="Y-m-d H:i",###}</li>
+    	</ul>
+    	</volist>
+    </div>
+	
+    <div class="hyxx10" style="text-indent:8px;">
+        截止&nbsp;<span class="red"><php>echo date("Y-m-d H:i:s",time());</php></span>&nbsp;对您有投标奖励的会员有：
+    </div>
+    <ul class="hyxx24ul fn-clear">
+        <li>会员名单</li>
+        <li>奖金贡献</li>
+    </ul>
+    <div id="content">
+        <volist name="vm" id="vo">
+        <ul class="hyxx24ul fn-clear" id="noinfotip">
+            <li>{$vo.user_name}</li>
+            <li>{$vo.jiangli|default=0}</li>
+        </ul>
+        </volist>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="hyxx24 fn-clear" style="border:none;">
+    <div class="hyxx10" style="text-indent:8px;">
+        截止&nbsp;<span class="red"><php>echo date("Y-m-d H:i:s",time());</php>
+        </span>&nbsp;您目前的奖金余额是：&nbsp;<span class="red"> ￥{$CR|default=0.00}</span>&nbsp;，您历史上累计获得奖金总额是：&nbsp;<span class="red"> ￥{$totalR|default=0.00}</span>&nbsp;。
+    </div>
+    <ul class="hyxx24ul fn-clear">
+        <li>编号</li>
+        <li>发生日期</li>
+    	<li>奖金金额</li>
+        <li>余额变动事由</li>
+    </ul>
+    <div id="content">
+    	<volist name="list" id="vo">
+    	<ul class="hyxx24ul fn-clear">
+    	    <li>{$vo.id}</li>
+    	    <li>{$vo.add_time|date="Y-m-d H:i:s",###}</li>
+    		<li>{$vo.affect_money}</li>
+    	    <li>{$vo.info}</li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-2" class="ajaxpagebar hyxx12 fn-right">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+    try{    
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    }catch(e){};
+    return false;
+})
+</script>

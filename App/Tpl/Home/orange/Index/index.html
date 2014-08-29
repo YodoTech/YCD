@@ -1,0 +1,118 @@
+<php>$home_orange_page = 'index';</php>
+<include file="Public:_header_common" />
+<title>{$glo.index_title}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<script type="text/javascript" src="__ROOT__/Style/H/js/backtotop.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/H/js/index.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
+<php>$online_time = strtotime('2014/07/29');</php>
+<script type="text/javascript">
+$(function() {
+  $('.knob').knob();
+  $('#getting-started').countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
+    $(this).html(event.strftime('<span>%D天</span>%H : %M : %S'));
+  });
+});
+</script>
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="conter">
+  <div class="banner">
+      <ul class="fn-clear">
+          <li><a href="#"><img src="/Style/Orange/images/banner1.jpg"></a></li>
+        </ul>
+    </div>
+    <div class="cont1 fn-clear">
+      <ul class="cont1L fn-left fn-clear">
+          <li>
+            <a href="javascript:;" class="fn-clear">
+              <img src="/Style/Orange/images/icon_1.jpg" />
+              <span>放款总额<br />{$statData.17.money|Fmoney=###}</span>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" class="fn-clear">
+              <img src="/Style/Orange/images/icon_2.jpg" />
+              <span>未收款总额<br />{:Fmoney($statData['17']['money']-$statData['11']['money'])}</span>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" class="fn-clear">
+              <img src="/Style/Orange/images/icon_3.jpg" />
+              <span>已收款总额<br />{$statData.11.money|Fmoney=###}</span>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" class="fn-clear">
+              <img src="/Style/Orange/images/icon_4.jpg" />
+              <span>为投资人提供收入<br />{$statData.28.money|Fmoney=###}</span>
+            </a>
+          </li>
+        </ul>
+        <ul class="cont1R fn-right">
+          <li class="li1 fn-left">
+              <img src="/Style/Orange/images/icon_5.jpg" />
+            </li>
+            <li class="li2 fn-right">
+              <p class="p1">上线累计时间</p>
+                <p class="p2" id="getting-started"></p>
+                <p class="p3">上线时间：{$online_time|mydate="Y年m月d日",###}</p>
+            </li>
+        </ul>
+    </div>
+    <div class="cont2">
+      <ul class="fn-clear">
+          <li>
+              <img src="/Style/Orange/images/icon_6.jpg"/>
+                <h2>公司动态</h2>
+                <ul class="fn-clear">
+                  <php>$xlist = getArticleList(array("type_id"=>array('in','338,336'),"pagesize"=>4)); foreach($xlist['list'] as $kx => $va){</php>
+                  <li>
+                    <a href="{$va.arturl}" title="{$va.title}" class="fn-clear">
+                      <span class="tm fn-left fn-text-overflow">{$va.title|cnsubstr=###,12}</span>
+                      <span class="sj fn-right">{$va.art_time|date="Y-m-d",###}</span>
+                    </a>
+                  </li>
+                  <php>};$xlist=NULL;</php>
+                </ul>
+            </li>
+            <li>
+              <img src="/Style/Orange/images/icon_7.jpg"/>
+                <h2>我要投资</h2>
+                <p><a href="__APP__/invest/index.html">安全高收益，预期年化收益率10%-24%，零门槛，多重保障，让您的资金迅速升值.更t有资金周转标，债权转让标</a></p>
+            </li>
+            <li>
+              <img src="/Style/Orange/images/icon_8.jpg"/>
+                <h2>我要借款</h2>
+                <p><a href="__APP__/borrow/index.html">抵押贷款，信用贷款等多种融资方式为您量身定制，利率更低，手续更简，下款更快，费用更低</a></p>
+            </li>
+            <li>
+              <img src="/Style/Orange/images/icon_9.jpg"/>
+                <h2>绿色通道</h2>
+                <p><a href="#">您身边优质金融资源的整合专家，银行贷款，银行承兑汇票，银行信用卡，融资租赁，信托，私募等多种金融业务快速咨询对接</a></p>
+            </li>
+        </ul>
+    </div>
+    <div class="cont3">
+      <h2>最新投资列表</h2>
+      <h3>助人利己 传递正能量</h3>
+      <ul class="fn-clear">
+        <volist name="listBorrow.list" id="vb">
+        <li>
+          <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+          <h4 title="{$vb.borrow_name}">{$vb.borrow_name|cnsubstr=###,8}</h4>
+          <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
+          <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
+          <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
+          <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
+          <p class="btn"><a href="{$vb.id|getInvestUrl=###}">我要投标</a></p>
+        </li>
+        </volist>
+      </ul>
+      <div class="cont3_btn"><p class="btn"><a href="__APP__/invest/index.html">查看更多</a></p></div>
+    </div>
+</div>
+<!--中部结束-->
+<include file="Public:_footer" />

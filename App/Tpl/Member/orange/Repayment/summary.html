@@ -1,0 +1,136 @@
+<style type="text/css">
+.fontred { color: #005B9F; }
+.dv_header_8 { background-image: url(); }
+		#pager { margin: 10px 0px 3px 0px; }
+.dv_account_0 { margin-top: 10px; }
+.tdHeard, .tdContent { border: solid 1px #ccc; }
+.tdContent{ background:white;}
+.tdContent a { text-decoration: underline; }
+.tdHeard { background-image: url(__ROOT__/Style/M/images/thbg.jpg); height: 29px; }
+.operaframe { width: 600px; text-align: left; overflow: hidden;  margin-left:20px; line-height: 27px; padding-left: 28px; float: left; margin-top: 20px; }
+.operaframe ul { padding: 0px; margin: 0px; text-align: left; overflow: hidden; line-height: 25px; }
+.operaframe ul li { float: left; line-height: 25px; }
+.divtitle { height: 20px; line-height: 30px; text-align: left; padding-left:20px; font-size: 12px;text-indent: 25px; margin-top: 8px; }
+
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/F/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，以下是您在{$glo.web_name}的还款安排，敬请咨询审阅
+</div>
+<div class="divtitle" style="width: 100%;">
+	借款偿还安排标注了您在将来如约还款的时间以及还款余额，您目前应还款总额是：<span class="fontred">￥0.00</span>，共<span class="fontred">0</span>笔借款。
+</div>
+
+   
+<div style="margin: 20px 0px; overflow: hidden; text-align: left; clear: both; float: left;
+	padding-left: 25px; width: 720px;">
+	<table id="Table1" style="width: 718px; border-collapse: collapse;" cellspacing="0">
+		<tbody><tr class="tableHeadTr">
+			<th scope="col" class="tdHeard" style="width: 93px;">
+				
+			</th>
+			<th scope="col" class="tdHeard" style="width: 123px;">
+				未来一月
+			</th>
+			<th scope="col" class="tdHeard" style="width: 123px;">
+				未来三月
+			</th>
+			<th scope="col" class="tdHeard" style="width: 123px;">
+				未来半年
+			</th>
+			<th scope="col" class="tdHeard" style="width: 123px;">
+				全部
+			</th>
+		</tr>
+		<tr class="tableHeadTr">
+			<td class="tdContent" style="width: 93px; color:#000">待还本息总额</td>
+			<td class="tdContent" style="width: 123px;">0.00</td>
+			<td class="tdContent" style="width: 123px;">0.00</td>
+			<td class="tdContent" style="width: 123px;">0.00</td>
+			<td class="tdContent" style="width: 123px;">0.00</td>
+		</tr>
+	</tbody></table>
+</div>
+
+<div style="border-top:1px #cccccc solid; background-color:#f6f6f6; width:720px; margin:auto; margin-bottom:20px; overflow:hidden;">
+
+ <div class="operaframe" style=" padding-left:0px;">
+	<ul id="Ul1">
+		<li style="width: 180px; font-weight:bold;">查询我的明细还款安排： </li>
+	   
+	</ul>
+	<ul style=" margin-top:8px;">
+		<li style="width: 68px; margin-left:40px;">快捷查询： </li>
+		<li onclick="getBind('2','1');" style="width: 70px; color: rgb(0, 51, 0); text-decoration: underline; cursor: pointer;" onmouseout="this.style.color='#005CA0'" onmousemove="this.style.cursor='pointer'; this.style.color='red'">未来一月</li>
+		<li onclick="getBind('2','3');" style="width: 70px; color: rgb(0, 51, 0); text-decoration: underline; cursor: pointer;" onmouseout="this.style.color='#005CA0'" onmousemove="this.style.cursor='pointer'; this.style.color='red'">未来三月</li>
+		<li onclick="getBind('2','6');" style="width: 70px;color:#005CA0;  text-decoration: underline;" onmouseout="this.style.color='#005CA0'" onmousemove="this.style.cursor='pointer'; this.style.color='red'">未来半年</li>
+		<li onclick="getBind('2','all');" style="width: 70px; color: rgb(0, 51, 0); text-decoration: underline; cursor: pointer;" onmouseout="this.style.color='#005CA0'" onmousemove="this.style.cursor='pointer'; this.style.color='red'">全部</li>
+	</ul>
+</div>
+
+ <div class="operaframe" style=" margin-top:5px;">
+	<ul id="formTb">
+		<li style="width: 80px;">自定义查询： </li>
+		<li style="width: 18px;">从 </li>
+		<li style="width: 240px;">
+			<input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time\\\')||\\\'2020-10-01\\\'}'})"/>
+			至
+			<input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time\\\')||\\\'2020-10-01\\\'}'})"/>
+		</li>
+		<li style="width: 120px;">
+			<img alt="" onclick="getBind('1','1');" src="__ROOT__/Style/M/images/chakan.jpg" id="btn_search" style="cursor: pointer;">
+		</li>
+		<li style="width: 80px; display:none"><a href="/down.html?cmd=borrowplan" style="vertical-align: bottom;
+			line-height: 20px;">下载
+			<img alt="" src="__ROOT__/Style/M/images/down.jpg"></a> </li>
+	</ul>
+</div>
+
+<div style="margin: 10px 0px 20px 0px; overflow: hidden; text-align: left; clear: both; float: left;
+	width: 685px; margin-left:17px;">
+	<table id="content" style="width: 685px; border-collapse: collapse;" cellspacing="0">
+		<tbody><tr class="tableHeadTr">
+			<th scope="col" class="tdHeard" style="width: 80px;">
+				借款标号
+			</th>
+			<th scope="col" class="tdHeard" style="width: 93px;">
+				还款日期
+			</th>
+			<th scope="col" class="tdHeard" style="width: 93px;">
+				还款金额
+			</th>
+			<th scope="col" class="tdHeard" style="width: 163px;">
+				本金+利息
+			</th>
+			<th scope="col" class="tdHeard" style="width: 143px;">
+				本期/总期数
+			</th>
+			<th scope="col" class="tdHeard">
+				合同
+			</th>
+		</tr>
+		<tr id="noinfotip" class="tableHeadTr">
+			<td class="tdContent" style="width: 80px;">
+			</td>
+			<td class="tdContent" style="width: 93px;">
+			</td>
+			<td class="tdContent" style="width: 93px;">
+			</td>
+			<td id="tdnone" class="tdContent" style="width: 163px;">
+				未设查询条件！
+			</td>
+			<td class="tdContent" style="width: 143px;">
+			</td>
+			<td class="tdContent">
+			</td>
+		</tr>
+	</tbody></table>
+	<div style=" line-height:32px; " id="divPrompt"></div>
+	<div id="pager" style="float: right; text-align: right;   padding-right: 0px;
+		width: 600px;" class="yahoo2">
+	</div>
+</div>
+
+</div>
+<div style="clear: both; float: none;">
+</div>

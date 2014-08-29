@@ -1,0 +1,112 @@
+<tagLib name="htmlA" />
+
+<script type="text/javascript" src="__ROOT__/Style/H/js/area.js" language="javascript"></script>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>真实姓名：</div>
+    <div class="hyxx25_2R_1C">{$vo.real_name|default="还未进行实名认证"}</div>
+    <div id="dv_realname" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>身份证号：</div>
+    <div class="hyxx25_2R_1C">{$vo.idcard|default="还未进行实名认证"}</div>
+    <div id="dv_idcard" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>手机号码：</div>
+    <div class="hyxx25_2R_1C"><htmlA:input id="cell_phone" value="{$vo.cell_phone}" class="inp1" /></div>
+    <div id="dv_cell_phone" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>性别：</div>
+    <div class="hyxx25_2R_1C"><htmlA:radio id="sex" default="男|男,女|女" value="key|vo.sex" /></div>
+    <div id="dv_sex" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>最高学历：</div>
+    <div class="hyxx25_2R_1C"><htmlA:radio id="education" default="高中以下|高中以下,大专或本科|大专或本科,硕士或硕士以上|硕士或硕士以上" value="key|vo.education" /></div>
+    <div id="dv_education" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>婚姻状况：</div>
+    <div class="hyxx25_2R_1C"><htmlA:radio id="marry" default="未婚|未婚,已婚|已婚" value="key|vo.marry" /></div>
+    <div id="dv_marry" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>籍贯：</div>
+    <div class="hyxx25_2R_1C">
+    	<select name="province" id="province" class="inp1"><option>请选择</option></select>&#12288;（省/直辖市）&#12288;<select name="city" id="city" class="inp1"><option>请选择</option></select>&#12288;市&#12288;<select name="area" id="area" class="inp1"><option>请选择</option></select>&#12288;区
+    </div>
+    <div id="dv_area" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>居住地址：</div>
+    <div class="hyxx25_2R_1C">
+    	<select name="province_now" id="province_now" class="inp1"><option>请选择</option></select>&#12288;（省/直辖市）&#12288;<select name="city_now" id="city_now" class="inp1"><option>请选择</option></select>&#12288;市&#12288;<select name="area_now" id="area_now" class="inp1"><option>请选择</option></select>&#12288;区
+    </div>
+    <div id="dv_area_now" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>职位：</div>
+    <div class="hyxx25_2R_1C"><htmlA:input id="zy" value="{$vo.zy}" class="inp1" /></div>
+    <div id="dv_zy" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>月收入：</div>
+    <div class="hyxx25_2R_1C"><htmlA:radio id="income" default="5000以下|5000以下,5000-10000|5000-10000,10000-50000|10000-50000,50000以上|50000以上" value="key|vo.income" /></div>
+    <div id="dv_income" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>个人描述：</div>
+    <div class="hyxx25_2R_1C">
+    	<htmlA:text style="height:80px;width:423px;" id="info" value="{$vo.info}" class="textarea1 inp1"/>
+    </div>
+    <div id="dv_info" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L">&nbsp;</div>
+    <div class="hyxx25_2R_1C">
+		<div class="hyxx25_1R"><span class="btn"><a href="javascript:;" onclick="editmemberinfo();" onmousemove="this.style.cursor='hand'">修改信息</a></span></div>
+    </div>
+</div>
+<script type="text/javascript">
+var areaurl="__URL__/getarea/";
+var s = new GetAreaSelect('#province','#city','#area'<empty name="vo['province']"><else/>,{$vo.province}</empty><empty name="vo['city']"><else/>,{$vo.city}</empty><empty name="vo['area']"><else/>,{$vo.area}</empty>);
+var s1 = new GetAreaSelect('#province_now','#city_now','#area_now'<empty name="vo['province_now']"><else/>,{$vo.province_now}</empty><empty name="vo['city_now']"><else/>,{$vo.city_now}</empty><empty name="vo['area_now']"><else/>,{$vo.area_now}</empty>);
+</script>
+<script type="text/javascript">
+function editmemberinfo(){
+	p = makevar(['sex','cell_phone','info','marry','education','income','province','city','area','province_now','city_now','area_now','zy']);
+	p['_tps'] = "post";
+	var mxs = true;
+	$.each(p,function(i) {
+		if(p[i] == "" && i!='area_now' && i!='area') {
+			mxs=false;
+			return false;
+		}
+	});
+	if(mxs===false){
+	  $.jBox.tip("所有项目都不能为空");
+	  return false;
+	}
+
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/editmemberinfo/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info1]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+	return false;
+}
+</script>

@@ -1,0 +1,55 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx24ul li.w70 {width: 70px;}
+.hyxx24ul li.w90 {width: 90px;}
+.hyxx24ul li.w110 {width: 110px;}
+.hyxx24ul li.w160 {width: 160px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+    <ul class="hyxx24ul fn-clear">
+        <li class="w70">借款标号</li>
+        <li class="w160">借款标题</li>
+    	<li class="w110">借入人</li>
+        <li class="w90">年化利率</li>
+        <li class="w70">逾期天数</li>
+        <li class="w90">待收本金</li>
+        <li class="w90">待收利息</li>
+        <li class="w90">当前/总(期)</li>
+    </ul>
+    <div id="content">
+    	<volist name="list" id="vo">
+    	<ul class="hyxx24ul fn-clear" id="noinfotip">
+    	    <li class="w70">{$vo.borrow_id}</li>
+    	    <li class="w160"><a href="{$vo.borrow_id|getInvestUrl=###}" target="_blank">{$vo.borrow_name}</a></li>
+    		<li class="w110">{$vo.borrow_user}</li>
+    	    <li class="w90">{$vo.borrow_interest_rate}%</li>
+    	    <li class="w70">{$vo.breakday}</li>
+    	    <li class="w90">{$vo.capital}</li>
+    	    <li class="w90">{$vo.interest}</li>
+    	    <li class="w90">{$vo.sort_order}/{$vo.total}</li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-4" class="ajaxpagebar hyxx12 fn-right">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+</script>

@@ -1,0 +1,33 @@
+<include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/M/css/left.css" />
+<div class="dv_account_0" style="margin-top: 10px; text-align: left;">
+	<div class="dv_account_1">
+		<include file="Public:_left"/>
+	</div>
+	<div class="dv_account_2"> 
+            <div class="box">
+                <div class="tagMenu" id="rotate">
+                    <ul class="menu ajaxdata"> 
+                        <li style="width:auto"><a href="#fragment-1" ajax_href="__URL__/auto/">自动投标</a></li>
+                        <li style="width:auto"><a id="x2" href="#fragment-2" ajax_href="__URL__/autolong/">普通标自动投标设置</a></li>
+                        <li style="width:auto"><a onclick="window.location.href='__URL__/autotransferindex#fragment-2';return false;">流转贷自动投标设置</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align:left; overflow:hidden;" class="content">
+				<div id="fragment-1" style="display:none">
+					<!--自动投标-->
+				</div>
+				<div id="fragment-2" style="display:none">
+					<!--长担贷自动投标设置-->
+				</div>
+				<div id="fragment-4" style="display:none">
+					<!--流转贷自动投标设置-->
+				</div>
+			</div>
+    </div>
+</div>
+<include file="default:Public:_footer_inner" group="Home" />

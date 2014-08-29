@@ -1,0 +1,96 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>银行帐户-- {$glo.web_name}</title>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<style>
+.hyxx24ul li.w110 {width: 110px;}
+</style>
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;会员中心&nbsp;>&nbsp;理财管理</div>
+    <div class="gywm fn-clear">
+    	<div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx30">
+            	<ul class="hyxx30ul fn-clear">
+            	    <li><a onclick="window.location.href='__URL__#fragment-1';return false;">投资总表</a></li>
+                    <li><a onclick="window.location.href='__URL__#fragment-2';return false;">竞标中的投资</a></li>
+                    <li><a onclick="window.location.href='__URL__#fragment-3';return false;">回收中的投资</a></li>
+                    <li><a onclick="window.location.href='__URL__#fragment-4';return false;">逾期未还的投资</a></li>
+                    <li class="ui-tabs-selected" style="width: 163px;"><a href="javascript:;" onclick="return false;">待收详细</a></li>
+            	</ul>
+                <div class="hyxx31">
+					<div class="hyxx24 fn-clear" style="border:none;">
+                        <div class="hyxx10" style="text-indent:8px;">
+                            <img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">‘{$name}’的还款明细
+                        </div>
+                        <ul class="hyxx24ul fn-clear">
+                            <li class="w110">应收日期</li>
+                            <li class="w110">应收本金</li>
+                            <li class="w110">应收利息</li>
+                            <li class="w110">应收手续费</li>
+                            <li class="w110">实收本息</li>
+                            <li class="w110">收款状态</li>
+                            <li class="w110">当前/总(期)</li>
+                        </ul>
+                        <div id="content">
+                            <volist name="list" id="vo">
+                            <ul class="hyxx24ul fn-clear" id="noinfotip">
+                                <li class="w110">{$vo.deadline|date="Y-m-d",###}</li>
+                                <li class="w110">{$vo.capital}</li>
+                                <li class="w110">{$vo['interest']}</li>
+                                <li class="w110">{$vo['interest_fee']}</li>
+                                <li class="w110">{$vo['receive_interest']+$vo['receive_capital']}</li>
+                                <li class="w110"><if condition="$vo['deadline'] lt time() && $vo['status'] eq 7">愈期未还<else/>{$status_arr[$vo['status']]}</if></li>
+                                <li class="w110">{$vo.sort_order}/{$vo.total}</li>
+                            </ul>
+                            </volist>
+                        </div>
+                        <div id="pager" data="fragment-2" class="ajaxpagebar hyxx12">{$pagebar}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />
+<script type="text/javascript">
+function repayment(bid,sort_order){
+    x = {"bid":bid,"sort_order":sort_order};
+    $.jBox.tip("还款中......",'loading');
+    $.ajax({
+        url: "__URL__/repayment",
+        data: x,
+        timeout: 15000,
+        cache: false,
+        type: "post",
+        dataType: "json",
+        success: function (d, s, r) {
+            if(d){
+                if(d.status==1) $.jBox.tip("还款成功",'success');
+                else $.jBox.tip(d.message,'fail');
+            }
+        }
+    });
+}
+
+$('.ajaxpagebar a').click(function(){
+    try{    
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    }catch(e){};
+    return false;
+})
+</script>

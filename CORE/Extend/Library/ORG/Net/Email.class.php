@@ -249,7 +249,7 @@ class smtp
 ////发件人,一般要与您登录smtp服务器的用户名($smtpuser)相同,否则可能会因为smtp服务器的设置导致发送失败 
 //$smtp = new smtp($smtpserver,$port,true,$smtpuser,$smtppwd,$sender); 
 ////$smtp->debug = false; //是否开启调试,只在测试程序时使用，正式使用时请将此行注释 
-//$to = "342556105222222222333@q22q.com"; //收件人 
+//$to = "222222222333@q22q.com"; //收件人 
 //$subject = "你好"; 
 //$body = "<font color='red'>你真好</font> "; 
 //$send=$smtp->sendmail($to,$sender,$subject,$body,$mailtype); 

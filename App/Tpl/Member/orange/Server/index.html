@@ -1,0 +1,28 @@
+<include file="Public:_header_common" />
+<title>我的账户-- {$glo.web_name}</title>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="wrap2">
+	<div id="hy_left">
+		<include file="Public:_left" />
+	</div>
+	<div id="hy_right">
+            <div class="box">
+				<div class="Menubox1" id="rotate">
+					<ul class="menu ajaxdata">
+                        <li style="width: 90px"><a href="#fragment-1" ajax_href="__URL__/upleve/">升级会员</a></li>
+                        <li style="width: 90px"><a href="#fragment-2" ajax_href="__URL__/uplevelog/">会员历史记录</a></li> 
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align:left; overflow:hidden;" class="content">
+				<div id="fragment-1" style="display:none">
+					<!--升级会员-->
+				</div>
+				<div id="fragment-2" style="display:none">
+					<!--会员历史记录-->
+				</div>
+			</div>
+    </div>
+</div>
+<include file="default:Public:_footer_inner" group="Home" />

@@ -1,0 +1,61 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx24ul li.w290 {width: 290px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+	<!-- <h2>借款申请查询</h2> -->
+    <ul class="hyxx24ul fn-clear">
+    	<li>会员名称</li>
+        <li>申请时间</li>
+        <li class="w290">操作</li>
+    </ul>
+    <div id="content">
+    	<volist name="list.list" id="vo">
+    	<ul class="hyxx24ul fn-clear">
+    	    <li>{$vo.user_name}</li>
+    	    <li>{$vo.add_time|date="Y-m-d H:i",###}</li>
+    	    <li class="w290"><a href="javascript:;" onclick="dofriend({$vo.uid},2)">拒绝</a>&nbsp;|&nbsp;<a href="javascript:;" onclick="dofriend({$vo.uid},1)">通过</a>&nbsp;|&nbsp;<a href="javascript:;" onclick="dofriend({$vo.uid},3)">加入黑名单</a></li>
+    	</ul>
+    	</volist>
+    </div>
+	<div id="pager" data="fragment-2" class="ajaxpagebar hyxx12 fn-right">{$list.page}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+function dofriend(uid,type) {
+	$.ajax({
+		url: "__URL__/dofriend",
+		data: {"uid":uid,"type":type},
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+		if(d) {
+			if(d.status==1) {
+				$.jBox.tip("操作成功,网页刷新后更新列表","success");
+			} else {
+				$.jBox.tip("操作失败，请重试","fail");
+			}
+		}
+	});
+}
+</script>

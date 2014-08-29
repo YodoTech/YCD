@@ -1,0 +1,95 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.fontred { color: #005B9F; }
+.infolist { margin: 5px 0 10px 20px; border: solid 1px #ddd; padding: 2px; width: 715px; text-align: left; }
+.infolist table td { height: 28px; }
+.infolist .myfont { color: #ff6500; font-weight: bold; }
+#pager a.current { background-color: #ddd; border: solid 1px #ccc; color: #fff; }
+#pager a:hover { background-color: #ddd; border: solid 1px #ccc; color: red; }
+.tdHeard, .tdContent { border: solid 1px #ccc; }
+.tdContent a { text-decoration: underline; }
+.tdHeard { background-image: url(__ROOT__/Style/H/images/thbg.jpg); height: 29px; }
+.divtitle { height: 20px; line-height: 30px; text-align: left; padding-left: 20px; font-size: 12px; text-indent: 25px; margin-top: 8px; margin-bottom: 1PX; }
+#noinfotip .tdContent{width:auto}
+.tdContent a{color:#03F; text-decoration:none}
+</style>
+
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，以下是您在{$glo.web_name}的由您担保的并且正在还款中的借款投资
+</div>
+<div class="divtitle" style="width: 100%;">
+	由您担保的并且正在还款中的借款
+</div>
+<div style="margin: 20px 0px; overflow: hidden; text-align: left; clear: both; float: left;padding-left: 8px;">
+	<table id="content" style="width: 760px; border-collapse: collapse;" cellspacing="0">
+		<tbody>
+	<tr>
+		<th style="width: 30px;" class="tdHeard" scope="col">
+			标号
+		</th>
+		<th style="width: 140px;" class="tdHeard" scope="col">
+			借款标题
+		</th>
+		<th style="width: 50px;" class="tdHeard" scope="col">
+			借入人
+		</th>
+		<th style="width: 90px;" class="tdHeard" scope="col">
+			借款总额
+		</th>
+		<th style="width: 60px;" class="tdHeard" scope="col">
+			借款期限
+		</th>
+		<th style="width: 70px;" class="tdHeard" scope="col">
+			已还/总(期)
+		</th>
+		<th style="width: 80px;" class="tdHeard" scope="col">
+			担保金额
+		</th>
+		<th class="tdHeard" style="width: 80px;" scope="col">
+			担保奖励
+		</th>
+		<th class="tdHeard" style="width: 80px;" scope="col">
+			还款截止日期
+		</th>
+	</tr>
+		<volist name="list" id="vo">
+		<tr id="noinfotip" style="">
+			<td class="tdContent">{$vo.borrow_id}</td>
+			<td class="tdContent"><a href="{$vo.borrow_id|getInvestUrl=###}" title="{$vo.borrow_name}" target="_blank">{$vo.borrow_name|cnsubstr=###,10}</a></td>
+			<td class="tdContent">{$vo.borrow_user}{$vo.credits|getLeveName=###}</td>
+			<td class="tdContent">{$vo.borrow_money}</td>
+			<td class="tdContent">{$vo.borrow_duration}<if condition="$vo.repayment_type eq 1">天<else/>个月</if></td>
+			<td class="tdContent">{$vo.has_pay}/{$vo.total}</td>
+			<td class="tdContent">{$vo.vouch_money}</td>
+			<td class="tdContent">{$vo.vouch_reward_money}</td>
+			<td class="tdContent">{$vo.deadline|date="Y-m-d",###}</td>
+		</tr>
+		</volist>
+	</tbody></table>
+<div data="fragment-3" id="pager" style="float: right; text-align: right; width: 500px; padding-right: 8px;margin-right: 24px;" class="yahoo2 ajaxpagebar">{$pagebar}</div>
+</div>
+<div style="clear: both;">
+</div>
+
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+})
+</script>

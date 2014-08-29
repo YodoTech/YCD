@@ -1,0 +1,63 @@
+<include file="../Public/_header" />
+<div class="so_main">
+  <div class="page_tit">P2P系统管理首页</div>
+  <!--列表模块-->
+  <div class="Toolbar_inbox">
+    <div class="page right">
+	当前时间<span id="clock"></span>
+    </div>
+    <a href="javascript:;" class="btn_a"><span>欢迎登陆</span></a></div>
+<script>
+function changeClock()
+{
+	var d = new Date();
+	document.getElementById("clock").innerHTML = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+}
+window.setInterval(changeClock, 1000);
+</script>  
+<style type="text/css">
+.ssx a{height:30px; line-height:30px}
+</style>
+  <div class="list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th style="width:30px;">&nbsp;</th>
+        <th class="line_l">待审核处理的工作</th>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待初审的标[<a href="__APP__/admin/borrow/waitverify.html">{$row.borrow_1|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待复审的标[<a href="__APP__/admin/borrow/waitverify2.html">{$row.borrow_2|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>额度申请等待审核的[<a href="__APP__/admin/members/infowait.html">{$row.limit_a|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>上传资料等待审核的[<a href="__APP__/admin/memberdata/index.html">{$row.data_up|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待VIP认证的[<a href="__APP__/Admin/vipapply/index?status=0">{$row.vip_a|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待实名认证的[<a href="__APP__/Admin/memberid/index?status=3">{$row.real_a|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待现场认证的[<a href="__APP__/admin/verifyface/index.html">{$row.face_a|default=0}</a>]个</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>等待视频认证的[<a href="__APP__/admin/verifyvideo/index.html">{$row.video_a|default=0}</a>]个</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<include file="Public:_footer" />

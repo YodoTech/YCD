@@ -1,0 +1,91 @@
+<include file="orange:Public:_header_common" group="Home" />
+<title>新用户注册-- {$glo.web_name}</title>
+
+<script type="text/javascript">
+var imgpath="__ROOT__/Style/M/";
+var curpath="__URL__";
+</script>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/M/reg.js"></script>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;注册</div>
+    <div class="zhuceym">
+        <ul class="zhuceym1 fn-clear">
+            <li></li>
+            <li></li>
+            <ul class="zhuceym2 fn-clear">
+                <li>1</li>
+                <li class="hei">2</li>
+                <li class="li1 hei">3</li>
+                <li class="li2" style="text-align:left; color:#fa6f15;">填写账户信息</li>
+                <li class="li2">邮箱验证</li>
+                <li class="li2" style="text-align:right;">注册成功</li>
+            </ul>
+        </ul>
+    </div>
+    <div class="zhuceym3">
+        <div class="zhuceym5">已有账号？<a href="__APP__/member/common/login/">立即登录</a></div>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>用户名</li>
+            <li class="zhuceym3R fn-left">
+                <img src="/Style/Orange/images/zcicon_1.jpg"/>
+                <span><input id="txtUser" name="txtUser" type="text" /></span>
+            </li>
+            <li id="dvUser"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>邮箱</li>
+            <li class="zhuceym3R fn-left">
+                <img src="/Style/Orange/images/zcicon_1.jpg"/>
+                <span><input id="txtEmail" name="txtEmail" type="text" /></span>
+            </li>
+            <li id="dvEmail"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>登录密码</li>
+            <li class="zhuceym3R fn-left">
+                <img src="/Style/Orange/images/zcicon_1.jpg"/>
+                <span><input id="txtPwd" name="txtPwd" type="password" /></span>
+            </li>
+            <li id="dvPwd"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>重复密码</li>
+            <li class="zhuceym3R fn-left">
+                <img src="/Style/Orange/images/zcicon_1.jpg"/>
+                <span><input id="txtRepwd" type="password" /></span>
+            </li>
+            <li id="dvRepwd"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>选择角色</li>
+            <li class="zhuceym3R_1 fn-left fn-clear">
+                <span class="fn-left"><a href="#">我要理财<i></i></a></span>
+                <span class="fn-right"><a href="#">我要借款<i></i></a></span>
+                <input class="fn-hide" type="radio" name="txtRole" value="1" />
+                <input class="fn-hide" type="radio" name="txtRole" value="2" />
+            </li>
+            <li id="dvRole"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"><span>*</span>验证码</li>
+            <li class="zhuceym3R_2 fn-left fn-clear">
+                <span class="fn-left"><input id="txtCode" maxlength="4" type="text" /></span>
+                <span class="sp1 fn-left"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></span>
+                <span class="sp2 fn-right"><a href="javascript:document.getElementById('imVcode').onclick();"><img src="/Style/Orange/images/sxicon.jpg"/></a></span>
+            </li>
+            <li id="dvCode"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left"></li>
+            <li class="zhuceym3R_3 fn-left fn-clear">
+                <span><input id="txtAgree" type="checkbox" /></span>
+                <span>我已阅读并同意<a href="#">《圆创贷网站服务协议》</a></span>
+            </li>
+            <li id="dvAgree"></li>
+        </ul>
+        <div class="zhuceym4"><p class="btn"><a href="#" id="Img1" onclick="return false;">立即注册</a></p></div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />

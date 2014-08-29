@@ -3,12 +3,28 @@
 class IndexAction extends HCommonAction {
     public function index(){
 		$per = C('DB_PREFIX');
-	
+		
+		//资金统计 start
+		$map = array();
+		$list = M("member_moneylog")->field('type,sum(affect_money) as money')->where($map)->group('type')->select();
+		$statData = array();
+		$name = C('MONEY_LOG');
+		foreach($list as $v) {
+			$statData[$v['type']]['money']= ($v['money']>0)?$v['money']:$v['money']*(-1);
+			$statData[$v['type']]['name']= $name[$v['type']];
+		}
+		$this->assign('statData', $statData);
+		//资金统计 end
+
+		/*
 		//网站公告
 		$parm['type_id'] = 321;
 		$parm['limit'] = 8;
 		$this->assign("noticeList",getArticleList($parm));
 		//网站公告
+		*/
+
+		/*
 		//成功的借款
 		$parm=array();
 		$searchMap = array();
@@ -19,6 +35,7 @@ class IndexAction extends HCommonAction {
 		$successBorrow = getBorrowList($parm);
 		$this->assign("successBorrow",$successBorrow);
 		//成功的借款
+		*/
 		
 		//正在进行的贷款
 		$searchMap = array();
@@ -26,43 +43,22 @@ class IndexAction extends HCommonAction {
 		$searchMap['is_tuijian']=0;
 		$parm=array();
 		$parm['map'] = $searchMap;
-		$parm['limit'] = 7;
+		$parm['limit'] = 8;
 		$parm['orderby']="b.borrow_status ASC,b.id DESC";
 		
 		$listBorrow = getBorrowList($parm);
 		
 		$this->assign("listBorrow",$listBorrow);
-		
 		//正在进行的贷款
-		//推荐的贷款
-		$searchMap = array();
-		$searchMap['borrow_status']=array("in",'2,4,6,7');
-		$searchMap['is_tuijian']=1;
-		//$searchMap['collect_time']=array('gt',time());
-		$parm=array();
-		$parm['map'] = $searchMap;
-		$parm['limit'] = 2;
-		$parm['orderby']="b.id DESC";
-		$listBorrowtj = getBorrowList($parm);
-		$this->assign("listBorrow_tj",$listBorrowtj);
-		//推荐的贷款
 
-		$this->assign( "mcount", M( "members" )->count( "id" ) );
-		$this->assign( "mborrowOut",M( "borrow_info" )->where( "borrow_status in(6,7,8,9)" )->sum( "borrow_money" ) );
-		$this->assign( "mborrowOutNum",M( "borrow_info" )->where( "borrow_status in(6,7,8,9)" )->count( "id" ) );
-
-		//地区文章列表
-		$artList = getAreaTypeList(array("limit"=>7,"area_id"=>$this->siteInfo['id'],'type_id'=>0));
-		$this->assign("newlist",$artList);
-		//地区文章列表
+		/*
 		if($this->uid){
 			$this->assign("m_minfo",M('members')->field('credits')->find($this->uid));
 			$this->assign("unread",$read=M("inner_msg")->where("uid={$this->uid} AND status=0")->count('id'));
 		}
+		*/
 		
-		$mborrowBail=1000000-M("member_moneylog")->where(" type=23 ")->sum("affect_money");
-		$this->assign("mborrowBail",$mborrowBail);
-		
+		/*
 		//////////////////////////排行榜//////////////////
 		$map = array();
 		$start = strtotime(date("Y-m-d",time())." 00:00:00");
@@ -99,6 +95,8 @@ class IndexAction extends HCommonAction {
 		$this->assign("pmMonth",$listPmMonth);
 		
 		////////////////////////////////////////////
+		*/
+
 		$this->display();
 		/****************************募集期内标未满,自动流标 新增 2013-03-13****************************/
 		//流标返回
@@ -185,8 +183,7 @@ class IndexAction extends HCommonAction {
 			$newBinfo['borrow_status'] = 3;
 			$newBinfo['second_verify_time'] = time();
 			$x = M("borrow_info")->save($newBinfo);
-			}
-			/****************************募集期内标未满,自动流标 新增 2013-03-13****************************/
-			
-		}	
-    }
+		}
+		/****************************募集期内标未满,自动流标 新增 2013-03-13****************************/
+	}
+}

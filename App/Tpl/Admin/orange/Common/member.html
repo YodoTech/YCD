@@ -1,0 +1,74 @@
+<style type="text/css">
+.x_member_form{width:750px; overflow:hidden}
+.x_member_form .form2{height:auto; overflow:auto;}
+.x_member_form .form2 .lineD{overflow:hidden}
+.x_member_form .form2 .lineD dt{width:150px; color:#9CB8CC; font-weight:bold}
+.x_member_form .form2 .lineD dd{width:200px; float:left; margin-left:0px}
+.x_member_form .form2 .lineD dd.xwidth{width:500px;}
+.x_member_form .form2 .lineD dt.title{color:#F00}
+</style>
+
+<div class="so_main x_member_form">
+<div class="page_tit">{$user}详细信息</div>
+<div class="page_tab"><span data="tab_1" class="active">会员资料</span><span data="tab_3">帐户资金</span><span data="tab_2">借款投资</span></div>
+<div class="form2">
+
+	<div id="tab_1">
+	
+		<dl class="lineD"><dt>用户名：</dt><dd>{$vo.user_name}  {$vo.credits|getLeveIco=###,2}</dd><dt>认证情况：</dt><dd>{$vo.id|getVerify=###}</dd></dl>
+		<dl class="lineD"><dt>是否冻结：</dt><dd>{$vo.is_ban}</dd><dt>客户类型：</dt><dd>{$vo.user_type}</dd></dl>
+		<dl class="lineD"><dt>所属客服：</dt><dd>{$vo.customer_name|default="未指定"}</dd><dt>真实姓名：</dt><dd>{$vo.real_name}</dd></dl>
+		<dl class="lineD"><dt>性别：</dt><dd>{$vo.sex}</dd><dt>职业：</dt><dd>{$vo.zy}</dd></dl>
+		<dl class="lineD"><dt>邮箱：</dt><dd>{$vo.user_email|default="未填"}</dd><dt>&nbsp;</dt><dd>&nbsp;</dd></dl>
+		<dl class="lineD"><dt>手机号码：</dt><dd>{$vo.cell_phone|default="未认证"}</dd><dt>年龄：</dt><dd>{$vo.age}</dd></dl>
+		<dl class="lineD"><dt>婚姻状况：</dt><dd>{$vo.marry}</dd><dt>学历：</dt><dd>{$vo.education}</dd></dl>
+		<dl class="lineD"><dt>身份证号：</dt><dd>{$vo.idcard}</dd><dt>月收入：</dt><dd>{$vo.income}</dd></dl>
+		<dl class="lineD"><dt>银行帐号：</dt><dd>{$vo.bank_num}</dd><dt>银行名称：</dt><dd>{$vo.bank_name}</dd></dl>
+		<dl class="lineD"><dt>银行开户行：</dt><dd class="xwidth">{$vo.bank_province}{$vo.bank_city}{$vo.bank_address}</dd></dl>
+		<dl class="lineD"><dt>籍贯：</dt><dd class="xwidth">{$vo.province}{$vo.city}{$vo.area}</dd></dl>
+		<dl class="lineD"><dt>居住地：</dt><dd class="xwidth">{$vo.province_now}{$vo.city_now}{$vo.area_now}</dd></dl>
+		<dl class="lineD"><dt>个人描述：</dt><dd class="xwidth">{$vo.info}</dd></dl>
+		<dl class="lineD"><dt>身份证：</dt><dd class="xwidth"><a href="__ROOT__/{$vo.card_img}" target="_blank"><img src="__ROOT__/{$vo.card_img}" height="100px" /></a></dd></dl>
+
+	</div><!--tab1-->
+	
+	<div id="tab_2" style="display:none">
+		<dl class="lineD"><dt class="title">借款金额统计</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>借款总额：</dt><dd>{$capitalinfo.tj.jkze|Fmoney=###}</dd><dt>负债情况：</dt><dd><if condition="$capitalinfo['tj']['fz'] lt 0">借出小于借入({$capitalinfo.tj.fz|Fmoney=###})<else/>借出大于借入({$capitalinfo.tj.fz|Fmoney=###})</if></dd></dl>
+		<dl class="lineD"><dt>已还总额：</dt><dd>{$capitalinfo.tj.yhze|Fmoney=###}</dd><dt>待还总额：</dt><dd>{$capitalinfo.tj.dhze|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt class="title">借还款次数统计</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>借款成功次数：</dt><dd>{$capitalinfo.tj.jkcgcs|default=0}次</dd><dt>正常还款次数：</dt><dd>{$capitalinfo.repayment.1.num|default=0}次</dd></dl>
+		<dl class="lineD"><dt>提前还款次数：</dt><dd>{$capitalinfo.repayment.2.num|default=0}次</dd><dt>逾期还款次数：</dt><dd>{$capitalinfo.repayment.5.num|default=0}次</dd></dl>
+		<dl class="lineD"><dt>迟还次数：</dt><dd>{$capitalinfo.repayment.3.num|default=0}次</dd><dt>网站代还次数：</dt><dd>{$capitalinfo.repayment.4.num|default=0}次</dd></dl>
+		<dl class="lineD"><dt class="title">投资统计</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>投资总额：</dt><dd>{$capitalinfo.tj.jcze|Fmoney=###}</dd><dt>投标奖励：</dt><dd>{$capitalinfo.tj.tbjl|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt>已收总额：</dt><dd>{$capitalinfo.tj.ysze|Fmoney=###}</dd><dt>待收总额：</dt><dd>{$capitalinfo.tj.dsze|Fmoney=###}</dd></dl>
+	</div><!--tab3-->
+	
+	<div id="tab_3" style="display:none">
+		<dl class="lineD"><dt class="title">资金情况</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>帐户总额：</dt><dd>{$vo.money_all|Fmoney=###}</dd><dt>待收金额：</dt><dd>{$vo.money_collect|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt>可用余额：</dt><dd>{$vo['account_money']+$vo['back_money']}</dd><dt>冻结金额：</dt><dd>{$vo.money_freeze|Fmoney=###}</dd></dl>
+
+		<dl class="lineD"><dt class="title">充值提现</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>充值成功次数：</dt><dd>{$wc.C.num|default=0}次</dd><dt>充值成功金额：</dt><dd>{$wc.C.money|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt>提现成功次数：</dt><dd>{$wc.W.num|default=0}次</dd><dt>提现成功金额：</dt><dd>{$wc.W.money|Fmoney=###}</dd></dl>
+
+		<dl class="lineD"><dt class="title">额度情况</dt><dd class="xwidth">&nbsp;</dd></dl>
+		<dl class="lineD"><dt>借款信用额度：</dt><dd>{$vo.credit_limit|Fmoney=###}</dd><dt>可用信用额度：</dt><dd>{$vo.credit_cuse|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt>借款担保总额：</dt><dd>{$vo.borrow_vouch_limit|Fmoney=###}</dd><dt>可用借款担保额度：</dt><dd>{$vo.borrow_vouch_cuse|Fmoney=###}</dd></dl>
+		<dl class="lineD"><dt>投资担保总额：</dt><dd>{$vo.invest_vouch_limit|Fmoney=###}</dd><dt>可用投资担保额度：</dt><dd>{$vo.invest_vouch_cuse|Fmoney=###}</dd></dl>
+	</div><!--tab3-->
+
+	<div class="page_btm">
+	  <input type="submit" class="btn_b" value="关闭" onclick="closeui();" />
+	</div>
+</div>
+
+</div>
+<script type="text/javascript">
+function closeui(){
+	ui.box.close();
+}
+</script>
+<script type="text/javascript" src="__ROOT__/Style/A/js/adminbase.js"></script>

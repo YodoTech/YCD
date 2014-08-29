@@ -1,0 +1,26 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>借款管理 - 会员中心 - {$glo.web_name}</title>
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/M/css/account.css" />
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/member/">会员中心</a>&nbsp;>&nbsp;借款管理</div>
+    <div class="gywm fn-clear">
+    	<div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx5h ajaxdata">
+                额度申请<a href="#fragment-1" ajax_href="__URL__/applylog/"></a>
+            </div>
+			<div class="fn-clear" id="fragment-1" style="display:none">
+                <!--升级会员-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(function() {
+    $('.ajaxdata a:first').trigger('click');
+});
+</script>
+<include file="orange:Public:_footer" group="Home" />

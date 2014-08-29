@@ -1,0 +1,175 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>基本设置 - 会员中心 - {$glo.web_name}</title>
+<style type="text/css">
+.tip{border:1px solid #CCC; background:#FC0; color:#BA0001; text-indent:15px; font-size:14px; text-align:left; padding:10px 0px;width:955px;margin-right:20px;}
+.borrowtable{width:960px;}
+.borrowtable th{text-align:right;font-weight:normal; color:#333333; border-bottom:1px dashed #CCC; height:30px}
+.borrowtable td{text-align:left;border-bottom:1px dashed #CCC; height:30px; }
+.col_1{width:15%}
+.sel_fs{width:120px}
+.x_input{border:1px solid #CCCCCC; width:150px; height:22px; line-height:25px; padding-left:10px; margin-right:5px;vertical-align:middle}
+.x_checkbox{border:1px solid #CCCCCC;height:22px;vertical-align:middle; padding:0px 3px}
+.x_select{border:1px solid #CCC;vertical-align:middle}
+</style>
+<script language="javascript" src="__ROOT__/Style/H/js/borrow.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/JQtip/tip-yellowsimple/tip-yellowsimple.css" />
+<script language="javascript" src="__ROOT__/Style/JQtip/jquery.poshytip.js" type="text/javascript"></script>
+<script type="text/javascript" src="__ROOT__/Style/H/js/area.js" language="javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$('.x_input').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5
+	});
+	$('.x_checkbox').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 10,
+		offsetY: -25
+	});
+	$('.x_select').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 10,
+		offsetY: -25
+	});
+});
+</script>
+<include file="orange:Public:_header_main" group="Home"/>
+<tagLib name="htmlA" />
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;VIP申请</div>
+	<div class="tip">
+        <if condition="$vipTime gt 0">您已经是VIP会员，将于{$vipTime|date="Y年m月d日",###}到期，你现在申请可延长VIP会员时间<else/>您正在申请VIP会员</if>
+    </div>
+    <form method="post" action="__URL__/save" onsubmit="return cksubmit();" name="postBorrow" id="postBorrow">
+		<input type="hidden" name="vkey" value="{$vkey}" />
+		<htmlA:select id="_day_option" datakey="borrow_day_time" style="display:none"/>
+		<htmlA:select id="_month_option" datakey="borrow_month_time" style="display:none"/>
+		<table class="borrowtable">
+			<tr>
+				<th class="col_1">VIP费用：</th>
+				<td class="col_2" style="width:60%" colspan="3">{$glo.fee_vip}元/年</td>
+			</tr>
+			<tr>
+				<th class="col_1">请先择当前居住城市：</th>
+				<td class="col_2" style="width:60%" colspan="3">
+					<select name="province_now" id="province_now" class="inp1 sel_fs">
+						<option>请选择</option>
+					</select>
+					&#12288;（省/直辖市）&#12288;
+					<select name="city_now" id="city_now" class="inp1 sel_fs">
+						<option>请选择</option>
+					</select>
+					&#12288;市&#12288;
+					<select name="area_now" id="area_now" class="inp1 sel_fs">
+						<option>请选择</option>
+					</select>
+					&#12288;区
+					<input id="gkf" type="button" onclick="getkf()" value="确定地区"  />
+				</td>
+			</tr>
+			<tr>
+				<th class="col_1">客服选择区：</th>
+				<td class="col_2" style="width:60%; overflow:hidden; padding:10px" colspan="3" id="kftable">请先选择您的当前居住城市</td>
+			</tr>
+			<tr>
+				<th class="col_1">申请说明：</th>
+				<td class="col_2" style="width:60%" colspan="3">
+					<textarea style="width:80%; height:100px; padding:10px" class="inp1" name="des" id="des"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<th class="col_1">&nbsp;</th>
+				<td class="col_2" style="width:60%" colspan="3">
+					<input type="button" id="subd" onclick="cksubmit()" value="提交申请" />		
+				</td>
+			</tr>
+		</table>
+    </form>
+</div>
+<!--中部结束-->
+<script type="text/javascript">
+<if condition="$vipTime gt 0">
+var tipS = '您的已经是VIP会员，将于{$vipTime|date="Y年m月d日",###}到期，你现在申请可延长VIP会员时间\\r\\n确定要申请延长VIP权限吗？';
+if(!confirm(tipS)) window.location.href="__APP__/member";
+</if>
+var areaurl="__URL__/getarea/";
+var s1 = new GetAreaSelect('#province_now','#city_now','#area_now'<empty name="vo['province_now']"><else/>,{$vo.province_now}</empty><empty name="vo['city_now']"><else/>,{$vo.city_now}</empty><empty name="vo['area_now']"><else/>,{$vo.area_now}</empty>);
+function setError(tip){
+	$.jBox.tip(tip);
+	return false;
+}
+function getkf(){
+  	var p=makevar(['province_now','city_now','area_now']);
+	if(p.province_now == "") return setError("必须选择当前居住地省份！");
+	if(p.city_now == "") return setError("必须选择当前居住地城市！");
+
+	var waitHtml = '<img src="__ROOT__/Style/Js/006.gif" />数据载入中......';
+	$("#kftable").html(waitHtml);
+	$("#gkf").attr("disabled",true);
+	$("#province_now").attr("disabled",true);
+	$("#city_now").attr("disabled",true);
+	$("#area_now").attr("disabled",true);
+	$.ajax({
+		url: "__URL__/getkf",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				$("#kftable").html(d.html);
+			}else{
+				$("#gkf").removeAttr('disabled');
+			}
+		}
+	});
+}
+
+function cksubmit(){
+	var p=makevar(['province_now','city_now','area_now','kfid','des']);
+	if(p.province_now == "") 			return setError("必须选择当前居住地省份！");
+	if(p.city_now == "") 				return setError("必须选择当前居住地城市！");
+	if(p.kfid == "") 					return setError("必须选择一位专有客服！");
+	if(p.des == "") 					return setError("请填写申请说明！");
+
+	$("#subd").attr('disabled',true);
+	$.jBox.tip('提交中...','loading');
+	$.ajax({
+		url: "__URL__/apply",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					alert("已提交申请，客服会尽快处理,点击确定后页面将跳转至会员中心");	
+					window.location.href="__APP__/member";
+				}else{
+					$.jBox.tip(d.message,'fail');	
+				}
+			}else{
+				$("#subd").removeAttr('disabled');
+			}
+		}
+	});
+}
+</script>
+<include file="orange:Public:_footer" group="Home" />

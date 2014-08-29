@@ -1,0 +1,104 @@
+<include file="Public:_header_common" />
+<title>散标投资列表 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+
+<script type="text/javascript" src="__ROOT__/Style/H/js/area.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
+<script type="text/javascript">
+$(function() {
+  $('.knob').knob();
+});
+</script>
+<include file="Public:_header_main" />
+<!--中部开始-->
+<tagLib name="htmlA" />
+<div class="nyconter">
+  <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/invest/">我要理财</a>&nbsp;>&nbsp;散标投资列表</div>
+  <div class="licai2 fn-clear">
+    <div class="licai2L fn-left">
+      <h2>筛选投资项目</h2>
+      <form id="searchform" name="searchform" action="__URL__/loanlist.html" method="get">
+      <ul class="fn-clear">
+        <li class="fn-clear">
+          <span class="sp1">关键字</span>
+          <input type="text" name="borrow_name" id="borrow_name" value="{$searchMap.borrow_name}" class="inp1 mt10" style="width:178px;" />
+        </li>
+        <li class="fn-clear">
+          <span class="sp1">还款方式</span>
+          <htmlA:select id="repayment_type" value="key|searchMap.repayment_type" datakey="Bconfig['REPAYMENT_TYPE']" class="inp1 mt10 w200" />
+        </li>
+        <li class="fn-clear">
+          <span class="sp1">借款目的</span>
+          <htmlA:select id="borrow_use" value="key|searchMap.borrow_use" datakey="Bconfig['BORROW_USE']" class="inp1 mt10 w200" />
+        </li>
+        <li class="fn-clear">
+          <span class="sp1">金额范围</span>
+          <htmlA:select id="money_from" value="key|searchMap.money_from" datakey="Bconfig['MONEY_SEARCH']" class="inp1 mt10 w200" />
+          至
+          <htmlA:select id="money_to" value="key|searchMap.money_to" datakey="Bconfig['MONEY_SEARCH']" class="inp1 mt10 ml10 w200" />
+        </li>
+        <li class="fn-clear">
+          <span class="sp1">期&#12288;&#12288;限</span>
+          <input value="{$searchMap.borrow_duration}" type="text" name="borrow_duration" id="borrow_duration" class="inp1 mt10" style="width:178px;" />
+        </li>
+        <li class="fn-clear">
+          <span class="sp1">奖&#12288;&#12288;励</span>
+          <htmlA:select id="is_reward" value="key|searchMap.is_reward" datakey="Bconfig['IS_REWARD']" class="inp1 mt10 w200" />
+        </li>
+        <li class="fn-clear">
+        <span class="sp1">&nbsp;</span>
+        <p class="btn w200" style="display:inline-block;"><a id="btnSubmit" href="javascript:;" onclick="$('#searchform').submit();" style="margin:10px 0;">搜&nbsp;&nbsp;索</a></p>
+        </li>
+      </ul>
+      </form>
+    </div>
+    <div class="licai2R fn-right">
+      <h2>新手引导</h2>
+      <ul class="fn-clear">
+      <php>$xlist = getArticleList(array("type_id"=>array('in','379'),"pagesize"=>4));foreach($xlist['list'] as $k => $v){</php>
+        <li><a href="{$v.arturl}" title="{$v.title}">{$v.title|cnsubstr=###,20}</a></li>
+      <php>};$xlist=NULL;</php>
+      </ul>
+    </div>
+  </div>
+  <div class="nybt">投资列表<a href="__APP__/tools/tool.html">（理财计算器）</a></div>
+  <!-- 
+  <ul class="licai2_2 fn-clear">
+    <li>
+        <a href="#" class="fn-clear">
+              <img src="__ROOT__/Style/Orange/images/nyicon_1.jpg" />
+              <span>累计成交总金额<br />31.42亿元</span>
+          </a>
+      </li>
+      <li>
+        <a href="#" class="fn-clear">
+              <img src="__ROOT__/Style/Orange/images/nyicon_2.jpg" />
+              <span>累计成交总笔数<br />59484笔</span>
+          </a>
+      </li>
+      <li>
+        <a href="#" class="fn-clear">
+              <img src="__ROOT__/Style/Orange/images/nyicon_5.jpg" />
+              <span>为用户累计赚取<br />20171.01万元</span>
+          </a>
+      </li>
+  </ul>
+   -->
+  <ul class="licai2_3 fn-clear">
+    <volist name="list.list" id="vb">
+      <li>
+        <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+        <h4 title="{$vb.borrow_name}">{$vb.borrow_name|cnsubstr=###,8}</h4>
+        <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
+        <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
+        <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
+        <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
+        <p class="btn"><a href="{$vb.id|getInvestUrl=###}">我要投标</a></p>
+      </li>
+    </volist>
+  </ul>
+  <ul class="licai2_4 fn-clear">{$list.page}</ul>
+</div>
+<!--中部结束-->
+<include file="Public:_footer" />

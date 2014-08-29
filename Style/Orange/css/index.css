@@ -1,0 +1,45 @@
+@charset "utf-8";
+/* CSS Document */
+/*首页中心部分*/
+.conter{ margin:0 auto; padding:0;}
+.banner{ background:#fa6f15; margin:0; padding:0;}
+.banner ul{ width:1170px; height:356px; margin:0 auto; padding:0;}
+.cont1{ width:1170px; margin:0 auto; padding:40px 0 20px; border-bottom:1px solid #eaeaea;}
+.cont1L{ width:560px;}
+.cont1L li{ width:280px; padding:22px 0;}
+.cont1L li a img{ padding-right:10px; border-right:1px solid #eaeaea; width:56px; height:56px; float:left;}
+.cont1L li a span{ font-size:18px; line-height:26px; display:block; width:204px; height:56px; float:right; color:#2f3032;}
+.cont1L li a:hover span{ color:#fa6f15;}
+.cont1R{ width:574px; padding:22px 0;}
+.cont1R li.li1{ width:110px; height:158px; text-align:center; background:#2f3032;}
+.cont1R li.li1 img{ margin:51px 0 0;}
+.cont1R li.li2{ width:460px; height:130px; padding:14px 0; background:#fa6f15;color:#fff;}
+.cont1R li.li2 p{ width:418px; margin:0 auto; text-align:left;}
+.cont1R li.li2 p a{ color:#fff;}
+.cont1R li.li2 p.p1{ font-size:20px; line-height:30px;}
+.cont1R li.li2 p.p2{ font-size:48px; line-height:70px; font-weight:bold;}
+.cont1R li.li2 p.p2 span{ border-right:2px solid #fff; font-size:40px; padding-right:20px; margin-right:15px;}
+.cont1R li.li2 p.p3{ font-size:14px; text-align:right;}
+.cont2{ width:1170px; margin:0 auto; padding:40px 0 20px; border-bottom:1px solid #eaeaea;}
+.cont2 ul{ width:1168px; margin:0 auto; padding:22px 0;}
+.cont2 ul li{ width:236px; margin:0; padding:0 28px; text-align:center;}
+.cont2 ul li h2{ margin:0; padding:10px 0 20px; font-size:30px; font-weight:normal;}
+.cont2 ul li ul{ width:236px; padding:10px 0;}
+.cont2 ul li ul li{ width:236px; border-bottom:1px dashed #b6b6b6; text-align:left; padding:6px 0 0;}
+.cont2 ul li ul li a span.tm{ width:144px; text-align:left; height:26px; color:#2f3032;}
+.cont2 ul li ul li a span.sj{ width:80px;text-align:right; height:26px; color:#2f3032; font-size:12px; line-height:26px;}
+.cont2 ul li ul li a:hover span{ color:#fa6f15;}
+.cont2 ul li p{ line-height:28px; text-align:left; text-indent:30px; padding:10px 0 0;}
+.cont2 ul li p a{ color:#2f3032;}
+.cont2 ul li p a:hover{ color:#fa6f15;}
+.cont3{ width:1170px; margin:0 auto; padding:40px 0 20px;}
+.cont3 h2,.cont3 h3{ text-align:center; margin:0; padding:0; font-size:24px;}
+.cont3 h2{ color:#fa6f15; font-size:48px;}
+.cont3 ul{ width:1168px; margin:0 auto; padding:35px 0 0px;}
+.cont3 ul li{ width:190px; margin:35px 15px; padding:35px; border:1px solid #d7dbe6;}
+*html .cont3 ul li{ margin:35px 15px 35px 12px;}
+.jdt_bg{ width:120px; height:120px; margin:0 auto; padding:0;}
+.cont3 ul li h4{ margin:0; padding:30px 0 6px; font-size:20px;}
+.cont3 ul li p{ line-height:26px;}
+.cont3 ul li p span.bg{ border-radius:100px; width:24px; height:24px; margin:3px 0 0; line-height:24px; display:block; background:#fa6f15; text-align:center; color:#fff; font-size:12px;}
+.cont3_btn{ width:428px; margin:0 auto 35px; padding:0;}

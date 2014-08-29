@@ -1,0 +1,106 @@
+<style type="text/css"> 
+ body { margin: 0; _height: 100%; }
+.dv_header_8 { background-image: url(); }
+.dv_account_0 { margin-top: 10px; }
+.v1 { background: url(__ROOT__/Style/F/images/bg/level.jpg); width: 658px; height: 53px; margin-top: 20px; }
+.v1 a { color: #FF0000; }
+.v1 a:hover { color: #FF0000; text-decoration: underline; }
+.t1 { margin-top: 30px; padding-left: 24px; padding-right: 24px; overflow: hidden; }
+.t1 div { line-height: 25px; }
+.t1 div.line { border-bottom: solid 1px #CCCCCC; }
+.t1 strong { color: #005B9F; }
+.b1 { height: 36px; background: #f6f6f6; width: 100%; margin-top: 20px; }
+.b1 div.cnt { padding-left: 20px; padding-top: 10px; }
+.b2 { margin-top: 20px; overflow: hidden; }
+.b2 ul { margin: 0px; padding: 0px; height: 274px; }
+.b2 ul li { float: left; width: 250px; height: 274px; }
+.b2 ul li img { width: 199px; height: 270px; }
+.b2 ul li a { width: 199px; height: 270px; display: block; margin-left: 23px; border: solid 2px #fff; }
+.b2 ul li a:hover { border: solid 2px #ff6d0c; }
+.b3 { overflow: hidden; margin-top: 20px; }
+.b3 div { clear: left; overflow: hidden; }
+.b3 div.leftbor { padding-left: 20px; line-height: 21px; }
+.b3 div img { float: left; }
+.b3 strong { color: #555555; float: left; margin-top: 2px; margin-left: 3px; }
+#back { display: none; position: absolute; z-index: 2; top: 0; left: 0; background: #ccc; width: 100%; line-height: 21px; height: 980px; }
+#layer { display: none; z-index: 5; color: #005B9F; position: absolute; top: 38%; left: 32%; background-image: url(__ROOT__/Style/H/images/tranbg.png); padding: 8px; }
+.winframe { width: 600px; height: 300px; background: url(__ROOT__/Style/H/images/bg/mess_bg.jpg); }
+.winframe .inframe { padding-left: 230px; text-align: left; font-size: 14px; }
+.outhref { background-repeat: no-repeat; background-position: -0px -22px; }
+</style>
+<div class="v1">
+	<div style="text-align: right;">
+		<a href="#">点击查看会员体系详情 &gt;&gt;</a></div>
+</div>
+<div class="t1">
+	<div class="line">
+		您目前是<strong><if condition="$vo.user_leve eq '1'">特权会员<else/>普通会员</if></strong>。
+	</div>
+	<div>
+		您的账户余额：<strong>￥<span id="sp_blance">{$vo.account_money}</span></strong>
+	</div>
+</div>
+<div class="b1">
+	<div class="cnt">
+		<img src="__ROOT__/Style/F/images/ministar.gif" style="margin-right: 5px;">
+		请点击下列套餐，购买您所需要的会员服务。</div>
+</div>
+<div class="b2">
+	<ul>
+		<li><a href="javascript:" id="open1action" onclick="upleve(25);">aaa
+			<img src="__ROOT__/Style/H/images/button/pay04.jpg" alt=""></a></li>
+		<li><a href="javascript:" id="open6action" onclick="upleve(100);">bbb
+			<img src="__ROOT__/Style/H/images/button/pay05.jpg" alt=""></a></li>
+		<li><a href="javascript:" id="open12action" onclick="upleve(150);">ccc
+			<img src="__ROOT__/Style/H/images/button/pay06.jpg" alt=""></a></li>
+	</ul>
+</div>
+<div class="b3">
+	<div style="height: 18px; padding-left:20px;">
+		<img alt="" src="__ROOT__/Style/H/images/minilogo.gif">
+		<strong style=" margin-left:5px;">温馨提示</strong></div>
+	<div style=" padding-left:40px;" class="leftbor">
+		如您在投标时会员状态为特权会员，则在您投的这个标存续期间，您在这个标上都享受特权会员待遇，包括佣金优惠，逾期保利，优先赔付等。即使您的特权会员已经到期，您依旧可以享受如上的特权会员待遇。当然，如您在投标时的状态为普通会员，您无法享受特权会员的待遇。
+	</div>
+</div>
+<script type="text/javascript">
+var lueve = null;
+var submitup = function (v, h, f) {
+    if (v == true)
+        window.location.href="__APP__/member/charge#fragment-1";
+    return true;
+};
+var upl = function (v,d) {
+    if (v == true){
+        $.ajax({
+            url: "__URL__/actupleve",
+            data: {"upmoney":lueve},
+            timeout: 5000,
+            cache: false,
+            type: "post",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d){
+					if(d.status==1){
+						alert("恭喜升级成功,现在将自动刷新页面");
+						window.location.reload();
+					}
+					else $.jBox.tip(d.message,'fail');
+				}
+            }
+        });
+	}
+    return true;
+};
+
+function upleve(needmoney){
+	var money = "{$vo.account_money}";
+	if(needmoney > money){
+		$.jBox.confirm("您帐户余额不足以支付升级的费用，是否现在就去充值？", "会员升级提示", submitup, { buttons: { '去充值': true, '不充值': false} });
+	}else{
+		lueve = needmoney;
+		$.jBox.confirm("确定要升级吗？", "会员升级提示", upl, { buttons: { '是': true, '否': false} });
+	}
+}
+// 自定义按钮
+</script>

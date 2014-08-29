@@ -1,0 +1,25 @@
+<include file="Public:_header_common" />
+<title>{$vo.type_name}-{$glo.web_name}客服中心</title>
+<meta http-equiv="keywords" content="{$vo.type_keyword}" />
+<meta http-equiv="description" content="{$vo.type_info}" />
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;客服中心</div>
+    <ul class="licai2_3 fn-clear">
+      <volist name="kflist" id="vl">
+        <li>
+          <p class="jdt_bg">
+            <img src="{$vl.id|get_avatar=###+10000000}"></p>
+          <h4>{$vl.user_name}</h4>
+          <p>姓名：{$vl.real_name}</p>
+          <p>电话:{$vl.phone}</p>
+          <p class="btn">
+            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin={$vl.qq}&amp;site=qq&amp;menu=yes" target="_blank">QQ咨询</a>
+          </p>
+        </li>
+      </volist>
+    </ul>
+</div>
+<!--中部结束--> 
+<include file="Public:_footer" />

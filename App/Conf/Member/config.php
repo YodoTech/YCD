@@ -1,5 +1,6 @@
 <?php
 return array(
+	'DEFAULT_THEME'     =>'orange',//使用的模板
 	//'配置项'=>'配置值'
 	'MEMBER_PAGE_SIZE'=>15,//后台列表默认显示条数
 	'VIP_PAGE_SIZE'=>15,//后台列表默认显示条数

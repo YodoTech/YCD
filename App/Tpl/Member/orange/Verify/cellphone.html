@@ -1,0 +1,39 @@
+<if condition="$phone_status eq '1'">
+	<div style="overflow: auto; height: auto; padding:20px" id="mybox2_content">
+		<span style="font-size:12px;color:#999999;">
+			<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">&nbsp;&nbsp;亲爱的[{:session('u_user_name')}]，您好，您已通过手机验证</span>
+	</div>
+	<else/>
+	<div style="overflow: auto; height: 435px;" id="mybox4_content">
+		<div style="width:100%;">
+			<div style="width:20%; line-height:30px;float:left;font-size:14px;text-align:center ; ">
+				<img src="__ROOT__/Style/M/images/s_mobil.gif" style="vertical-align:middle;margin-top:20px;">
+			</div>
+			<div style="width:80%; line-height:30px;float:left;font-size:14px;">
+				<span style="margin:20px;display:block; text-align:left;">
+					<p>您在{$glo.web_name}的充值提现等重要操作，都需要通过手机动态验证码！</p>
+					<p>请填写您真实的手机号码，完成手机验证。</p>
+					<p style="padding-top:10px;">
+						手机号：
+						<input class="inp1" type="text" onkeyup="value=this.value.replace(/\D+/g,&quot;&quot;)" onkeydown="$(&quot;#sendSMSTip&quot;).html(&quot;&quot;)" maxlength="11" id="txt_phone">
+						<a href="javascript:;" onclick="sendMobileValidSMSCode()" id="btnSendMsg">获取验证码</a>
+					</p>
+					<p style="padding-top:10px;">
+						验证码：
+						<input class="inp1" type="text" onkeyup="value=this.value.replace(/\D+/g,&quot;&quot;)" id="txt_smsCode">
+						<span style="font-size:12px;" class="spTip" id="sendSMSTip"></span>
+					</p>
+					<div style="width:100px;">
+						<span class="btn"><a href="javascript:;" onclick="setMobile();" onmousemove="this.style.cursor='hand'">完成手机验证</a></span>
+					</div>
+					<span style="font-size:12px;color:#999999;">
+						<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">&nbsp;&nbsp;请注意以下事项：</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">1、根据省份、城市、地区不同，一般会在5秒-5分钟内收到验证码。</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">2、如果您在验证过程中，出现任何问题，请联系网站客服。</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</if>

@@ -1,0 +1,62 @@
+<if condition="$id_status eq '1'">
+	<div style="overflow: auto; height: auto; padding:20px; font-size:18px" id="mybox2_content">
+		<span style="font-size:12px;color:#999999;">
+			<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">&nbsp;&nbsp;亲爱的[{:session('u_user_name')}]，您好，您已通过身份认证</span>
+	</div>
+	<elseif condition="$id_status eq '3'"/>
+	<div style="overflow: auto; height: auto; text-align:center; padding:20px; font-size:18px" id="mybox2_content">
+		<span style="font-size:12px;color:#999999;">
+			<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">
+			&nbsp;&nbsp;亲爱的[{:session('u_user_name')}]，您好，你提交的身份认证正在审核中...
+		</span>
+	</div>
+	<else/>
+	<div style="overflow: auto; height: auto;" id="mybox2_content">
+		<div style="width:100%; height:auto;">
+			<div style="width:20%; height:auto; line-height:30px;float:left;font-size:14px;text-align:center ; ">
+				<img src="__ROOT__/Style/M/images/s_idcard.gif" style="vertical-align:middle;margin-top:20px;"></div>
+			<div style="width:80%; height:auto; line-height:30px;float:left;font-size:14px;">
+				<span style="margin:20px;display:block; text-align:left;">
+					<p>您必须填写您的真实姓名和身份证号码，虚假的身份信息，是不能通过验证的。</p>
+					<p style="padding-top:10px;">
+						真实姓名：<input type="text" class="inp1 w280" id="realname">
+						<span class="red" id="realnameErr"></span>
+					</p>
+					<p style="padding-top:10px;">
+						身份证号：<input type="text" onkeyup="value=this.value.replace(/[^0-9|x|X]+/g,"")" maxlength="18" class="inp1 w280" id="idcard">
+						<span class="red" id="idcardErr"></span>
+					</p>
+					<p style="padding-top:10px;">
+						身份证正面图片：
+						<input type="file" onchange="ajaxFileUploads();" id="imgfile" name="imgfile" style="width:160px;height:21px;line-height:21px;font-size:14px;font-weight:bold;margin:5px;ime-mode:Disabled;"/>
+						<span style="margin-left:40px">
+							<img id="loading_makeclub" style="display:none" src="__ROOT__/Style/Js/loading.gif" />
+						</span>
+						<span class="red" style="margin-left:40px" id="idimg"></span>
+					</p>
+					<p style="padding-top:10px;">
+						身份证反面图片：
+						<input type="file" onchange="ajaxFileUploads2();" id="imgfile2" name="imgfile2" style="width:160px;height:21px;line-height:21px;font-size:14px;font-weight:bold;margin:5px;ime-mode:Disabled;"/>
+						<span style="margin-left:40px">
+							<img id="loading_makeclub2" style="display:none" src="__ROOT__/Style/Js/loading.gif" />
+						</span>
+						<span class="red" style="margin-left:40px" id="idimg2"></span>
+					</p>
+					<div style="width:100px;">
+						<span class="btn"><a href="javascript:;" onclick="setIdCard();" onmousemove="this.style.cursor='hand'" style="margin-top:10px;">完成实名验证</a></span>
+					</div>
+					<span style="font-size:12px;color:#999999;">
+						<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">&nbsp;&nbsp;请注意以下事项：</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">1、我们将通过全国公民身份信息中心（NCIIC）系统对您提交的身份进行审核。</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">
+						2、实名认证是您绑定银行卡和使用{$glo.web_name}核心功能的必要条件,提现时的银行帐户名以您提交的认证信息为准。
+					</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">3、如果您在验证过程中，出现任何问题，请联系网站客服。</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</if>

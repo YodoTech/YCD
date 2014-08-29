@@ -1,0 +1,91 @@
+<include file="Public:_header_common" />
+<title>自动投标-- {$glo.web_name}</title>
+<include file="default:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<tagLib name="htmlA" />
+<div class="wrap2">
+	<div id="hy_left">
+		<include file="Public:_left" />
+	</div>
+	<div id="hy_right">
+            <div class="box">
+				<div class="Menubox1">
+					<ul class="menu">
+						<li class="ui-tabs-selected"><a>自动投标</a></li>
+						<li><a href="__URL__/add">添加自动投标</a></li>
+					</ul>
+				</div> 
+				<div class="contentright">
+<style type="text/css">
+.operaframe { width: 600px; text-align: left; overflow: hidden; margin-left: 20px; line-height: 27px; padding-left: 28px; float: left; margin-top: 20px; }
+        .operaframe ul { padding: 0px; margin: 0px; text-align: left; overflow: hidden; line-height: 25px; }
+        .operaframe ul li { float: left; line-height: 25px; }
+	.tdTitle { text-align: right; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 160px; font-weight: bold; background-color: #F9F9F9; }
+	.tdContent1 { text-align: left; padding-left: 10px; font-size: 12px; height: 40; line-height: 40px; vertical-align: middle; width: 535px; }
+	.tdContent { line-height: 28px; border: 1px solid #ccc; }
+	.tdHeard { border: 1px solid #ccc; }
+.txtInput{   background-color: #FFFFFF;
+                    background-position: right center;
+                    background-repeat: no-repeat;
+                    border: 1px solid #CCCCCC;
+                    font-size: 12px;
+                    height: 15px;
+                    margin-right: 4px;
+                    padding: 2px;
+                    text-align: left;
+                    vertical-align: middle;
+                    width: 95px;
+                }
+</style>
+<div class="divtitle" style="width: 100%;">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	自动投标列表
+</div>
+<div style="width: 100%;">
+	<table id="content" style="width: 708px; margin-left: 24px; float: left;
+		border-collapse: collapse;" cellspacing="0">
+		<tbody><tr id="tdHead">
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				编号
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				是否开启
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				每次投标金额
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				借款期限
+			</th>
+			<th scope="col" class="tdHeard" style="width: 180px;">
+				操作
+			</th>
+		</tr>
+	
+	<volist name="list" id="vo">
+	<tr>
+	<td class="tdContent" style="width: 180px;">{$vo.id}</td>
+	<td class="tdContent" style="width: 180px;"><if condition="$vo.status eq 1"><font color="#00CC00">已开启</font><else/>未开启</if></td>
+	<td class="tdContent" style="width: 180px;"><if condition="$vo.tender_type eq 1">{$vo.tender_account}元<else/>{$vo.tender_rate}%</if></td>
+	<td class="tdContent" style="width: 180px;"><if condition="$vo.timelimit_status eq 0">不限制<else/>{$vo.timelimit_month_first}---{$vo.timelimit_month_last}个月</if></td>
+	<td class="tdContent" style="width: 180px;"><a href="__URL__/edit?id={$vo.id}">编辑</a> | <a href="__URL__/del?id={$vo.id}">删除</a></td>
+	</tr>
+	</volist>
+	
+	</tbody></table>
+	<div style="clear: both; height: 0px;">
+	</div>
+	<div style=" float:left; margin:10px 30px 10px 25px;">
+	</div>
+	<div data="fragment-2" id="pager" style="float: right; text-align: right; width: 500px; padding-right: 8px;margin-right: 24px;" class="yahoo2 ajaxpagebar">{$pagebar}</div>
+	<div style="clear: both; height: 0px;">
+	</div>
+</div>
+
+
+
+				</div>
+			</div>
+    </div>
+</div>
+<include file="default:Public:_footer_inner" group="Home" />

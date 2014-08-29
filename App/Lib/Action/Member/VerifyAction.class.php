@@ -3,7 +3,6 @@
 class VerifyAction extends MCommonAction {
 
     public function index(){
-		//if(!$_GET['id']) redirect(__APP__."/member/verify?id=1#fragment-1");
 		$this->display();
     }
 

@@ -119,7 +119,7 @@ class View {
         // 网页字符编码
         header('Content-Type:'.$contentType.'; charset='.$charset);
         header('Cache-control: private');  //支持页面回跳
-        header('X-Powered-By:QQ342556105');
+        header('X-Powered-By:YODO');
         // 输出模板文件
         echo $content;
     }

@@ -1,0 +1,83 @@
+<tagLib name="htmlA" />
+<style>
+.hyxx7,.hyxx8 {width: auto;border: none;border-top: 5px solid #fa6f15;}
+.hyxx7 li.w200 {width: 200px;}
+.hyxx7 li.h100 {height: 100px;}
+.hyxx7 li.c {width: 625px;text-align: left;}
+
+.hyxx10 li.w100 {width: 100px;}
+.hyxx10 li.w130 {width: 130px;}
+.hyxx10 li.s {text-align:left;width:100%;text-indent: 8px;height: 30px;line-height: 15px;}
+</style>
+<ul class="hyxx7 fn-clear">
+    <li class="li1 w200">起止日期：</li>
+    <li class="li3 c">&nbsp;&nbsp;
+        <input type="text" id="start_time8" value="<php>if($search['start_time8']){echo date('Y-m-d',$search['start_time8']);}</php>" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time8\\\')||\\\'2020-10-01\\\'}'})"/>
+        至
+        <input type="text" value="<php>if($search['end_time8']){echo date('Y-m-d',$search['end_time8']);}</php>" id="end_time8" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time8\\\')||\\\'2020-10-01\\\'}'})"/>
+    </li>
+</ul>
+<div style="margin:auto;width:100px;">
+    <span class="btn"><a id="btn_search" href="javascript:;" onclick="sdetail8();" onmousemove="this.style.cursor='hand'" style="margin:-15px 0 0;">查看</a></span>
+</div>
+<div class="hyxx8 fn-clear">
+    <ul class="hyxx10 fn-clear">
+        <li class="w130">借款标题</li>
+        <li class="w100">还款方式</li>
+        <li class="w100">借款金额</li>
+        <li class="w100">借款期限</li>
+        <li class="w100">借款时间</li>
+        <li class="w100">已还本息</li>
+        <li class="w100">还款明细</li>
+    </ul>
+    <div id="content">
+        <volist name="list" id="vo">
+        <ul class="hyxx10 fn-clear" style="height: auto;">
+            <li class="w130"><a href="/invest/{$vo.id}.html" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,8}</a></li>
+            <li class="w100">{$vo.repayment_type}</li>
+            <li class="w100">{$vo.borrow_money}</li>
+            <li class="w100">{$vo.borrow_duration}<if condition="$vo.borrow_type_num eq 1">天<else/>个月</if></li>
+            <li class="w100">{$vo.add_time|date="Y-m-d",###}</li>
+            <li class="w100">{$vo['borrow_money']+$vo['borrow_interest']}元</li>
+            <li class="w100"><a href="/member/borrowdetail?id={$vo.id}#fragment-1">还款明细</a></li>
+        </ul>
+        </volist>
+    </div>
+    <div id="pager" data="fragment-8" class="ajaxpagebar hyxx12 fn-right" style="padding: 10px;">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+function sdetail8(){
+    x = makevar(['start_time8','end_time8']);
+    $.ajax({
+        url: "__URL__/borrowdone",
+        data: x,
+        timeout: 5000,
+        cache: false,
+        type: "get",
+        dataType: "json",
+        success: function (d, s, r) {
+            if(d) $("#fragment-8").html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+        }
+    });
+}
+
+$('.ajaxpagebar a').click(function(){
+    try{    
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    }catch(e){};
+    return false;
+})
+</script>

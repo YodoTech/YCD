@@ -1,5 +1,6 @@
 <?php
 return array(
+	'DEFAULT_THEME'     =>'orange',//使用的模板
 	//'配置项'=>'配置值'
     'HOME_CACHE_TIME'     =>'3600',//前台数据缓存时间，以秒为单位
 	'URL_HTML_SUFFIX'	=>'.html',//文件后缀

@@ -1,0 +1,78 @@
+<if condition="$safe_question eq '1'">
+	<div style="overflow: auto; height: auto; padding:20px" id="mybox2_content">您已经设置安全问题</div>
+	<else/>
+	<div style="overflow: auto; height: 435px;" id="mybox3_content">
+		<div style="width:100%;">
+			<div style="width:20%; line-height:30px;float:left;font-size:14px;text-align:center ; ">
+				<img src="__ROOT__/Style/M/images/s_question.gif" style="vertical-align:middle;margin-top:20px;">
+			</div>
+			<div style="width:80%; line-height:30px;float:left;font-size:14px;">
+				<span style="margin:20px;display:block; text-align:left;">
+					非常重要！请认真回答问题并牢记答案！
+					<div style="vertical-align:top;margin-top:10px;">
+						问题：
+						<select class="inp1 w280" onchange="$(&quot;#qErr&quot;).html(&quot;&quot;)" id="question1">
+							<option value="您母亲的生日是？">您母亲的生日是？</option>
+							<option value="您母亲的姓名是？">您母亲的姓名是？</option>
+							<option value="您父亲的生日是？">您父亲的生日是？</option>
+							<option value="您父亲的姓名是？">您父亲的姓名是？</option>
+							<option value="您孩子的生日是？">您孩子的生日是？</option>
+							<option value="您孩子的姓名是？">您孩子的姓名是？</option>
+							<option value="您配偶的名字是？">您配偶的名字是？</option>
+							<option value="您配偶的生日是？">您配偶的生日是？</option>
+							<option value="您的出生地是哪里？">您的出生地是哪里？</option>
+							<option value="您最喜欢什么颜色？">您最喜欢什么颜色？</option>
+							<option value="您是什么学历？">您是什么学历？</option>
+							<option value="您的属相是什么的？">您的属相是什么的？</option>
+							<option value="您小学就读的是哪所学校？">您小学就读的是哪所学校？</option>
+							<option value="您最崇拜谁？">您最崇拜谁？</option>
+							<option value="您打字经常用什么输入法？">您打字经常用什么输入法？</option>
+							<option value="您是什么时间参加工作的？">您是什么时间参加工作的？</option>
+						</select>
+					</div>
+					<div style="vertical-align:top;margin-top:10px;">
+						答案：
+						<input type="text" class="inp1 w280" id="answer1">
+						<span class="red" id="answer1err"></span>
+					</div>
+					<div style="vertical-align:top;margin-top:10px;">
+						问题：
+						<select class="inp1 w280" onchange="$(&quot;#qErr&quot;).html(&quot;&quot;)" id="question2">
+							<option value="您母亲的生日是？">您母亲的生日是？</option>
+							<option value="您母亲的姓名是？" selected="">您母亲的姓名是？</option>
+							<option value="您父亲的生日是？">您父亲的生日是？</option>
+							<option value="您父亲的姓名是？">您父亲的姓名是？</option>
+							<option value="您孩子的生日是？">您孩子的生日是？</option>
+							<option value="您孩子的姓名是？">您孩子的姓名是？</option>
+							<option value="您配偶的名字是？">您配偶的名字是？</option>
+							<option value="您配偶的生日是？">您配偶的生日是？</option>
+							<option value="您的出生地是哪里？">您的出生地是哪里？</option>
+							<option value="您最喜欢什么颜色？">您最喜欢什么颜色？</option>
+							<option value="您是什么学历？">您是什么学历？</option>
+							<option value="您的属相是什么的？">您的属相是什么的？</option>
+							<option value="您小学就读的是哪所学校？">您小学就读的是哪所学校？</option>
+							<option value="您最崇拜谁？">您最崇拜谁？</option>
+							<option value="您打字经常用什么输入法？">您打字经常用什么输入法？</option>
+							<option value="您是什么时间参加工作的？">您是什么时间参加工作的？</option>
+						</select>
+						<span class="red" id="qErr"></span>
+					</div>
+					<div style="vertical-align:top;margin-top:10px;">
+						答案：
+						<input type="text" class="inp1 w280" id="answer2">
+						<span class="red" id="answer2err"></span>
+					</div>
+					<div style="width:100px;">
+						<span class="btn"><a href="javascript:;" onclick="setSafeQuestion(3);" onmousemove="this.style.cursor='hand'">完成安全问题</a></span>
+					</div>
+					<span style="font-size:12px;color:#999999;">
+						<img src="__ROOT__/Style/M/images/zhuce1.gif" style="vertical-align:middle">&nbsp;&nbsp;请注意以下事项：</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">1、安全问题是您修改手机号码，变更邮箱，找回密码和修改银行账号的必备信息。</span>
+					<br>
+					<span style="font-size:12px;color:#999999;">2、如果您在验证过程中，出现任何问题，请联系网站客服。</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</if>

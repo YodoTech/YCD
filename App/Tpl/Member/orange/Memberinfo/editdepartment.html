@@ -1,0 +1,90 @@
+<tagLib name="htmlA" />
+
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>单位名称：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:input class="inp1" id="department_name" value="{$vo.department_name}" />
+    </div>
+    <div id="dv_department_name" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>电话：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:input class="inp1" id="department_tel" value="{$vo.department_tel}" />
+    </div>
+    <div id="dv_department_tel" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>地址：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:input class="inp1" id="department_address" value="{$vo.department_address}" />
+    </div>
+    <div id="dv_department_address" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>工作年限：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:radio id="department_year" default="1年以下|1年以下,1-3年|1-3年,3-5年|3-5年,5-10年|5-10年,10年以上|10年以上" value="key|vo.department_year" />
+    </div>
+    <div id="dv_department_year" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>证明人：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:input class="inp1" id="voucher_name" value="{$vo.voucher_name}" />
+    </div>
+    <div id="dv_voucher_name" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L"><b>*</b>证明人手机：</div>
+    <div class="hyxx25_2R_1C">
+		<htmlA:input class="inp1" id="voucher_tel" value="{$vo.voucher_tel}" />
+    </div>
+    <div id="dv_voucher_tel" class="tdTip hyxx25_2R_1R"></div>
+</div>
+<div class="hyxx25_2R_1 fn-clear">
+	<div class="hyxx25_2R_1L">&nbsp;</div>
+    <div class="hyxx25_2R_1C">
+		<div class="hyxx25_1R">
+			<span class="btn"><a href="javascript:;" onclick="editdepartment();" onmousemove="this.style.cursor='hand'">修改信息</a></span>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">
+function editdepartment(){
+	p = makevar(['department_name','department_tel','department_address','voucher_name','voucher_tel','department_year']);
+	p['_tps'] = "post";
+	
+	var mxs = true;
+	$.each(p,function(i) {
+		if(p[i] == "") {
+			mxs=false;
+			return false;	
+		}
+	});
+	if(mxs===false){
+	  $.jBox.tip("所有项目都不能为空");	
+	  return false;
+	}
+
+	$.jBox.tip('提交中......','tip');
+	$.ajax({
+		url: "__URL__/editdepartment/",
+		data: p,
+		timeout: 5000,
+		cache: false,
+		type: "post",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d){
+				if(d.status==1){
+					$.jBox.tip(d.message,'success');
+					$('#xtab').find('a[data=info4]').click();
+				}
+				else  $.jBox.tip(d.message,'fail');
+			}
+		}
+	});
+	return false;
+}
+</script>

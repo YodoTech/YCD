@@ -1,0 +1,88 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>互动管理 - 会员中心 - {$glo.web_name}</title>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/member/">会员中心</a>&nbsp;>&nbsp;互动管理</div>
+    <div class="gywm fn-clear">
+    	<div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx30">
+                <div id="rotate">
+                	<ul class="ajaxdata hyxx30ul fn-clear">
+                	    <li><a href="#fragment-1" ajax_href="__URL__/friendlist/">好友列表</a></li>
+						<li><a href="#fragment-2" ajax_href="__URL__/friendapply/">好友申请</a></li>
+						<li><a href="#fragment-3" ajax_href="__URL__/friendmsg/">会员留言</a></li>
+						<li><a href="#fragment-4" ajax_href="__URL__/msghistory/">我发出的留言</a></li>
+						<li style="width: 163px;"><a href="#fragment-5" ajax_href="__URL__/blockfriend/">黑名单</a></li>
+                	</ul>
+                </div>
+                <div class="hyxx31">
+					<div class="fn-clear" id="fragment-1" style="display:none">
+						<!--自动投标-->
+					</div>
+					<div class="fn-clear" id="fragment-2" style="display:none">
+						<!--自动投标-->
+					</div>
+					<div class="fn-clear" id="fragment-3" style="display:none">
+						<!--自动投标-->
+					</div>
+					<div class="fn-clear" id="fragment-4" style="display:none">
+						<!--自动投标-->
+					</div>
+					<div class="fn-clear" id="fragment-5" style="display:none">
+						<!--自动投标-->
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function checkAll(o,id){
+	if( o.checked == true ){
+		$("#"+id).find('input[name="checkbox"]').attr('checked','true');
+	}else{
+		$("#"+id).find('input[name="checkbox"]').removeAttr('checked');
+	}
+}
+function getChecked(id) {
+	var gids = new Array();
+	$.each($("#"+id).find('input:checked'), function(i, n){
+		if($(n).val()!=0) gids.push( $(n).val() );
+	});
+	return gids;
+}
+function del(id,type) {
+	if(!confirm("删除后不可恢复，确定要删除吗?")) return;
+	aid = getChecked(id);
+	aid = aid.toString();
+	if(aid == '') return false;
+
+	//提交修改
+	var datas = {'idarr':aid,'type':type};
+	$.post("__URL__/delmsg", datas, delResponse,'json');
+}
+function delResponse(d){
+	if(d.status==1){
+		$.jBox.tip("删除成功",'success');
+		aid = d.data.split(',');
+		$.each(aid, function(i,n){
+			$('#msg_'+n).remove();
+		});
+	}else{
+		$.jBox.tip(d.message,'fail');
+	}
+}
+
+function InnerMsg(uid){
+	var uid = uid;
+	$.jBox("get:__URL__/innermsg?uid="+uid, {
+		title: "发送站内信",
+		width: "auto",
+		buttons: {'关闭': true }
+	});
+}
+</script>
+<include file="orange:Public:_footer" group="Home" />

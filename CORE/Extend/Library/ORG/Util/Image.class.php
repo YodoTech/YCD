@@ -338,13 +338,79 @@ class Image {
         $stringColor = imagecolorallocate($im, mt_rand(0, 200), mt_rand(0, 120), mt_rand(0, 120));
         // 干扰
         for ($i = 0; $i < 10; $i++) {
-            //imagearc($im, mt_rand(-10, $width), mt_rand(-10, $height), mt_rand(30, 300), mt_rand(20, 200), 55, 44, $stringColor);
+            imagearc($im, mt_rand(-10, $width), mt_rand(-10, $height), mt_rand(30, 300), mt_rand(20, 200), 55, 44, $stringColor);
         }
         for ($i = 0; $i < 25; $i++) {
-            //imagesetpixel($im, mt_rand(0, $width), mt_rand(0, $height), $stringColor);
+            imagesetpixel($im, mt_rand(0, $width), mt_rand(0, $height), $stringColor);
         }
         for ($i = 0; $i < $length; $i++) {
             imagestring($im, 5, $i * 10 + 5, mt_rand(1, 8), $randval{$i}, $stringColor);
+        }
+        Image::output($im, $type);
+    }
+
+    /**
+      +----------------------------------------------------------
+     * 生成图像验证码
+      +----------------------------------------------------------
+     * @static
+     * @access public
+      +----------------------------------------------------------
+     * @param string $length  位数
+     * @param string $mode  类型
+     * @param string $type 图像格式
+     * @param string $width  宽度
+     * @param string $height  高度
+     * @param array $backArr 背景色
+     * @param array $borderArr 边框色
+     * @param array $stringArr 字体颜色
+      +----------------------------------------------------------
+     * @return string
+      +----------------------------------------------------------
+     */
+    static function buildImageVerify2($length=4, $mode=1, $type='png', $width=48, $height=22, $verifyName='verify', $backArr=null, $borderArr=null, $stringArr=null) {
+        import('ORG.Util.String');
+        $randval = String::randString($length, $mode);
+        $_SESSION[$verifyName] = md5(strtolower($randval));
+        $width = ($length * 10 + 10) > $width ? $length * 10 + 10 : $width;
+        if ($type != 'gif' && function_exists('imagecreatetruecolor')) {
+            $im = imagecreatetruecolor($width, $height);
+        } else {
+            $im = imagecreate($width, $height);
+        }
+        $r = Array(225, 255, 255, 223);
+        $g = Array(225, 236, 237, 255);
+        $b = Array(225, 236, 166, 125);
+        $key = 2;//mt_rand(0, 3);
+
+        if (is_null($backArr)) {//背景色
+          $backColor = imagecolorallocate($im, $r[$key], $g[$key], $b[$key]);
+        } else {
+          $backColor = imagecolorallocate($im, $backArr[0], $backArr[1], $backArr[2]);
+        }
+        if (is_null($borderArr)) {//边框色
+          $borderColor = imagecolorallocate($im, 100, 100, 100);
+        } else {
+          $borderColor = imagecolorallocate($im, $borderArr[0], $borderArr[1], $borderArr[2]);
+        }
+        imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
+        imagerectangle($im, 0, 0, $width - 1, $height - 1, $borderColor);
+        if (is_null($stringArr)) {//字体颜色
+          $stringColor = imagecolorallocate($im, mt_rand(0, 200), mt_rand(0, 120), mt_rand(0, 120));
+        } else {
+          $stringColor = imagecolorallocate($im, $stringArr[0], $stringArr[1], $stringArr[2]);
+        }
+        // 干扰
+        for ($i = 0; $i < 10; $i++) {
+            imagearc($im, mt_rand(-10, $width), mt_rand(-10, $height), mt_rand(30, 300), mt_rand(20, 200), 55, 44, $stringColor);
+        }
+        for ($i = 0; $i < 25; $i++) {
+            imagesetpixel($im, mt_rand(0, $width), mt_rand(0, $height), $stringColor);
+        }
+
+        $fontface = dirname(__FILE__) . "/" . "simhei.ttf";
+        for ($i = 0; $i < $length; $i++) {
+            imagettftext($im, mt_rand(20, 30), 0, 20 * $i + 10, mt_rand(30, 35), $stringColor, $fontface, $randval{$i});
         }
         Image::output($im, $type);
     }

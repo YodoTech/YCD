@@ -1,0 +1,128 @@
+/* 清理浮动 */
+.fn-clear:after {
+    visibility:hidden;
+    display:block;
+    font-size:0;
+    content:" ";
+    clear:both;
+    height:0;
+}
+.fn-clear {
+    zoom:1; /* for IE6 IE7 */
+}
+
+/* 隐藏, 通常用来与 JS 配合 */
+body .fn-hide {
+    display:none;
+}
+
+/* 设置内联, 减少浮动带来的bug */
+.fn-left,
+.fn-right {
+    display:inline;
+}
+.fn-left {
+    float:left;
+}
+.fn-right {
+    float:right;
+}
+
+/* 单行文字溢出时出现省略号，需设定宽度 */ 
+.fn-text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 简单的渐变 */
+.fn-linear {
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#f1f1f1));
+    background: -moz-linear-gradient(top, #fcfcfc, #f1f1f1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f1f1f1');
+    background:-o-linear-gradient(top, #fcfcfc, #f1f1f1);
+    background:-ms-linear-gradient(top, #fcfcfc, #f1f1f1);
+    background: linear-gradient(to bottom, #fcfcfc, #f1f1f1);
+}
+
+/* 浅色的渐变 */
+.fn-linear-light {
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#f9f9f9));
+    background: -moz-linear-gradient(top, #fcfcfc, #f9f9f9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f9f9f9');
+    background:-o-linear-gradient(top, #fcfcfc, #f9f9f9);
+    background:-ms-linear-gradient(top, #fcfcfc, #f9f9f9);
+    background: linear-gradient(to bottom, #fcfcfc, #f9f9f9);
+}
+
+/* 人民币符号 */
+.fn-rmb {
+    font-family: arial;
+    font-style: normal;
+    padding-right: 4px;
+}
+
+
+/* chrome 下字体过小的问题 */
+.fn-webkit-adjust {
+    -webkit-text-size-adjust: none;
+}
+
+body{ margin:0; padding:0; font-family:"微软雅黑"; font-size:16px;}
+ul{ margin:0; padding:0; text-decoration:none;}
+li{ float:left; list-style:none; margin:0; padding:0;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:underline;}
+img{ margin:0; padding:0; border:none;}
+p,div,span{ margin:0; padding:0;}
+/*网站头部样式*/
+header{ position: relative; z-index: 99999; -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .2); -webkit-border-shadow: 0 1px 4px rgba(0, 0, 0, .2); box-shadow: 0 1px 4px rgba(0, 0, 0, .2);}
+.topnav{ height:24px; margin:0; padding:0; background:#2f3032; font-size:12px; line-height:24px;}
+.topnav ul{ width:1170px; margin:0 auto; padding:0; background:#2f3032;}
+.topnav ul li{ color:#fff; float:right; padding:0 4px; text-decoration:none;}
+.topnav ul li a{ color:#fff;}
+.top2{ background:#fff; margin:0 auto; padding:0; color:#2f3032;}
+.mainnav{ width:1170px; margin:0 auto; padding:10px 0; background:#fff; }
+.mainnav .logo{ width:234px; padding-left:20px;}
+.mainnav ul{ width:auto; padding-top:16px;}
+.mainnav ul li{ width:112px; text-align:center; font-size:16px; font-weight:bold;position: relative;}
+.mainnav ul li a{ width:112px; display:block; color:#2f3032;}
+.mainnav ul li a:hover{ color:#fa6f15;}
+.mainnav ul li ul{ width:132px;position: absolute;top:30px;left: 0;z-index: 9999;padding: 5px 0;background: #fff;border: 1px solid #e0e0e0;-webkit-box-shadow: 0 0 3px -1px #ccc;-moz-box-shadow: 0 0 3px -1px #ccc;box-shadow: 0 0 3px -1px #ccc;}
+.mainnav ul li ul li{ width:132px; text-align:center; font-size:14px; font-weight:normal;}
+.mainnav ul li ul li.ui-nav-dropdown-angle{position: absolute;top: -5px;}
+.mainnav ul li ul li.ui-nav-dropdown-angle span{display:block; width:9px; height:5px; margin:0 auto; background:url(../images/nav-angle-up.png) no-repeat;}
+.mainnav ul li ul li a{ width:132px; line-height:26px;}
+.mainnav .denglv{ width:204px; padding-right:10px;}
+/*注册与登录*/
+.mainnav .denglv ul.zc_dl{ width:180px; margin:0 auto;}
+.mainnav .denglv ul.zc_dl li{ width:80px;}
+.mainnav .denglv ul.zc_dl li a{ border-radius:2px; height:30px; width:80px; display:block; line-height:30px; text-align:center; color:#fff;}
+.mainnav .denglv ul.zc_dl li a:hover{ color:#fff;}
+.mainnav .denglv ul.zc_dl li.li1 a{ background:#fa6f15;}
+.mainnav .denglv ul.zc_dl li.li2 a{ background:#2f3032;}
+/*登录后的样式*/
+.mainnav .denglv ul li{ width:204px; font-size:16px; font-weight:bold;position: relative; text-align:right;}
+.mainnav .denglv ul li a{ display:inline; color:#2f3032;}
+.mainnav .denglv ul li a:hover{ color:#fa6f15;}
+.mainnav .denglv ul li ul{ width:116px;position: absolute;top:30px;left:66px;z-index: 9999;padding: 5px 8px;background: #fff;border: 1px solid #e0e0e0;-webkit-box-shadow: 0 0 3px -1px #ccc;-moz-box-shadow: 0 0 3px -1px #ccc;box-shadow: 0 0 3px -1px #ccc;}
+.mainnav .denglv ul li ul li{ width:90px; padding:0 13px; text-align:left; font-size:14px; font-weight:normal;}
+.mainnav .denglv ul li ul li.ui-nav-dropdown-angle{position: absolute;top: -5px;}
+.mainnav .denglv ul li ul li.ui-nav-dropdown-angle span{display:block; width:9px; height:5px; margin:0 auto; background:url(../images/nav-angle-up.png) no-repeat;}
+.mainnav .denglv ul li ul li a{ width:90px; line-height:26px;}
+.mainnav .denglv ul li ul li.xian{ border-bottom:1px solid #d7dbe6; margin-bottom:5px; padding-bottom:5px;}
+
+/*网站底部样式*/
+footer{ background:#2f3032; margin:0 auto; padding:0;}
+footer ul{ width:1170px; margin:0 auto; padding:50px 0 20px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
+footer ul li{ width:214px; height:190px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; text-align:center;}
+footer ul li p{ font-size:14px; line-height:26px;}
+footer ul li p.p1{ font-size:18px; padding:10px 0 0 0; line-height:30px;}
+footer ul li p.p2{ font-size:30px; line-height:36px;}
+footer ul li a{ color:#fff;}
+footer ul li.li1{ width:240px; border:none; box-shadow:none; padding-left:20px; text-align:left;}
+footer ul li.li2{ width:240px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; padding-right:20px; text-align:right;}
+footer .banquan{ width:1170px; margin:0 auto; text-align:center;color:#848485; font-size:12px; line-height:40px; background:#2f3032;}
+
+/*按钮*/
+.btn a{ border-radius:2px; display:block; margin:20px 0 0; line-height:40px; text-align:center; color:#fff; background:#fa6f15;}

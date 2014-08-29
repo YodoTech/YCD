@@ -1,0 +1,84 @@
+<script src="__ROOT__/Style/Js/ui.core.js"></script>
+<script src="__ROOT__/Style/Js/ui.tabs.js"></script>
+<script src="__ROOT__/Style/My97DatePicker/WdatePicker.js"></script>
+<script src="__ROOT__/Style/H/js/backtotop.js"></script>
+<script>
+function ajaxGetData(url,targetid,data){
+	if(!url) return;
+	data = data||{};
+	var thtml = '<div class=\"loading\"><img src=\"__ROOT__/Style/Orange/images/loading.gif\"></div>';
+	$("#"+targetid).html(thtml).show();
+	
+	$.ajax({
+		url: url,
+		data: data,
+		timeout: 10000,
+		cache: true,
+		type: "get",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) $("#"+targetid).html(d.html);
+		},
+		error: '',
+		complete: ''
+	});
+}
+function getTabContent(target) {
+	var $target = $(target);
+	var geturl = $target.attr('ajax_href');
+	var hasget = $target.attr('get')||0;
+	var nowurl = $target.attr('href');
+	var vid = nowurl.split("#");
+	if(hasget!=1) ajaxGetData(geturl,vid[1]);
+	$target.attr('get','1');
+}
+var currentUrl = window.location.href.toLowerCase();
+$(function() {
+	//tab
+	$('#rotate > ul').tabs();/* 第一个TAB渐隐渐现（{ fx: { opacity: 'toggle' } }），第二个TAB是变换时间（'rotate', 2000） */
+	
+	$('.ajaxdata a').click(function(){
+		getTabContent(this);
+		$('html,body').animate({scorllTop:0},1000);
+		return false;
+	});
+
+	//left menu
+	$('.gywmL')
+	.children('li').on('click', function() {
+		$(this).next('ul.hyxx').toggle();
+		return false;
+	})
+	.end().children('ul').find('a').on('click', function() { // 绑定单击事件
+		var $this = $(this);
+		var nowurl = $this.attr('href');
+		var vid = nowurl.split("#");
+		try{
+			if(currentUrl.indexOf(vid[0]) != -1 ) {
+				// 设置导航样式
+				$this.parent('li').addClass('active').siblings('li').removeClass('active');
+
+				// 切换选项卡标签
+				$('#rotate > ul').tabs('select', "#"+vid[1]);
+				getTabContent('#rotate > ul li a[href="#'+vid[1]+'"]');
+				return false;
+			}
+		}catch(ex){};
+		return true;
+	})
+	<php>if('index' != $member_orange_page){</php>
+	//左边导航定位
+	.next('span').filter(":contains('"+window.location.pathname+"')").each(function(i) {
+		var $this = $(this);
+		if ($this.text().indexOf(window.location.hash) != -1 || i === 0) {
+			$this
+				.parent('li').addClass('active')
+				.siblings('li').removeClass('active')
+				.end().parent('ul.hyxx').show().prev('li').addClass('active')
+			;
+		}
+	})
+	<php>}</php>
+	;
+});
+</script>

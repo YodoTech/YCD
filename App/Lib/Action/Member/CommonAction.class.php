@@ -16,7 +16,18 @@ class CommonAction extends MCommonAction {
 			//if($uidx>0) session("tmp_invite_user",$uidx);
 			session("tmp_invite_user",$_GET['invite']);
 		}
-		$this->display();
+
+    	//激活验证
+    	if ($this->verifyStatus === false) {
+    		$userEmail = M('members')->getFieldById($this->uid,'user_email');
+    		$this->assign('userEmail', $userEmail);
+    		$this->assign('message','我们给您的邮箱<span style="color:#930303; font-weight:bold; margin:0 3px;">'.$userEmail.'</span>发送了确认邮件，请点击邮件中的链接进行确认。');
+    		$this->display('regcheck');
+    	} elseif($this->verifyStatus === true) {
+    		//...
+    	} else {
+    		$this->display();
+    	}
     }
 	
 	private function actlogin_bak(){
@@ -41,9 +52,9 @@ class CommonAction extends MCommonAction {
 			require_once C('APP_ROOT')."Lib/Uc/config.inc.php";
 			require C('APP_ROOT')."Lib/Uc/uc_client/client.php";
 		}
-		
+
 		//uc登陆
-		if($_SESSION['verify'] != md5($_POST['sVerCode'])) ajaxmsg("验证码错误!",0);
+		if($_SESSION['verify'] != md5(strtolower($_POST['sVerCode']))) ajaxmsg("验证码错误!",0);
 		
 		
 		(false!==strpos($_POST['sUserName'],"@"))?$data['user_email'] = text($_POST['sUserName']):$data['user_name'] = text($_POST['sUserName']);
@@ -92,7 +103,6 @@ class CommonAction extends MCommonAction {
 			}else{//本站登陆不成功
 				ajaxmsg("用户名或者密码错误！",0);
 			}
-
 		}
 	}
 	
@@ -135,53 +145,73 @@ class CommonAction extends MCommonAction {
 	
 	
 	public function regaction(){
-		$data['user_name'] = text($_POST['txtUser']);
-		$data['user_pass'] = md5($_POST['txtPwd']);
-		$data['user_email'] = text($_POST['txtEmail']);
-		$count = M('members')->where("user_email = '{$data['user_email']}' OR user_name='{$data['user_name']}'")->count('id');
-		if($count>0) ajaxmsg("注册失败，用户名或者邮件已经有人使用",0);
-		//uc注册
-		$loginconfig = FS("Webconfig/loginconfig");
-		$uc_mcfg  = $loginconfig['uc'];
-		if($uc_mcfg['enable']==1){
-			require_once C('APP_ROOT')."Lib/Uc/config.inc.php";
-			require C('APP_ROOT')."Lib/Uc/uc_client/client.php";
-			$uid = uc_user_register($data['user_name'], $_POST['txtPwd'], $data['user_email']);
-			if($uid <= 0) {
-				if($uid == -1) {
-					ajaxmsg('用户名不合法',0);
-				} elseif($uid == -2) {
-					ajaxmsg('包含要允许注册的词语',0);
-				} elseif($uid == -3) {
-					ajaxmsg('用户名已经存在',0);
-				} elseif($uid == -4) {
-					ajaxmsg('Email 格式有误',0);
-				} elseif($uid == -5) {
-					ajaxmsg('Email 不允许注册',0);
-				} elseif($uid == -6) {
-					ajaxmsg('该 Email 已经被注册',0);
-				} else {
-					ajaxmsg('未定义',0);
+		if ($this->verifyStatus === false) {
+			$data['user_email'] = text($_POST['txtEmail']);
+			if (Notice(1, $this->uid, array('email',$data['user_email']))) {
+				ajaxmsg('发送成功');
+			} else {
+				ajaxmsg('发送失败，请重试', 0);
+			}
+		} elseif ($this->verifyStatus === true) {
+			ajaxmsg('发送失败，邮箱已验证', 0);
+		} else {
+			$data['user_name'] = text($_POST['txtUser']);
+			$data['user_pass'] = md5($_POST['txtPwd']);
+			$data['user_email'] = text($_POST['txtEmail']);
+			$data['user_role'] = MY_FUNC::intval($_POST['txtRole'], array(1, 2));
+			//数据校验
+			foreach ($data as $v) {
+				if (empty($v)) ajaxmsg('请按要求填写完整', 0);
+			}
+
+			$count = M('members')->where("user_email = '{$data['user_email']}' OR user_name='{$data['user_name']}'")->count('id');
+			if($count>0) ajaxmsg("注册失败，用户名或者邮件已经有人使用",0);
+			//uc注册
+			$loginconfig = FS("Webconfig/loginconfig");
+			$uc_mcfg  = $loginconfig['uc'];
+			if($uc_mcfg['enable']==1){
+				require_once C('APP_ROOT')."Lib/Uc/config.inc.php";
+				require C('APP_ROOT')."Lib/Uc/uc_client/client.php";
+				$uid = uc_user_register($data['user_name'], $_POST['txtPwd'], $data['user_email']);
+				if($uid <= 0) {
+					if($uid == -1) {
+						ajaxmsg('用户名不合法',0);
+					} elseif($uid == -2) {
+						ajaxmsg('包含要允许注册的词语',0);
+					} elseif($uid == -3) {
+						ajaxmsg('用户名已经存在',0);
+					} elseif($uid == -4) {
+						ajaxmsg('Email 格式有误',0);
+					} elseif($uid == -5) {
+						ajaxmsg('Email 不允许注册',0);
+					} elseif($uid == -6) {
+						ajaxmsg('该 Email 已经被注册',0);
+					} else {
+						ajaxmsg('未定义',0);
+					}
 				}
 			}
+			//uc注册
+			
+			$data['reg_time'] = time();
+			$data['reg_ip'] = get_client_ip();
+			$data['lastlog_time'] = time();
+			$data['lastlog_ip'] = get_client_ip();
+			if(session("tmp_invite_user"))  $data['recommend_id'] = session("tmp_invite_user");
+			$newid = M('members')->add($data);
+			
+			if($newid){
+				session('u_id',$newid);
+				session('u_user_name',$data['user_name']);
+				//memberMoneyLog($newid,1,$this->glo['award_reg'],"注册奖励");
+				if (Notice(1, $newid, array('email',$data['user_email']))) {
+					ajaxmsg();
+				} else {
+					ajaxmsg('请手动发送激活邮件');
+				}
+			}
+			else  ajaxmsg('注册失败，请重试',0);
 		}
-		//uc注册
-		
-		$data['reg_time'] = time();
-		$data['reg_ip'] = get_client_ip();
-		$data['lastlog_time'] = time();
-		$data['lastlog_ip'] = get_client_ip();
-		if(session("tmp_invite_user"))  $data['recommend_id'] = session("tmp_invite_user");
-		$newid = M('members')->add($data);
-		
-		if($newid){
-			session('u_id',$newid);
-			session('u_user_name',$data['user_name']);
-			//memberMoneyLog($newid,1,$this->glo['award_reg'],"注册奖励");
-			Notice(1,$newid,array('email',$data['user_email']));
-			ajaxmsg();
-		}
-		else  ajaxmsg("注册失败，请重试",0);
 	}
 	
 	public function emailverify(){
@@ -266,7 +296,7 @@ class CommonAction extends MCommonAction {
 	}
 	
 	public function ckcode(){
-		if($_SESSION['verify'] != md5($_POST['sVerCode'])) {
+		if($_SESSION['verify'] != md5(strtolower($_POST['sVerCode']))) {
 			echo (0);
 		 }else{
 			echo (1);
@@ -275,15 +305,39 @@ class CommonAction extends MCommonAction {
 	
 	public function verify(){
 		import("ORG.Util.Image");
-		Image::buildImageVerify();
+		$backArr = array(255,255,255);//背景色
+		$borderArr = array(255,255,255);//边框色
+		$stringArr = array(250,111,21);//字体颜色
+		Image::buildImageVerify2(4, 5, 'png', 104, 46, 'verify', $backArr, $borderArr, $stringArr);
 	}
 	
-	public function regsuccess(){
-		$this->assign('userEmail',M('members')->getFieldById($this->uid,'user_email'));
-		$d['content'] = $this->fetch();
-		echo json_encode($d);
+	public function regsuccess() {
+		$code = text($_GET['vcode']);
+		$uk = is_verify(0,$code,1,60*1000);
+		if(false === $uk) {
+			//根据当前用户进行判断
+			if ($this->verifyStatus === true) {//已验证
+				//...
+			} elseif ($this->verifyStatus === false) {//待验证
+				$this->assign('userEmail', M('members')->getFieldById($this->uid, 'user_email'));
+	    		$this->assign('message','<span class="red">验证失败</span>，请<a href="#" class="reSend">重发</a>邮件。');
+				$this->display('regcheck');
+			} else {//未登录
+				redirect(__APP__.'/member/login/');
+			}
+		} else {
+			$count = M('members_status')->where("uid={$uk}")->count('uid');
+			$data['email_status']=1;
+			if($count == 0) {
+				$data['uid'] = $uk;
+				$data['email_status'] = 1;
+				M('members_status')->where("uid={$uk}")->add($data);
+			} else {
+				M('members_status')->where("uid={$uk}")->save($data);
+			}
+			$this->display();
+		}
 	}
-
 
 	public function getpassword(){
 		$d['content'] = $this->fetch();

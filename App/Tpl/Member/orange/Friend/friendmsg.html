@@ -1,0 +1,77 @@
+<style>
+.hyxx24ul li.w30 {width: 30px;}
+.hyxx24ul li.w290 {width: 290px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+	<!-- <h2>借款申请查询</h2> -->
+    <ul class="hyxx24ul fn-clear">
+        <li class="w30"></li>
+        <li><img src="__ROOT__/Style/M/images/xf1.jpg"></li>
+        <li>发件人</li>
+    	<li class="w290">主题</li>
+        <li>时间</li>
+        <li>操作</li>
+    </ul>
+    <div class="hyxx10" style="text-indent:8px;">
+		未读&nbsp;<span id="spSysMsgCountUn" class="red">{$unread}</span>&nbsp;封，已读&nbsp;<span id="spSysMsgCountRead" class="red">{$list['count'] - $unread}</span>&nbsp;封，共&nbsp;<span id="spSysMsgCountTotal" class="red">{$list['count']}</span>&nbsp;封
+	</div>
+    <div id="listTable_receive">
+    	<volist name="list.list" id="vo">
+    	<ul class="hyxx24ul fn-clear" id="msg_{$vo.id}">
+    	    <li class="w30">
+				<input type="checkbox" name="checkbox" id="checkbox2" onclick="checkon(this)" value="{$vo.id}">
+    	    </li>
+    	    <li>
+    	    	<img src="__ROOT__/Style/M/images/<if condition='$vo.is_read eq 1'>read.jpg<else/>unread.jpg</if>">
+    	    </li>
+    	    <li>{$vo.from_uname}</li>
+    		<li class="w290 fn-text-overflow">{$vo.title}</li>
+    	    <li>{$vo.add_time|date="Y-m-d",###}</li>
+    	    <li><a class="read" href="#" data="{$vo.id}">查看</a>&nbsp;|&nbsp;<a href="javascript:;" onclick="InnerMsg({$vo.from_uid})">回复</a></li>
+    	</ul>
+    	</volist>
+    </div>
+    <ul class="hyxx24ul fn-clear">
+		<li class="w30">
+			<input id="selectall" type="checkbox" onclick="checkAll(this,'listTable_receive')">
+		</li>
+		<li>
+			<label for="selectall">全选</label>
+		</li>
+		<li>
+			<input value="删除" id="deletebtn1" type="button" onclick="del('listTable_receive','to')">
+		</li>
+	</ul>
+	<div data="fragment-3" class="ajaxpagebar hyxx12 fn-right">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+var readimg = "__ROOT__/Style/M/images/read.jpg";
+$(".read").click(function(){
+	id = $(this).attr('data');
+	$.jBox("get:__URL__/viewmsg/?id="+id, {
+		title: "查看信息",
+		width: "auto",
+		buttons: {'阅读完毕': true }
+	});
+});
+
+$('.ajaxpagebar a').click(function(){
+	try{	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+	}catch(e){};
+	return false;
+});
+</script>

@@ -1,0 +1,122 @@
+<style type="text/css">
+.content a { font-size: 12px; color: #092fa9; }
+.tdTilte { color: Gray; text-align:right; width:120px;  }
+.tdMoneyShow { color: #005B9F;  width:160px;}
+.tdDes { color: Gray; }
+
+.tb_list{ width:100%;}
+.tb_list td,.tb_list th{padding:10px;}
+.tb_list th{ background:#E8E8E8; text-align:left; text-indent: 5px;}
+.divList td{border-bottom:1px #DEDEDE solid; }
+
+a.ctl{color:#666;}
+a.ctl:hover{ text-decoration:underline}
+</style>
+<div class="top_account_bg">
+	<img src="__ROOT__/Style/H/images/ministar.gif" style="margin-right: 5px;">
+	尊敬的{$glo.web_name}用户，以下是您在{$glo.web_name}作为担保人的担保情况总表，敬请仔细审阅
+</div>
+
+<div style="border:1px #DEDEDE solid; margin:10px 20px;">
+	<table class="tb_list" border="0" cellpadding="0" cellspacing="0">                            
+		<tbody><tr>
+			<th style="width:80px; "></th>
+			<th style="width:50px; text-align:left;">项 目</th>
+			<th style="width:165px;">担保的金额</th>
+			<th>说 明</th> 
+		</tr>                        
+	</tbody></table>
+	
+	<div style="margin:0 30px;">
+		<table class="tb_list" border="0" cellpadding="0" cellspacing="0">                            
+		<tbody><tr class="divList">
+			<td class="tdTilte">竞标中的担保：</td>
+			<td class="tdMoneyShow">
+				￥{$vouching.vouch_money|default="0.00"}/{$vouching.num|default="0"}标
+				<span style="color:#666;">[</span><a href="javascript:;" onclick="$('#mx2').click();" class="ctl">列表</a><span style="color:#666;">]</span>
+			</td>
+			<td class="tdDes">（目前正在投标中，尚未确定是否会担保成功）</td>
+		</tr>
+		<tr class="divList">
+			<td class="tdTilte">还款中的担保：</td>
+			<td class="tdMoneyShow">
+				￥{$vouchrepaymenting.vouch_money|default="0.00"}/{$vouchrepaymenting.num|default="0"}标
+				<span style="color:#666;">[</span><a href="javascript:;" onclick="$('#mx3').click();" class="ctl">列表</a><span style="color:#666;">]</span>
+			</td>
+			<td class="tdDes">（目前已经担保成功，借款人正在还款的标）</td>
+		</tr>
+		<tr class="divList">
+			<td class="tdTilte">完成的担保：</td>
+			<td class="tdMoneyShow">
+				￥{$vouchrepaymented.vouch_money|default="0.00"}/{$vouchrepaymented.num|default="0"}标
+                <span style="color:#666;">[</span><a href="javascript:;" onclick="$('#mx4').click();" class="ctl">列表</a><span style="color:#666;">]</span>
+			</td>
+			<td class="tdDes">（借款人已经还款完成，担保圆满结束的标）</td>
+		</tr>
+		<tr class="divList">
+			<td class="tdTilte">失败的担保：</td>
+			<td class="tdMoneyShow">
+				￥{$vouchbreak.capital|default="0.00"}/{$vouchbreak.num|default="0"}标
+				<span style="color:#666;">[</span><a href="javascript:;" onclick="$('#mx5').click();" class="ctl">列表</a><span style="color:#666;">]</span>
+			</td>
+			<td class="tdDes">（参与了担保，但是因为种种原因被担保的标没能正常进行）</td>
+		</tr>
+	</tbody></table>
+	</div>
+</div>
+
+
+<div style="border:1px #DEDEDE solid; margin:10px 20px; display:none">
+
+	
+	<div style="margin:0 30px;">
+		
+ 
+	   <table class="tb_list" border="0" cellpadding="0" cellspacing="0">   
+			<tbody><tr class="divList">
+			<td class="tdTilte">
+				累计投资金额：
+			</td>
+			<td class="tdMoneyShow">
+				￥{$total_invest.t_invest|default="0.00"}
+			</td>
+			<td class="tdDes">
+				（注册至今，您累计投资的总额）
+			</td>
+		</tr>
+		<tr class="divList">
+			<td class="tdTilte">
+				累计投资收益：
+			</td>
+			<td class="tdMoneyShow">
+				￥{$total_invest.t_interest|default="0.00"}
+			</td>
+			<td class="tdDes">
+				（注册至今，您累计投资已收回和将要回收的利息总额）
+			</td>
+		</tr>
+		<tr class="divList">
+			<td class="tdTilte">
+				坏账率：
+			</td>
+			<td class="tdMoneyShow">
+				{$avr_rate}%
+			</td>
+			<td class="tdDes">
+				（坏账率 = 逾期的投资 / 累计投资金额）
+			</td>
+		</tr>
+		<tr style="display:none">
+			<td class="tdTilte">
+				平均收益率：
+			</td>
+			<td class="tdMoneyShow">
+				0.00%
+			</td>
+			<td class="tdDes">
+				（平均收益率 = 各笔收益率的加权平均）
+			</td>
+		</tr>
+	</tbody></table> 
+	</div>
+</div> 
