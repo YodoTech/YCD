@@ -1,4 +1,5 @@
 <script type="text/javascript">
+<if condition="VERIFY_VIDEO_STATUS">
 function videoverify(){
 	$.jBox.confirm("申请视频认证后会直接从帐户扣除认证费用{$glo.fee_video|default=0}元，然后客服会联系您进行认证。<br/><font style='color:red'>确定要申请认证吗?</font>", "视频认证", dovideo, { buttons: { '确认申请': true, '暂不申请': false} });
 }
@@ -21,6 +22,8 @@ function dovideo(v, h, f) {
 	}
 	return true;
 };
+</if>
+<if condition="VERIFY_FACE_STATUS">
 // 自定义按钮
 function faceverify(){
 	$.jBox.confirm("<font style='color:red'>确定要申请现场认证吗?</font>", "现场认证", doface, { buttons: { '确认申请': true, '暂不申请': false} });
@@ -44,6 +47,7 @@ function doface(v, h, f) {
 	}
 	return true;
 };
+</if>
 <!--经典导航-->
 //简单的URL判定导航
 $(document).ready(function() {

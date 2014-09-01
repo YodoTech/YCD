@@ -1,121 +1,120 @@
 <include file="Public:_header_common" />
 <title>一次性还款利息计算器</title>
-
-<include file="Public:_header_main" />
+<style>
+.gywm {width: 1110px;}
+.hyxx3 {width: 690px;}
+</style>
 <script type="text/javascript">
-        $(function() {
-
-            $("#sel_Days").bind("change", function() {
-                var thisDom = $(this);
-                if (thisDom.val() == "-1") {
-                    thisDom.next().show();
-                }
-                else {
-                    thisDom.next().hide();
-                }
-            });
-            $(".dv_r_6,.dv_r_5").mousemove(function() {
-                $(this).addClass("current");
-            }).mouseout(function() {
-                $(this).removeClass("current");
-            });
-        });  
-    </script>
+$(function() {
+  $("#sel_Days").bind("change", function() {
+    var thisDom = $(this);
+    if (thisDom.val() == "-1") {
+      thisDom.next().show();
+    } else {
+      thisDom.next().hide();
+    }
+  });
+});
+</script>
+<include file="Public:_header_main" />
 <!--中部开始-->
-<div class="wrap2">
-  <div id="content1B">
- 
-      <div class="glossymenu">
-        <ul>
-          <li class="cjwt_a"><span style="color:#ea5413; padding-left:40px; display:inline;">借贷工具</span></li>
+<!--中部开始-->
+<div class="nyconter">
+  <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/tools/tools.html">借贷工具</a>&nbsp;>&nbsp;一次性还款利息计算器</div>
+  <div class="gywm fn-clear">
+    <ul class="gywmL fn-clear fn-left">
+      <assign name="tmpInt" value="2" />
+      <include file="left" />
+    </ul>
+    <div class="gywmR fn-right">
+      <!-- content start -->
+      <div class="hyxx33 fn-clear">
+        <h2>一次性还款利息计算器</h2>
+        <div class="hyxx33_1">
+          <p>使用一次性还款利息计算器，帮您计算一下借款的总成本，包括到期本金及利率等。</p>
+        </div>
+      </div>
+      <div class="hyxx33 fn-clear">
+        <h2>借款设置</h2>
+        <ul class="hyxx34 fn-clear">
+          <li class="fn-clear">
+            <span class="sp1">借款金额：</span>
+            <span><input name="txtAmount" id="txtAmount" type="text" class="inp1 w200" />元</span>
+          </li>
+          <li class="fn-clear">
+            <span class="sp1">年化利率：</span>
+            <span><input name="txtIntegernal" id="txtIntegernal" type="text" class="inp1 w200" />%</span>
+          </li>
+          <li class="fn-clear">
+            <span class="sp1">借款期限：</span>
+            <span>
+              <select name="sel_Days" id="sel_Days" style="width:80px;" class="inp1">
+                <php>for($j=1;$j<13;$j++){</php>
+                <option value="{$j}">{$j}</option>
+                <php>}</php>
+                <option value="-1">自定义</option>
+              </select>
+              <input name="txtCusDay" id="txtCusDay" style="display:none;width:80px;" type="text" class="inp1" />个月
+            </span>
+          </li>
+          <li class="fn-clear">
+            <span class="sp1">还款方式：</span>
+            <span>到期还本付息</span>
+          </li>
+          <li class="fn-clear">
+            <span class="sp1"></span>
+            <span class="btn"><a href="javascript:;" onclick="return Verify();">计算</a></span>
+          </li>
         </ul>
-        <ul>
-          <li><a href="tool.html">分期还款利息计算器</a></li>
-          <li><a class="hover" href="tool2.html">一次性还款利息计算器</a></li>
-          <li><a href="tool3.html">按季还款利息计算器</a></li>
-        </ul>
-		<img src="__ROOT__/Style/H/images/lf_bg_db.jpg" complete="complete"/>
       </div>
-
-  </div>
-  <div id="content2B1"> </div>
-  <div id="content3B">
-    <div class="tool_title" id="tools01">
-      <div class="backgroup">
-        <div> 一次性还款利息计算器</div>
-      </div>
-      <div class="cont"> 使用一次性还款利息计算器，帮您计算一下借款的总成本，包括到期本金及利率等。 </div>
+      <div style="display:none" class="hyxx33 fn-clear" id="backList"></div>
+      <!-- content end -->
     </div>
-    <div class="tool_title">
-      <div class="fun_title">
-        <div> 借款设置</div>
-      </div>
-      <div class="funframe">
-        <div> 借款金额：
-          <input name="txtAmount" id="txtAmount" type="text">
-          元&nbsp;&nbsp;&nbsp; 年化利率：
-          <input name="txtIntegernal" id="txtIntegernal" type="text">
-          %&nbsp;&nbsp;&nbsp;
-          借款期限：
-          <select name="sel_Days" id="sel_Days" style="width:70px" class="selectStyle">
-            <php>for($j=1;$j<13;$j++){</php>
-            <option value="{$j}">{$j}</option>
-            <php>}</php>
-            <option value="-1">自定义</option>
-          </select>
-          <input name="txtCusDay" id="txtCusDay" style="width:30px;display:none;" type="text">
-          个月<span style="margin-left: 8px">还款方式：</span> 到期还本付息 </div>
-      </div>
-      <div class="tools02">
-        <input name="btnCount" value="" onclick="return Verify();" id="btnCount" class="addbtn" type="button">
-      </div>
-    </div>
-    <div style=" display:none" class="tool_title" id="backList"> </div>
-    <script type="text/javascript">
-                var _partten_n = /^\d+$/;               //整数
-                var _partten_f = /^\d+\.\d{1,2}$/;      //浮点
-                var _partten_a = /^\d+(.)?\d{1,2}$/;    //兼容浮点和整数
-                var newTitle = '{$glo.web_name}提醒您：';
-                function RegVerify(_val, _partten) {
-                    var _reg = new RegExp(_partten);
-                    return _reg.test(_val);
-                }
-                function Verify() {
-
-                    if (!RegVerify($("#txtAmount").val(), _partten_n)) {
-						$("#txtAmount").focus();
-                        $.jBox.alert('您好，请输入借款金额！', newTitle);
-                        return false;
-                    }
-                    if ($("#txtCusDay:visible")[0] && !RegVerify($("#txtCusDay").val(), _partten_n)) {
-						$("#txtCusDay").focus();
-                        $.jBox.alert('您好，请输入正确的天数', newTitle);
-                        return false;
-                    }
-                    if (!RegVerify($("#txtIntegernal").val(), _partten_a)) {
-						$("#txtIntegernal").focus();
-                        $.jBox.alert('您所输入的年利率数值不正确!', newTitle);
-                        return false;
-                    }
-					
-					$.ajax({
-						url: "__URL__/tool2",
-						data: {"money":$("#txtAmount").val(),"month":$("#txtCusDay").val(),"interest_rate":$("#txtIntegernal").val(),"selDays":$("#sel_Days").val()},
-						timeout: 5000,
-						cache: false,
-						type: "post",
-						dataType: "json",
-						success: function (d, s, r) {
-							if(d){
-								$("#backList").html(d.html).show();
-							}
-						}
-					});					
-                    //
-                }
-                
-           
-            </script>
   </div>
 </div>
-<include file="Public:_footer_inner" />
+<script type="text/javascript">
+var _partten_n = /^\d+$/; //整数
+var _partten_f = /^\d+\.\d{1,2}$/; //浮点
+var _partten_a = /^\d+(.)?\d{1,2}$/; //兼容浮点和整数
+var newTitle = '{$glo.web_name}提醒您：';
+function RegVerify(_val, _partten) {
+    var _reg = new RegExp(_partten);
+    return _reg.test(_val);
+}
+function Verify() {
+  if (!RegVerify($("#txtAmount").val(), _partten_n)) {
+    $("#txtAmount").focus();
+    $.jBox.alert('您好，请输入借款金额！', newTitle);
+    return false;
+  }
+  if ($("#txtCusDay:visible")[0] && !RegVerify($("#txtCusDay").val(), _partten_n)) {
+    $("#txtCusDay").focus();
+    $.jBox.alert('您好，请输入正确的天数', newTitle);
+    return false;
+  }
+  if (!RegVerify($("#txtIntegernal").val(), _partten_a)) {
+    $("#txtIntegernal").focus();
+    $.jBox.alert('您所输入的年利率数值不正确!', newTitle);
+    return false;
+  }
+  $.ajax({
+    url: "__URL__/tool2",
+    data: {
+      "money": $("#txtAmount").val(),
+      "month": $("#txtCusDay").val(),
+      "interest_rate": $("#txtIntegernal").val(),
+      "selDays": $("#sel_Days").val()
+    },
+    timeout: 5000,
+    cache: false,
+    type: "post",
+    dataType: "json",
+    success: function(d, s, r) {
+      if (d) {
+        $("#backList").html(d.html).show();
+      }
+    }
+  });
+}
+</script>
+<include file="Public:_footer" />

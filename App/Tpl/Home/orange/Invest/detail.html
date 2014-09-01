@@ -54,10 +54,17 @@ function addFriend(type){
 }
 function InnerMsg(){
   var uid = {$minfo.uid};
-  $.jBox("get:__URL__/innermsg?uid="+uid, {
-    title: "发送站内信",
-    width: "auto",
-    buttons: {'关闭': true }
+  $.getJSON('__URL__/innermsg', {uid:uid}, function(d, textStatus) {
+    if(d){
+      if(d.status==1) {
+        $.jBox.info(d.content, '发送站内信', {
+          width: "auto",
+          buttons: {'关闭': true }
+        });
+      } else {
+        $.jBox.tip(d.message,'fail');
+      }
+    }
   });
 }
 //-->
@@ -548,11 +555,14 @@ function jubao(id){
     $.jBox.tip("请先登陆");
     return;
   }
-  $.jBox("get:__URL__/jubao/?id="+id, {
-    title: "举报会员",
-    width: "auto",
-    top:'15%',
-    buttons: {'关闭': true }
+  $.getJSON('__URL__/jubao', {id:id}, function(d, textStatus) {
+    if(d){
+      $.jBox.info(d.content, '举报会员', {
+        width: "auto",
+        top: "15%",
+        buttons: {'关闭': true }
+      });
+    }
   });
 }
 

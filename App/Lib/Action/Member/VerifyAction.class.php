@@ -261,5 +261,4 @@ class VerifyAction extends MCommonAction {
 		$data['html'] = $this->fetch();
 		exit(json_encode($data));
     }
-
 }

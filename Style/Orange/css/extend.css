@@ -7,16 +7,30 @@
 .ui-tabs-hide { display: none; }
 .loading {text-align: center;padding: 30px;z-index: 999;}
 /*width*/
-.w30 {width: 30px;}
+.w30 {width: 30px!important;}
+.w80 {width: 80px!important;}
 .w100 {width: 100px!important;}
+.w130 {width: 130px!important;}
+.w180 {width: 180px!important;}
 .w200 {width: 200px!important;}
 .w280 {width: 280px!important;}
+.w300 {width: 300px!important;}
+/*height*/
+.h180 {height: 180px!important;}
+.h200 {height: 200px!important;}
 /*color*/
 .red {color: red;}
+.white {color: white;}
 /*margin*/
 .mt10 {margin-top: 10px;}
 .mb10 {margin-bottom: 10px;}
 .ml10 {margin-left: 10px;}
+.mr10 {margin-right: 10px;}
+/*padding*/
+.pt10 {padding-top: 10px;}
+.pb10 {padding-bottom: 10px;}
+.pl10 {padding-left: 10px;}
+.pr10 {padding-right: 10px;}
 /*verify*/
 .verify {
 	float: left;

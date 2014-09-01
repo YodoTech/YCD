@@ -628,6 +628,88 @@ ul.hyxx6 li p span.bg{ border-radius:100px; width:24px; height:24px; margin:3px 
 .list3 ul.com_ul{ margin:0; padding:10px 0 0;}
 .list3 ul.com_ul li{width: auto; padding:0 22px; height:40px; line-height:30px;}
 
+/*生意贷申请表*/
+.ysd{ padding:0;}
+.ysd1{ width:1050px; margin:40px auto 30px;  position:relative;}
+.ysd1 li{ background:#e7e5e3; margin:0; padding:0; width:520px; height:22px; border-radius:0;}
+.ysd1 li.li1{ background:#fa6f15;}
+.ysd1 .ysd2{ width:1050px; height:70px;position:absolute; left:-5px; top:-25px;}
+.ysd1 .ysd2 li{ background:#fa6f15; border:10px solid #e7e5e3; height:45px; width:45px; line-height:45px; color:#fff; margin:0 180px 0 0; font-size:24px; font-weight:bold; border-radius:100px; text-align:center;}
+.ysd1 .ysd2 li.hei{ background:#999999; color:#2f3032;}
+.ysd1 .ysd2 li.li1{ float:right; margin:0; padding:0;}
+.ysd1_1 { width:1134px; margin:0 auto;}
+.ysd1_1 li{ margin:0; padding:0; background:none; border:none; width:154px; height:40px; line-height:40px; font-size:16px; color:#2f3032; text-align:center;}
+.ysd1_1 li.li1{ width:330px;}
+.ysd3{width:1050px; margin:50px auto; padding:0;}
+.ysd3 ul{ margin:0 0 20px 0;}
+.ysd3L{ width:150px; height:46px; line-height:46px; padding:0 20px 0 0; text-align:right;}
+.ysd3L span{ color:#fa6f15; font-size:16px; padding:0px 4px 0 0;}
+.ysd3R{width:304px; height:46px; border-radius:4px; border:1px solid #c5c5c5; background:#fff;}
+.ysd3R span{ width:304px; height:46px; display:block;}
+.ysd3R span input{ margin:0; padding:0 0 0 10px; width:294px; height:46px; line-height:46px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+.ysd3R span select{ margin:0; padding:0 0 0 10px; width:304px; height:46px; line-height:46px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+
+.ysd3R_1{width:304px; height:46px; border-radius:4px; background:#fff;}
+.ysd3R_1 span{width:148px; height:46px;}
+.ysd3R_1 span a{ width:148px; height:46px; border-radius:2px; color:#fa6f15; border:1px solid #fa6f15; display:block; text-align:center; line-height:46px;}
+.ysd3R_2{width:304px; height:46px; border-radius:4px; background:#fff;}
+.ysd3R_2 span{width:148px; height:46px; border-radius:4px; border:1px solid #c5c5c5; }
+.ysd3R_2 span input{ margin:0; padding:0 0 0 10px; width:138px; height:46px; line-height:46px; font-size:12px; color:#666666; border:none; background:none;}
+.ysd3R_2 span.sp1{width:104px; text-align:center; height:46px; border:none;}
+.ysd3R_2 span.sp2{ width:46px; height:46px; border:1px solid #fa6f15; border-radius:4px;}
+.ysd3R_2 span.sp2 a{width:46px; height:35px; display:block; text-align:center; padding:11px 0 0 0;}
+.ysd3R_3{width:304px; height:46px; line-height:46px;}
+.ysd3R_3 span a{ color:#fa6f15;}
+.ysd4{ padding:0 0 0 172px; width:148px;}
+.ysd4 p.btn a{ font-size:16px;}
+
+.ysd3L_l{ width:150px; height:20px; line-height:46px; padding:0 20px 0 0; text-align:right; line-height:26px;}
+.ysd3R_r{width:304px; height:20px; border-radius:4px; background:#fff; font-size:14px; line-height:26px;}
+ul.ysd5{ width:880px; margin:0 auto; padding:0 0 0 170px;}
+ul.ysd5 li{ width:880px; height:50px; line-height:50px; margin:0; padding:0; border-bottom:1px solid #eaeaea;}
+ul.ysd5 li span{ width:35px; height:35px; display:block; border-radius:100px; margin:0 25px; text-align:center;float:left;}
+ul.ysd5 li span.sp1{ width:90px;}
+ul.ysd5 li.li1{ border-bottom:1px solid #eaeaea; height:50px; line-height:50px;}
+ul.ysd5 li.li1 span{ width:35px; height:35px; display:block; border-radius:100px; margin:0 25px; background:#fa6f15; text-align:center; line-height:35px; color:#fff; float:left;}
+ul.ysd5 li.li1 span.sp1{ width:90px; background:none; border-radius:0; color:#2f3032;}
+
+.ysd6{width:880px; margin:20px auto 0; padding:0 0 0 170px;}
+.ysd6 textarea{ width:880px; height:100px; line-height:24px;}
+ul.ysd7{ width:880px; margin:10px auto 0; padding:0 0 0 170px;}.zhuceym3R_3{width:304px; height:46px; line-height:46px;}
+ul.ysd7 li span a{ color:#fa6f15;}
+
+.sidernav{ width:1134px; margin:0 auto; padding:30px 0 0;}
+.sidernav ul li{ width:188px; height:50px; line-height:50px; font-size:16px; margin-left:1px; text-align:center;}
+.sidernav ul li a{ width:188px; height:50px; display:block; background:#fa6f15; color:#fff;}
+.sidernav ul li a:hover{ background:#2f3032;}
+.sidernav ul li a.a1{ background:#2f3032}
+.ysdB{width:1050px; margin:0 auto 50px; padding:10px 0 30px 82px; border:1px solid #b1b1b1;}
+.ysdB h3{ font-size:24px;}
+.ysdB ul{ margin:0 0 10px 0;}
+.ysdB ul li{ width:150px; height:42px; line-height:40px; padding:0 20px 0 0; text-align:right;}
+.ysdB ul li span{ color:#fa6f15; font-size:16px; padding:0px 4px 0 0;}
+.ysdB ul li.li1{width:304px; text-align:left;}
+.ysdB ul li.li1 span{width:304px; height:40px; display:block; border-radius:4px; border:1px solid #c5c5c5; background:#fff; padding:0;}
+.ysdB ul li.li1 input{ margin:0; padding:0 0 0 10px; width:294px; height:40px; line-height:40px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+.ysdB ul li.li1 select{ margin:0; padding:0 0 0 10px; width:304px; height:40px; line-height:40px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+.ysdB ul li.li1 span.sp1,.ysdB ul li.li1 span.sp2{height:40px; float:left; display:block; border-radius:4px; border:1px solid #c5c5c5; background:#fff; padding:0;}
+.ysdB ul li.li1 span.sp1{width:94px; }
+.ysdB ul li.li1 span.sp2{width:190px; }
+.ysdB ul li.li1 span.sp3{ border:none; width:16px; margin:0; padding:0; text-align:center; float:left; }
+.ysdB ul li.li1 span.sp1 input,.ysdB ul li.li1 span.sp2 input{ margin:0; padding:0 0 0 10px; height:40px; line-height:40px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+.ysdB ul li.li1 span.sp1 input{width:84px; }
+.ysdB ul li.li1 span.sp2 input{width:180px; }
+.ysdB ul li.li1 span.sp4{ width:145px; padding:0;}
+.ysdB ul li.li1 span.sp4 select{ margin:0; padding:0 0 0 10px; width:145px; height:40px; line-height:40px; font-size:12px; color:#666666; border:none; background:none; font-size:14px;}
+.ysdB ul.ul1{ padding:0 0 0 170px;}
+.ysdB ul.ul1 li { height:auto;}
+.ysdB ul.ul1 li p{ text-align:left; line-height:16px;}
+.ysdB ul.ul1 li p span.btn a{ margin:0;}
+.ysdB ul.ul1 li.li1{ width:62px; height:62px; padding-top:10px;}
+
+/*家庭信息*/
+.ysdB ul li.li2{ width:400px; text-align:left;}
+.ysdB h4{ font-size:20px; font-weight:normal;}
 
 
 

@@ -3506,17 +3506,19 @@ function getVerify($uid)
     } else {
         $str .= "<span class=\"a1\"><img alt=\"邮件认证未通过\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_4h.jpg\"/></span>";
     }
-    if (false) {//暂停使用
-        if ($vo['user_leve'] != 0 && time() < $vo['time_limit']) {
-            $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip.gif\"/></a>";
-        } else {
-            $str .= "<a href=\"" . __APP__ . "/member/vip\"><img alt=\"不是VIP会员\" src=\"" . __ROOT__ . "/Style/H/images/icon/vip_0.gif\"/></a>";
-        }
+    if ($vo['user_leve'] != 0 && time() < $vo['time_limit']) {
+        $str .= "<span><img alt=\"VIP会员\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_6.jpg\"/></span>";
+    } else {
+        $str .= "<span class=\"a1\"><img alt=\"不是VIP会员\" src=\"" . __ROOT__ . "/Style/Orange/images/hyxxicon_6h.jpg\"/></span>";
+    }
+    if (VERIFY_VIDEO_STATUS) {
         if ($vo['video_status'] == 1) {
             $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过视频认证');\"><img alt=\"视频认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/video.gif\"/></a>";
         } else {
             $str .= "<a href=\"javascript:;\" onclick=\"videoverify();\"><img alt=\"未进行视频认证\" src=\"" . __ROOT__ . "/Style/H/images/icon/video_0.gif\"/></a>";
         }
+    }
+    if (VERIFY_FACE_STATUS) {
         if ($vo['face_status'] == 1) {
             $str .= "<a href=\"javascript:;\" onclick=\"alert('已通过现场认证');\"><img alt=\"现场认证通过\" src=\"" . __ROOT__ . "/Style/H/images/icon/place.gif\"/></a>";
         } else {

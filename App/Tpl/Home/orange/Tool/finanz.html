@@ -1,94 +1,100 @@
 <include file="Public:_header_common" />
 <title>实时财务</title>
 <link rel="stylesheet" type="text/css" href="__ROOT__/Style/H/css/by_jiekuan.css" />
-
+<style>
+.gywm {width: 1110px;}
+.hyxx3 {width: 690px;}
+</style>
 <include file="Public:_header_main" />
 <!--中部开始-->
-
-
-    <div class="wrap2">
-	<img src="__ROOT__/Style/H/images/sscw_bg1.jpg" complete="complete" style="width:980px" />
-	<div class="title_cw">
-	  <div class="zi_bg1">
-	  <span class="oldai_color">实时财务</span>
-	  </div>
-	  </div>
-	  
-        <div class="finanz">
-         
-            <div id="finanz_count" class="tab-con">
-                <table><tbody>
-                    <tr>
-                        <th>风险准备金余额</th>
-                        <th>成功放款笔数</th>
-                        <th>成功放款总额</th>
-                        <th>待回收本金总额</th>
-                    </tr>
-                    <tr>
-                        <td><span class="red">￥{$mborrowBail} 元</span></td>
-                        <td><span class="red">{$mborrowOutNum} 笔</span></td>
-                        <td><span class="red">￥{$mborrowOut}元</span></td>
-                        <td><span class="red">￥{$mborrowLimit} 元</span></td>
-                    </tr>
-                </tbody></table>
-            </div>
-			<img src="__ROOT__/Style/H/images/sscw_bg3.jpg" complete="complete" style="width:980px" />
-        </div>
-        <div class="finanz">
-		
-            <ul id="finanz_title" class="tab-list1">
-                <li  site="1">一周内应回收欠款列表</li>
-                <li class="li2" site="2">逾期未归还列表</li>
-                <li class="li2" site="3">投资排行榜</li>
-                <li class="li2" site="4">借款排行榜</li>
+<div class="nyconter">
+  <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/tools/tools.html">借贷工具</a>&nbsp;>&nbsp;实时财务</div>
+  <div class="gywm fn-clear">
+    <ul class="gywmL fn-clear fn-left">
+      <assign name="tmpInt" value="1" />
+      <include file="left" />
+    </ul>
+    <div class="gywmR fn-right">
+        <!-- content start -->
+        <div class="hyxx33 fn-clear">
+            <h2>偿还的时间表</h2>
+            <ul class="hyxx34 fn-clear">
+                <li class="fn-clear">
+                    <span class="sp1 w200">风险准备金余额：</span>
+                    <span class="red">￥{$mborrowBail} 元</span>
+                </li>
+                <li class="fn-clear">
+                    <span class="sp1 w200">成功放款笔数：</span>
+                    <span class="red">{$mborrowOutNum} 笔</span>
+                </li>
+                <li class="fn-clear">
+                    <span class="sp1 w200">成功放款总额：</span>
+                    <span class="red">￥{$mborrowOut}元</span>
+                </li>
+                <li class="fn-clear">
+                    <span class="sp1 w200">待回收本金总额：</span>
+                    <span class="red">￥{$mborrowLimit} 元</span>
+                </li>
             </ul>
-            <div id="finanz_detail" class="tab-con"></div>
-            <script type="text/javascript">
-                //获取url参数值
-                function getQueryString(name) {
-                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-                    var r = window.location.search.substr(1).match(reg);
-                    if (r != null) return unescape(r[2]); return null;
-                }
-
-                $(function(){
-                    //获取数据
-                    function getData (site) {
-                        try{    
-                            $.ajax({
-                                url: "/home/tool/finanzData",
-                                data: {site:site},
-                                timeout: 5000,
-                                cache: false,
-                                type: "get",
-                                dataType: "json",
-                                success: function (d, s, r) {
-                                    if(d) $("#finanz_detail").html(d.html);//
-									
-                                }
-                            });
-                        }catch(e){};
-                        return false;
-                    }
-               $("#finanz_title li").first().addClass("current");
-                    //起始选中
-                    var site = 0;
-                    if(parseInt(getQueryString("site"))>=0 && parseInt(getQueryString("site"))<=4){
-                        site = parseInt(getQueryString("site"));
-                    }
-                    $("#finanz_title li[site="+site+"]").addClass("current");
-                    getData(site);
-
-                    $("#finanz_title li").click(function(){
-                        $(this).parent().find(".current").removeClass("current");
-                        $(this).addClass("current");
-                        getData($(this).attr("site"));
-                    });
-				
-                });
-            </script>
         </div>
-		<img src="__ROOT__/Style/H/images/sscw_bg3.jpg" complete="complete" style="width:980px" />
+        <ul id="finanz_title" class="hyxx30ul fn-clear">
+            <li site="1" style="width:202px;"><a style="width:200px;" href="javascript:;">一周内应回收欠款列表</a></li>
+            <li site="2"><a href="javascript:;">逾期未归还列表</a></li>
+            <li site="3"><a href="javascript:;">投资排行榜</a></li>
+            <li site="4"><a href="javascript:;">借款排行榜</a></li>
+        </ul>
+        <div id="finanz_detail"></div>
+        <!-- content end -->
     </div>
+  </div>
+</div>
+<script type="text/javascript">
+//获取url参数值
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+}
+$(function() {
+    //获取数据
+    function getData(site) {
+        $.jBox.tip("加载中...", 'loading');
+        try {
+            $.ajax({
+                url: "/home/tool/finanzData",
+                data: {
+                    site: site
+                },
+                timeout: 5000,
+                cache: false,
+                type: "get",
+                dataType: "json",
+                success: function(d, s, r) {
+                    if (d) $("#finanz_detail").html(d.html); //
+                    $.jBox.closeTip();
+                },
+                error: function(r, t, e) {
+                    $.jBox.tip(t, 'error');
+                }
+            });
+        } catch (e) {};
+        return false;
+    }
+    $("#finanz_title li").first().addClass("ui-tabs-selected");
+    //起始选中
+    var site = 0;
+    if (parseInt(getQueryString("site")) >= 0 && parseInt(getQueryString("site")) <= 4) {
+        site = parseInt(getQueryString("site"));
+    }
+    $("#finanz_title li[site=" + site + "]").addClass("ui-tabs-selected");
+    getData(site);
 
-<include file="Public:_footer_inner" />
+    $("#finanz_title li").click(function() {
+        $(this).parent().find(".ui-tabs-selected").removeClass("ui-tabs-selected");
+        $(this).addClass("ui-tabs-selected");
+        getData($(this).attr("site"));
+    });
+});
+</script>
+<include file="Public:_footer" />

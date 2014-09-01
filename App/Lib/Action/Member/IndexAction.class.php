@@ -46,12 +46,15 @@ class IndexAction extends MCommonAction {
 		/////////////////////////////////
 		
 		//理财
-		$investList = M('investor_detail')->field('deadline,interest,capital')->where("investor_uid = {$this->uid}")->order("deadline ASC")->select();
+		$investList = getTenderList(array('investor_uid'=>$this->uid,'status'=>4),0,5);
+		$investList['count'] = count($investList['list']);
 		$this->assign("investList", $investList);
 		//借款
-		$borrowList = M('investor_detail')->field('deadline,interest,capital')->where("borrow_uid = {$this->uid}")->order("deadline ASC")->select();
-		$this->assign("borrowList", $borrowList);echo '<pre>';print_r($investList);
+		$borrowList = getBorrowList(array('borrow_uid'=>$this->uid,'borrow_status'=>6,'status'=>7),0,5);
+		$borrowList['count'] = count($borrowList['list']);
+		$this->assign("borrowList", $borrowList);
 		
+
 		$this->assign("kflist",get_admin_name());
 		$list=array();
 		$pre = C('DB_PREFIX');

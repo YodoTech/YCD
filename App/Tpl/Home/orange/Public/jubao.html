@@ -1,5 +1,5 @@
 <STYLE> 
-*{padding-bottom:0px;margin:0px;padding-left:0px;padding-right:0px;padding-top:0px}.nav{width:620px;display:block;float:left;height:300px}.yetitle{width:100%;background:url(__ROOT__/Style/H/images/line.jpg) repeat-x 0px 37px;height:45px}.yuet{margin:15px auto auto 5px;display:block;float:left;font-size:12px;font-weight:bold}.buttonc{margin:10px 0px;display:block;float:right}.close{border-right-width:0px;width:22px;background:url(__ROOT__/Style/H/images/1_03.gif);BORDER-TOP-WIDTH:0px;border-bottom-width:0px;height:19px;border-left-width:0px}.tip{text-align:center;margin-top:50px;width:100%;font-family:Arial;font-size:16px}.buttontwo{text-align:center;margin-top:40px;width:100%}.buttony{border-right-width:0px;width:109px;background:url(__ROOT__/Style/H/images/bow_btn.jpg);BORDER-TOP-WIDTH:0px;border-bottom-width:0px;height:27px;color:#fff;font-size:14px;border-left-width:0px;cursor:pointer;font-weight:bold}.leftitle{width:100px;display:block;float:left}.leftitle SPAN{text-align:right;width:100%;display:block;height:30px}.rightnavv{text-align:left;padding-left:10px;display:block;float:left}.rightnavv SPAN{width:100%;display:block;height:30px}.textarea{border-bottom:#ccc 1px solid;border-left:#ccc 1px solid;width:350px;height:100px;border-top:#ccc 1px solid;border-right:#ccc 1px solid}*{font-size:12px}.tip{line-height:200%;margin:20px 0px;font-size:14px}.nav{margin-left:20px} 
+.nav{width:620px;display:block;float:left;height:300px}.yetitle{width:100%;background:url(__ROOT__/Style/H/images/line.jpg) repeat-x 0px 37px;height:45px}.yuet{margin:15px auto auto 5px;display:block;float:left;font-size:12px;font-weight:bold}.buttonc{margin:10px 0px;display:block;float:right}.close{border-right-width:0px;width:22px;background:url(__ROOT__/Style/H/images/1_03.gif);BORDER-TOP-WIDTH:0px;border-bottom-width:0px;height:19px;border-left-width:0px}.tip{text-align:center;margin-top:50px;width:100%;font-family:Arial;font-size:16px}.buttontwo{text-align:center;width:100%}.leftitle{width:100px;display:block;float:left}.leftitle SPAN{text-align:right;width:100%;display:block;height:30px}.rightnavv{text-align:left;padding-left:10px;display:block;float:left}.rightnavv SPAN{width:100%;display:block;height:30px}.textarea{border-bottom:#ccc 1px solid;border-left:#ccc 1px solid;width:350px;height:100px;border-top:#ccc 1px solid;border-right:#ccc 1px solid}.tip{line-height:200%;margin:20px 0px;font-size:14px}.nav{margin-left:20px} 
 </STYLE>
  
 <DIV style="overflow:hidden;">
@@ -8,7 +8,7 @@
 <DIV class="tip" style="margin:10px 0px">
 {$glo.web_name}提醒您：请客观地反映您所遇到的真实情况，以共同维护一个诚信和公平的借贷环境。 
 </DIV>
-<DIV class="tip2">
+<DIV class="tip2 fn-clear">
 <DIV class="leftitle">
 <SPAN>被举报用户：</SPAN> <SPAN>你的邮件地址：</SPAN> <SPAN style="HEIGHT: 120px">举报原因：</SPAN> <SPAN>附加信息：</SPAN> 
 </DIV>
@@ -21,13 +21,17 @@
 <SPAN><LABEL><INPUT id="radio2" type="radio" name="radio" value="此用户冒用他人身份" /> 此用户冒用他人身份</LABEL>：如照片，列表内容，身份信息，网站等</SPAN> 
 <SPAN><INPUT id="radio3" type="radio" name="radio" value="怀疑此人有虚假信息" /> <LABEL>怀疑此人有虚假信息</LABEL>：（请提供理由，链接等)</SPAN> 
 <SPAN><LABEL><INPUT id="radio4" type="radio" name="radio" value="其他/此用户发表了不当语言或图片" /> 其他/此用户发表了不当语言或图片</LABEL>：（请说明或提供链接）</SPAN> 
-<SPAN style="HEIGHT: 100px"><TEXTAREA id="txtReportContent" class="textarea" name="textfield" type="text"></TEXTAREA> </SPAN>
+<SPAN style="HEIGHT: auto;"><TEXTAREA id="txtReportContent" class="textarea" name="textfield" type="text"></TEXTAREA> </SPAN>
 </DIV>
 <DIV style="CLEAR: both">
 </DIV>
 </DIV>
-<DIV class="buttontwo">
-<INPUT id="submit" class="buttony" type="button" name="only" jQuery1342963898011="2" value="确定" />&nbsp;&nbsp;&nbsp;&nbsp;<BR /><SPAN style="LINE-HEIGHT: 280%" id="spanErr"></SPAN>&nbsp;&nbsp;&nbsp;&nbsp;
+
+<DIV class="buttontwo fn-left">
+    <div class="w200 fn-left" style="margin:0;">
+        <span class="btn"><a id="submit" href="javascript:;" style="margin:0;">确定</a></span>
+    </div>
+    <div style="LINE-HEIGHT: 280%" class="fn-left red pt10 pl10" id="spanErr"></div>
 </DIV>
 </DIV>
 <SCRIPT language="javascript" type="text/javascript"> 

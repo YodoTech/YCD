@@ -41,62 +41,80 @@
                         <else />
                         <span><a class="a1" href="__APP__/member/verify"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
                         </if>
+                        <if condition="($verifyStatus['user_leve'] neq 0) AND (time() lt $verifyStatus['time_limit']) ">
+                        <span><a href="__APP__/member/vip"><img alt="VIP会员" title="VIP会员" src="__ROOT__/Style/Orange/images/hyxxicon_6.jpg" /></a></span>
+                        <else />
+                        <span><a class="a1" href="__APP__/member/vip"><img alt="普通会员" title="普通会员" src="__ROOT__/Style/Orange/images/hyxxicon_6h.jpg"/></a></span>";
+                        </if>
                         <span class="sp1" style="width:auto;">冻结金额：{$minfo.money_freeze|Fmoney=###}</span>
                         <span class="sp1" style="width:auto;">可用金额：{:Fmoney($minfo['account_money']+$minfo['back_money'])}</span>
                     </p>
                 </div>
             </div>
             <ul class="hyxx2 fn-clear">
-                <li>账户净资产</li>
-                <li>理财资产</li>
-                <li>借款负债</li>
-                <li>账户余额</li>
-                <li class="li1">0.00元</li>
+                <li>资产总额</li>
+                <li>可用余额</li>
+                <li>待收总额</li>
+                <li>冻结总额</li>
+                <li class="li1">{:Fmoney($minfo['account_money']+$minfo['back_money']+$minfo['money_collect']+$minfo['money_freeze'])}</li>
                 <li class="li2">=</li>
-                <li class="li1">0.00元</li>
+                <li class="li1">{:Fmoney($minfo['account_money']+$minfo['back_money'])}</li>
                 <li class="li2">+</li>
-                <li class="li1">-0.00元</li>
+                <li class="li1">{$minfo.money_collect|Fmoney=###}</li>
                 <li class="li2">+</li>
-                <li class="li1">0.00元</li>
+                <li class="li1">{$minfo.money_freeze|Fmoney=###}</li>
             </ul>
-            <div class="hyxx2h">理财账户<!--   已赚总金额：0.00元  <a href="#">回账查询</a> --></div>
+            <div class="hyxx2h"><a href="__APP__/member/tendout#fragment-3">理财账户</a></div>
             <ul class="hyxx3 fn-clear">
-                <li>理财方式</li>
-                <li>账户资产</li>
-                <li>已赚金额</li>
-                <li>加权平均收益率</li>
-                <li>持有数量</li>
-                <li></li>
-                <li class="li1">债权投资</li>
-                <li class="li1">0.00元</li>
-                <li class="li1">0.00元</li>
-                <li class="li1">0.0%</li>
-                <li class="li1">0</li>
-                <li class="li2"><a href="#">查看</a></li>
-                <li class="li3">债权投资</li>
-                <li class="li3">0.00元</li>
-                <li class="li3">0.00元</li>
-                <li class="li3">0.0%</li>
-                <li class="li3">0</li>
-                <li class="li4"><a href="#">查看</a></li>
+                <li style="width:176px;">借款标题</li>
+                <li>借入人</li>
+                <li>我的投资金额</li>
+                <li>已还本息</li>
+                <li>已还/总期数</li>
+                <li style="width:100px;"></li>
+                <empty name="investList.list">
+                    <li style="width:100%;" class="li3">没有记录</li>
+                <else />
+                    <volist name="investList.list" id="vo">
+                    <if condition="($i eq 1) AND ($investList.count gt 1) ">
+                        <assign name="tmpInt" value="1" />
+                    <else/>
+                        <assign name="tmpInt" value="3" />
+                    </if>
+                    <li style="width:175px;" class="li{$tmpInt}"><a href="{$vo.borrow_id|getInvestUrl=###}" title="{$vo.borrow_name}" target="_blank">{$vo.borrow_name|cnsubstr=###,10}</a></li>
+                    <li class="li{$tmpInt}">{$vo.borrow_user}</li>
+                    <li class="li{$tmpInt}">{$vo.investor_capital}</li>
+                    <li class="li{$tmpInt}">{$vo['receive_capital'] + $vo['receive_interest']}</li>
+                    <li class="li{$tmpInt}">{$vo.back|default="0"}/{$vo.total}</li>
+                    <li style="width:100px;" class="li{$tmpInt+1}"><a href="__APP__/member/tendout/tendoutdetail?id={$vo.id}" target="_blank">详情</a></li>
+                    </volist>
+                </empty>
             </ul>
-            <div class="hyxx2h">借款账户<!--   待还总金额：0.00元  <a href="#">申请查询</a> --></div>
-            <ul class="hyxx4 fn-clear">
-                <li>借款标题</li>
-                <li>待还本金</li>
-                <li>待还利息/管理费</li>
-                <li>逾期费用</li>
-                <li class="li1"></li>
-                <li class="li2 fn-text-overflow">帮老婆筹款开分店</li>
-                <li class="li2">0.00元</li>
-                <li class="li2">0.00元</li>
-                <li class="li2">0</li>
-                <li class="li3"><a href="#">查看</a></li>
-                <li class="li4 fn-text-overflow">国企员工兼职伙伴创业</li>
-                <li class="li4">0.00元</li>
-                <li class="li4">0.00元</li>
-                <li class="li4">0</li>
-                <li class="li5"><a href="#">查看</a></li>
+            <div class="hyxx2h"><a href="__APP__/member/borrowin#fragment-3">借款账户</a></div>
+            <ul class="hyxx3 fn-clear">
+                <li style="width:176px;">借款标题</li>
+                <li>还款方式</li>
+                <li>借款金额</li>
+                <li>已还金额</li>
+                <li>即将还款时间</li>
+                <li style="width:100px;"></li>
+                <empty name="borrowList.list">
+                    <li style="width:100%;" class="li3">没有记录</li>
+                <else />
+                    <volist name="borrowList.list" id="vo">
+                    <if condition="($i eq 1) AND ($borrowList.count gt 1) ">
+                        <assign name="tmpInt" value="1" />
+                    <else/>
+                        <assign name="tmpInt" value="3" />
+                    </if>
+                    <li style="width:175px;" class="li{$tmpInt} fn-text-overflow"><a href="__APP__/invest/{$vo.id}.html" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,8}</a></li>
+                    <li class="li{$tmpInt}">{$vo.repayment_type}</li>
+                    <li class="li{$tmpInt}">{$vo.borrow_money}</li>
+                    <li class="li{$tmpInt}">{$vo.repayment_money}</li>
+                    <li class="li{$tmpInt}">{$vo.repayment_time|date="Y-m-d",###}</li>
+                    <li style="width:100px;" class="li{$tmpInt+1}"><a href="__APP__/member/borrowdetail?id={$vo.id}#fragment-1" target="_blank">详情</a></li>
+                    </volist>
+                </empty>
             </ul>
             <div class="hyxx5h">理财推荐</div>
             <ul class="hyxx6 fn-clear">

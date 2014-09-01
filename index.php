@@ -8,6 +8,10 @@ if(isset($_SERVER['HTTP_X_REWRITE_URL'])){
 }
 ?>
 <?php
+define('VERIFY_VIDEO_STATUS', false);//视频认证申请,[true开启][false关闭]
+define('VERIFY_FACE_STATUS', false);//现场认证申请,[true开启][false关闭]
+?>
+<?php
     define('THINK_PATH',dirname(__FILE__).DIRECTORY_SEPARATOR.'CORE'.DIRECTORY_SEPARATOR);
     define('APP_NAME',dirname(__FILE__).'App');
     define('APP_PATH',dirname(__FILE__).DIRECTORY_SEPARATOR.'App'.DIRECTORY_SEPARATOR);

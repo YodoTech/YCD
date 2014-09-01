@@ -7,7 +7,7 @@ function ajaxGetData(url,targetid,data){
 	if(!url) return;
 	data = data||{};
 	var thtml = '<div class=\"loading\"><img src=\"__ROOT__/Style/Orange/images/loading.gif\"></div>';
-	$("#"+targetid).html(thtml).show();
+	$('#'+targetid).html(thtml).show();
 	
 	$.ajax({
 		url: url,
@@ -17,10 +17,8 @@ function ajaxGetData(url,targetid,data){
 		type: "get",
 		dataType: "json",
 		success: function (d, s, r) {
-			if(d) $("#"+targetid).html(d.html);
-		},
-		error: '',
-		complete: ''
+			if(d) $('#'+targetid).html(d.html);
+		}
 	});
 }
 function getTabContent(target) {

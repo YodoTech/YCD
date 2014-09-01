@@ -55,8 +55,12 @@ $menu_left[$i][$i."-".$j][] = array('举报信息',U('/admin/jubao/index'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('认证及申请管理','#',1);
 $menu_left[$i][$i."-".$j][] = array('手机认证会员',U('/admin/verifyphone/index'),1);
-$menu_left[$i][$i."-".$j][] = array('视频认证申请',U('/admin/verifyvideo/index'),1);
-$menu_left[$i][$i."-".$j][] = array('现场认证申请',U('/admin/verifyface/index'),1);
+if (VERIFY_VIDEO_STATUS) {
+	$menu_left[$i][$i."-".$j][] = array('视频认证申请',U('/admin/verifyvideo/index'),1);
+}
+if (VERIFY_FACE_STATUS) {
+	$menu_left[$i][$i."-".$j][] = array('现场认证申请',U('/admin/verifyface/index'),1);
+}
 $menu_left[$i][$i."-".$j][] = array('VIP申请管理',U('/admin/vipapply/index'),1);
 $menu_left[$i][$i."-".$j][] = array('会员实名认证申请',U('/admin/memberid/index'),1);
 $menu_left[$i][$i."-".$j][] = array('额度申请待审核',U('/admin/members/infowait'),1);
