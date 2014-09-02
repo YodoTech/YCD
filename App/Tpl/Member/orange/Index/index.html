@@ -49,6 +49,10 @@
                         <span class="sp1" style="width:auto;">冻结金额：{$minfo.money_freeze|Fmoney=###}</span>
                         <span class="sp1" style="width:auto;">可用金额：{:Fmoney($minfo['account_money']+$minfo['back_money'])}</span>
                     </p>
+                    <p>
+                        <span>信用额度：{$minfo.credit_cuse|Fmoney=###}&nbsp;(<a href="__APP__/member/moneylimit#fragment-1" class="red">申请额度</a>)</span>
+                        &nbsp;&nbsp;<span>担保额度：{$minfo.borrow_vouch_cuse|Fmoney=###}</span>
+                    </p>
                 </div>
             </div>
             <ul class="hyxx2 fn-clear">
