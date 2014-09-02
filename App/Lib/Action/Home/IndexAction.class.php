@@ -16,6 +16,11 @@ class IndexAction extends HCommonAction {
 		$this->assign('statData', $statData);
 		//资金统计 end
 
+		//首页广告 start
+		$adArr = get_ad(2);
+		$this->assign('adArr', $adArr);
+		//首页广告 end
+
 		/*
 		//网站公告
 		$parm['type_id'] = 321;
