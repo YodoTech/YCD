@@ -54,12 +54,12 @@ $menu_left[$i][$i."-".$j][] = array('会员资料列表',U('/admin/members/info'
 $menu_left[$i][$i."-".$j][] = array('举报信息',U('/admin/jubao/index'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('认证及申请管理','#',1);
-$menu_left[$i][$i."-".$j][] = array('手机认证会员',U('/admin/verifyphone/index'),1);
+$menu_left[$i][$i."-".$j][] = array('手机认证会员',U('/admin/verify_phone/index'),1);
 if (VERIFY_VIDEO_STATUS) {
-	$menu_left[$i][$i."-".$j][] = array('视频认证申请',U('/admin/verifyvideo/index'),1);
+	$menu_left[$i][$i."-".$j][] = array('视频认证申请',U('/admin/verify_video/index'),1);
 }
 if (VERIFY_FACE_STATUS) {
-	$menu_left[$i][$i."-".$j][] = array('现场认证申请',U('/admin/verifyface/index'),1);
+	$menu_left[$i][$i."-".$j][] = array('现场认证申请',U('/admin/verify_face/index'),1);
 }
 $menu_left[$i][$i."-".$j][] = array('VIP申请管理',U('/admin/vipapply/index'),1);
 $menu_left[$i][$i."-".$j][] = array('会员实名认证申请',U('/admin/memberid/index'),1);
@@ -96,17 +96,17 @@ $menu_left[$i][$i."-".$j][] = array('文章分类',U('/admin/acategory/'),1);
 $i++;
 $menu_left[$i]= array('资金统计','#',1);
 $menu_left[$i]['low_title'][$i."-".$j] = array('会员帐户','#',1);
-$menu_left[$i][$i."-".$j][] = array('会员帐户',U('/admin/capitalAccount/index'),1);
+$menu_left[$i][$i."-".$j][] = array('会员帐户',U('/admin/capital_account/index'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('充值提现','#',1);
-$menu_left[$i][$i."-".$j][] = array('充值记录',U('/admin/capitalOnline/charge'),1);
-$menu_left[$i][$i."-".$j][] = array('提现记录',U('/admin/capitalOnline/withdraw'),1);
+$menu_left[$i][$i."-".$j][] = array('充值记录',U('/admin/capital_online/charge'),1);
+$menu_left[$i][$i."-".$j][] = array('提现记录',U('/admin/capital_online/withdraw'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('会员资金变动记录','#',1);
-$menu_left[$i][$i."-".$j][] = array('资金记录',U('/admin/capitalDetail/index'),1);
+$menu_left[$i][$i."-".$j][] = array('资金记录',U('/admin/capital_detail/index'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('网站资金统计','#',1);
-$menu_left[$i][$i."-".$j][] = array('网站资金统计',U('/admin/capitalAll/index'),1);
+$menu_left[$i][$i."-".$j][] = array('网站资金统计',U('/admin/capital_all/index'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('客服客户统计','#',1);
 $menu_left[$i][$i."-".$j][] = array('客服客户统计',U('/admin/customer/index'),1);
