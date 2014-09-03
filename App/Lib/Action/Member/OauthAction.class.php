@@ -1,9 +1,10 @@
 <?php
 // 本类由系统自动生成，仅供测试用途
 class OauthAction extends MCommonAction {
-	var $notneedlogin=true;
-	var $memberTable = C('DB_PREFIX')."members";
+	var $notneedlogin = true;
+	var $memberTable = '';
 	public function  _MyInit(){
+		$this->memberTable = C('DB_PREFIX').'members';
 		if($this->uid > 0){
 			redirect("/member/");
 			exit;
@@ -16,7 +17,7 @@ class OauthAction extends MCommonAction {
 	//QQ登陆
 	public function qq(){
 		$loginconfig = FS("Webconfig/loginconfig");
-		if($loginconfig['qq']['enable']==0) $this->error("此登陆方式已被暂时关闭，请选择其他方式登陆",__APP__."/");
+		if($loginconfig['qq']['enable']==0) $this->error("此登陆方式已被暂时关闭，请选择其他方式登陆",__APP__.'/member/common/login/');
 		require C("APP_ROOT")."Lib/Oauth/qq2.0/oauth/qq_login.php";
 		qq_login($_SESSION["appid"], $_SESSION["scope"], $_SESSION["callback"]);
 	}
