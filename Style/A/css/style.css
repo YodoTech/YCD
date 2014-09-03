@@ -1,7 +1,7 @@
 @charset "utf-8";
 @import url("public.css");
 /*头部*/
-.header { height:75px;_height:75px; text-align:left; margin:0 auto; background:#2E4C8C url(../images/header_bg.gif) repeat-x 0px bottom; z-index:1; border-bottom:1px solid #142513; position:relative }
+.header { height:75px;_height:75px; text-align:left; margin:0 auto; /*background:#2E4C8C url(../images/header_bg.gif) repeat-x 0px bottom;*/ background-color:#fa6f15; z-index:1; border-bottom:1px solid #142513; position:relative }
 .header .logo { position:absolute; top:0px; left:0px; background: url(../images/logo.png) no-repeat 0px 0px; height:65px; width:200px; }
 .header .logo a { height: 59px; width: 200px; display: block; text-decoration: none; }
 .header .main_nav { position:absolute; bottom:0; left:200px; }
@@ -157,5 +157,5 @@ a.actuator:link, a.actuator:visited, a.actuator:hover, a.actuator:active { color
 .leve_5 .typeson{margin-left:40px}
 .lineD dd span.hidespan,.lineD dd span.proinfo{color:#006600}
 /*------------------*/
-.kuaiJie{position: absolute;top:25px; right:20%; line-height:25px;font-weight:bold; font-size:14px;}
+.kuaiJie{position: absolute;top:35px; right:10px; line-height:25px;font-weight:bold; font-size:14px;}
 .suaxin{float:left;background:url(../images/new/27.png); margin-right:5px; text-align:center;  width:75px; height:25px;}
