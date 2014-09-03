@@ -25,276 +25,47 @@
 	<img style="margin-right: 5px;" src="__ROOT__/Style/H/images/ministar.gif">
 	请输入充值金额（币种：人民币，单位：元）
 </div>
-<if condition="$payConfig['guofubao']['enable'] neq '1' && $payConfig['ips']['enable'] neq '1' && $payConfig['chinabank']['enable'] neq '1' && $payConfig['baofoo']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1' && $payConfig['ecpss']['enable'] neq '1'">
+<if condition="$payConfig['chinabank']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1'">
 <div style="height: 25px; width: 100%; line-height: 25px; text-indent: 26px;
 	text-align: left; margin: 0px; padding: 12px 0px; color:#FF0000;" class="charge2">
 	温馨提示：网站当前尚未开启任何在线支付，敬请期待。
 </div>
 <else/>
-
 <div style="height: 25px; width: 100%; line-height: 25px; text-indent: 26px;
 	text-align: left; margin: 0px; padding: 12px 0px;" class="charge2">
 	温馨提示：最低充值金额50元。充值免手续费！充值资金可用于进行验证、投标、还款等。充值成功后资金会立刻划拨到您的帐户。
 </div>
 </if>
 <!--资金输入-->
-<if condition="$payConfig['guofubao']['enable'] neq '1' && $payConfig['ips']['enable'] neq '1' && $payConfig['chinabank']['enable'] neq '1' && $payConfig['baofoo']['enable'] neq '1' && $payConfig['shengpay']['enable'] neq '1' && $payConfig['shengpay']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1' && $payConfig['ecpss']['enable'] neq '1'">
+<if condition="$payConfig['chinabank']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1'">
 <div style="width: 710px; background-color: #F6F6F6; border: none; margin-left:24px; display:none;" class="charge2_1">
 <else/>
 <div style="width: 710px; background-color: #F6F6F6; border: none; margin-left:24px" class="charge2_1">
 </if>
-<if condition="$payConfig['guofubao']['enable'] eq '1'">
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/gsyh1_b.jpg">
-	<else/>
-		<if condition="$payConfig['ips']['enable'] eq '1'">
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/ips1_b.jpg">
-		<elseif condition="$payConfig['baofoo']['enable'] eq '1'"/>
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/baofoo1_b.jpg">
-		<elseif condition="$payConfig['shengpay']['enable'] eq '1'"/>
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/shengpay1_b.jpg">
-		<elseif condition="$payConfig['tenpay']['enable'] eq '1'"/>
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/tenpay1_b.jpg">
-		<elseif condition="$payConfig['ecpss']['enable'] eq '1'"/>
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/ecpss1_b.jpg">
-		<else/>
-		<img style="width: 221px; height: 70px; float: left;" id="s_selectbank" src="__ROOT__/Style/M/images/bank/chinabank1_b.jpg">
-		</if>
-	</if>
-	<div style="float: left; border: solid #e5e5e5 1px; border-left-width: 0px; height: 68px;
-		width: 488px;">
+	<div style="float: left; border: solid #e5e5e5 1px; border-left-width: 0px; height: 68px; width: 488px;">
 		<div style="float: left; width: 450px;">
 			<div style="height: 35px; line-height: 35px; text-indent: 20px; font-family: 黑体;
 				color: #555555; padding-top: 10px; font-size: 24px;">
 				充值金额<input type="text" class="moneyInput" id="t_money">元
 					<img src="__ROOT__/Style/M/images/bank/fukan.jpg" alt="登录到网银充值" onclick="submitform(this)" style=" cursor:pointer;">	
 			</div>
-		
-	<if condition="$payConfig['guofubao']['enable'] eq '1'">
-		<input type="hidden" value="ICBC" id="pd_bank" name="pd_bank">
-	<else/>
-		<if condition="$payConfig['ips']['enable'] eq '1'">
-		<input type="hidden" value="ips" id="pd_bank" name="pd_bank">
-		<elseif condition="$payConfig['baofoo']['enable'] eq '1'"/>
-		<input type="hidden" value="baofoo" id="pd_bank" name="pd_bank">
-		<elseif condition="$payConfig['shengpay']['enable'] eq '1'"/>
-		<input type="hidden" value="shengpay" id="pd_bank" name="pd_bank">
-		<elseif condition="$payConfig['tenpay']['enable'] eq '1'"/>
-		<input type="hidden" value="tenpay" id="pd_bank" name="pd_bank">
-		<elseif condition="$payConfig['ecpss']['enable'] eq '1'"/>
-		<input type="hidden" value="ecpss" id="pd_bank" name="pd_bank">
-		<else/>
-		<input type="hidden" value="chinabank" id="pd_bank" name="pd_bank">
-		</if>
-	</if>
-			<!--<input type="hidden" value="ICBC" id="pd_bank" name="pd_bank">-->
+			<if condition="$payConfig['tenpay']['enable'] eq '1'">
+				<input type="hidden" value="tenpay" id="pd_bank" name="pd_bank">
+			<else/>
+				<input type="hidden" value="chinabank" id="pd_bank" name="pd_bank">
+			</if>
 			<input type="hidden" value="0" id="pa_MP" name="pa_MP">
 		</div>
 		<div class="errLayer" id="d_money"><div class="charge_wrong"></div></div>
 	</div>
 </div>
-<if condition="$payConfig['guofubao']['enable'] neq '1' && $payConfig['ips']['enable'] neq '1' && $payConfig['chinabank']['enable'] neq '1'  && $payConfig['baofoo']['enable'] neq '1' && $payConfig['shengpay']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1' && $payConfig['ecpss']['enable'] neq '1'">
-<div style="height: auto; border:solid 1px #eee; border-top: none; width:680px; display:none" class="banklist">
+<if condition="$payConfig['chinabank']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1'">
+	<div style="height: auto; border:solid 1px #eee; border-top: none; width:680px; display:none" class="banklist">
 <else/>
-<div style="height: auto; border:solid 1px #eee; border-top: none; width:680px;" class="banklist">
+	<div style="height: auto; border:solid 1px #eee; border-top: none; width:680px;" class="banklist">
 </if>
-<if condition="$payConfig['guofubao']['enable'] eq '1'">
-	
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" checked="checked" class="charge7" onclick="checkbank(this);" data="ICBC" id="r_gsyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="ICBC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="工商银行" id="d_gsyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="工商银行" src="__ROOT__/Style/M/images/bank/gsyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" onclick="checkbank(this);" data="ABC" id="r_nyyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="ABC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="农业银行" id="d_nyyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="农业银行" src="__ROOT__/Style/M/images/bank/nyyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" onclick="checkbank(this);" data="BOC" id="r_zgyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="BOC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="中国银行" id="d_zgyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="中国银行" src="__ROOT__/Style/M/images/bank/zgyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" onclick="checkbank(this);" id="r_jsyh" data="CCB" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CCB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="建设银行" id="d_jsyh" class="charge6">
-				<img alt="建设银行" src="__ROOT__/Style/M/images/bank/jsyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" onclick="checkbank(this);" data="CMB" id="r_zsyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CMB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="招商银行" id="d_zsyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="招商银行" src="__ROOT__/Style/M/images/bank/zsyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" onclick="checkbank(this);" data="BOCOM" id="r_jtyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="BOCOM" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="交通银行" id="d_jtyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="交通银行" src="__ROOT__/Style/M/images/bank/jtyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="PSBC" onclick="checkbank(this);" id="r_ycyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="PSBC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="邮政储蓄" id="d_ycyh" class="charge6">
-				<img alt="邮政储蓄" src="__ROOT__/Style/M/images/bank/ycyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" data="CMBC" class="charge7" onclick="checkbank(this);" id="r_msyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CMBC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="民生银行" id="d_msyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="民生银行" src="__ROOT__/Style/M/images/bank/msyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="GDB" onclick="checkbank(this);" id="r_gfyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="GDB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="广发银行" id="d_gfyh" class="charge6">
-				<img alt="广发银行" src="__ROOT__/Style/M/images/bank/gfyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="SPDB" onclick="checkbank(this);" id="r_pfyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="SPDB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="浦发银行" id="d_pfyh" class="charge6">
-				<img alt="浦发银行" src="__ROOT__/Style/M/images/bank/pfyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="CEB" onclick="checkbank(this);" id="r_gdyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CEB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="光大银行" id="d_gdyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="光大银行" src="__ROOT__/Style/M/images/bank/gdyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="CITIC" onclick="checkbank(this);" id="r_zxyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CITIC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="中信银行" id="d_zxyh" class="charge6">
-				<img alt="中信银行" src="__ROOT__/Style/M/images/bank/zxyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="CIB" onclick="checkbank(this);" id="r_xyyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="CIB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="兴业银行" id="d_xyyh" class="charge6" style="border-color: rgb(204, 204, 204);">
-				<img alt="兴业银行" src="__ROOT__/Style/M/images/bank/xyyh1.jpg">
-			</div>
-		</div>
-		
-	
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="HXBC" onclick="checkbank(this);" id="r_hxyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="HXBC" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="华夏银行" id="d_hxyh" class="charge6">
-				<img alt="华夏银行" src="__ROOT__/Style/M/images/bank/hxyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="PAB" onclick="checkbank(this);" id="r_payh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="PAB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="平安银行" id="d_payh" class="charge6">
-				<img alt="平安银行" src="__ROOT__/Style/M/images/bank/payh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="BOBJ" onclick="checkbank(this);" id="r_bjyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="BOBJ" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="北京银行" id="d_bjyh" class="charge6">
-				<img alt="北京银行" src="__ROOT__/Style/M/images/bank/bjyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="BOS" onclick="checkbank(this);" id="r_shyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="BOS" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="上海银行" id="d_shyh" class="charge6">
-				<img alt="上海银行" src="__ROOT__/Style/M/images/bank/shyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="SRCB" onclick="checkbank(this);" id="r_shnsyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="SRCB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="上海农商银行" id="d_shnsyh" class="charge6">
-				<img alt="上海农商银行" src="__ROOT__/Style/M/images/bank/shnsyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="SDB" onclick="checkbank(this);" id="r_szyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="SDB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="深圳发展银行" id="d_szyh" class="charge6">
-				<img alt="深圳发展银行" src="__ROOT__/Style/M/images/bank/szyh1.jpg">
-			</div>
-		</div>
-		
-		<div class="charge4">
-			<div class="charge5">
-				<input type="radio" class="charge7" data="TCCB" onclick="checkbank(this);" id="r_tjyh" name="mybank">
-			</div>
-			<div onmouseout="this.style.borderColor='#cccccc'" data="TCCB" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="天津银行" id="d_tjyh" class="charge6">
-				<img alt="天津银行" src="__ROOT__/Style/M/images/bank/tjyh1.jpg">
-			</div>
-		</div>
-	<else/>
-	</if>
 	<div style="clear:both;"></div>
     <hr style="clear:both; margin-top:20px" />
-    <if condition="$payConfig['ips']['enable'] eq '1'">
-    <div class="charge4">
-        <div class="charge5">
-            <input type="radio" class="charge7" data="ips" onclick="checkbank(this);" id="r_ips" name="mybank">
-        </div>
-        <div onmouseout="this.style.borderColor='#cccccc'" data="ips" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="环迅支付" id="d_ips" class="charge6">
-            <img alt="环迅支付" src="__ROOT__/Style/M/images/bank/ips.jpg" height="36px">
-        </div>
-    </div>
-	<else/>
-	</if>
-	
 	<if condition="$payConfig['chinabank']['enable'] eq '1'">
     <div class="charge4">
         <div class="charge5">
@@ -307,32 +78,8 @@
 	<else/>
 	</if>
 	
-	<if condition="$payConfig['baofoo']['enable'] eq '1'">
-    <div class="charge4">
-        <div class="charge5">
-            <input type="radio" class="charge7" data="baofoo" onclick="checkbank(this);" id="r_baofoo" name="mybank">
-        </div>
-        <div onmouseout="this.style.borderColor='#cccccc'" data="baofoo" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="宝付" id="d_baofoo" class="charge6">
-           <img alt="宝付" src="__ROOT__/Style/M/images/bank/baofoo.jpg" height="36px">
-        </div>
-    </div>
-	<else/>
-	</if>
-	
-	<if condition="$payConfig['shengpay']['enable'] eq '1'">
-    <div class="charge4">
-        <div class="charge5">
-            <input type="radio" class="charge7" data="shengpay" onclick="checkbank(this);" id="r_shengpay" name="mybank">
-        </div>
-        <div onmouseout="this.style.borderColor='#cccccc'" data="shengpay" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="盛付通" id="d_shengpay" class="charge6">
-           <img alt="盛付通" src="__ROOT__/Style/M/images/bank/shengpay.jpg" height="36px">
-        </div>
-    </div>
-	<else/>
-	</if>
-	
 	<if condition="$payConfig['tenpay']['enable'] eq '1'">
-     <div class="charge4">
+    <div class="charge4">
         <div class="charge5">
             <input type="radio" class="charge7" data="tenpay" onclick="checkbank(this);" id="r_tenpay" name="mybank">
         </div>
@@ -342,18 +89,7 @@
     </div>
 	<else/>
 	</if>
-	
-	<if condition="$payConfig['ecpss']['enable'] eq '1'">
-     <div class="charge4">
-        <div class="charge5">
-            <input type="radio" class="charge7" data="ecpss" onclick="checkbank(this);" id="r_ecpss" name="mybank">
-        </div>
-        <div onmouseout="this.style.borderColor='#cccccc'" data="ecpss" onmouseover="this.style.borderColor='#FF9933';this.style.cursor='hand' " onclick="checkbank(this);" title="汇潮支付" id="d_ecpss" class="charge6">
-            <img alt="汇潮支付" src="__ROOT__/Style/M/images/bank/ecpss.jpg" height="36px">
-        </div>
-    </div>
-	<else/>
-	</if>
+
 	<div style="clear:both;"></div>
 </div>
 <div style="text-align:left; margin:auto; width:710px; margin-top:10px; color:#999; line-height:180%; ">

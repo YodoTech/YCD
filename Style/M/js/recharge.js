@@ -22,13 +22,8 @@ function submitform_gopay(ctrl, bankCode) {
         var url = "bankCode=" + bankCode;
         url += "&t_money=" + tranAmt;
 		if(1==2&&bankCode=='CCB') window.open("/Pay/ccb?" + url);
-		else if(bankCode=='ips') window.open("/Pay/ips?" + url);
-		else if(bankCode=='chinabank') window.open("/Pay/chinabank?" + url);
-		else if(bankCode=='baofoo') window.open("/Pay/baofoo?" + url);
-		else if(bankCode=='shengpay') window.open("/Pay/shengpay?" + url);
 		else if(bankCode=='tenpay') window.open("/Pay/tenpay?" + url);
-		else if(bankCode=='ecpss') window.open("/Pay/ecpss?" + url);
-		else window.open("/Pay/guofubaopay?" + url);
+		else window.open("/Pay/chinabank?" + url);
         //Open_Dialog();
     }
 }
@@ -39,8 +34,9 @@ function submitform_credit(ctrl) {
     var pd_bank = $("#pd_bank").val();
     var pa_MP = $("#pa_MP").val();
 
-    //gsyh,nyyh,zgyh,jsyh,zsyh,jtyh,ycyh,msyh,gfyh,pfyh,zxyh,xyyh,hxyh
-    if (("ecpss,ips,chinabank,gsyh,zgyh,jsyh,zsyh,jtyh,ycyh,msyh,gfyh,sfzyh,pfyh,gdyh,zxyh,xyyh,payh,bjyh,shyh,zhesyh,nbyh,njyh,hxyh,bhyh,shns").indexOf(pd_bank) >= 0) {
+    //gsyh(工商银行),zgyh(中国银行),jsyh(建设银行),zsyh(招商银行),jtyh(交通银行),ycyh(邮政储蓄),msyh(民生银行),gfyh(广发银行)
+    //gdyh(光大银行),zxyh(中信银行),xyyh(兴业银行),payh(平安银行),hxyh(华夏银行),nyyh(农业银行)
+    if (("chinabank,gsyh,zgyh,jsyh,zsyh,jtyh,ycyh,msyh,gfyh,gdyh,zxyh,xyyh,payh,hxyh,nyyh").indexOf(pd_bank) >= 0) {
         submitform_gopay(ctrl, pd_bank, pa_MP, 1);
         return;
     }
@@ -73,26 +69,6 @@ function submitform_yeepay(ctrl, pd_bank, pa_MP, credit) {
 
     }
 }
-
-
-function submitform_shengpay(ctrl, bankCode, userId) {
-
-
-    if (BlurMoney()) {
-
-        var tranAmt = $("#t_money").val();
-
-        var url = "bankCode=" + bankCode;
-        url += "&amount=" + tranAmt;
-        url += "&userId=" + userId;
-
-        window.open("/pay/shengpay/pay.aspx?" + url);
-        Open_Dialog();
-
-    }
-}
-
-
 
 var arrBox = new Array();
 arrBox["d_money"] = "<img style='margin:2px;' src='"+Himg+"images/zhuce1.gif'/>&nbsp;请输入正确的金额，最小充值金额50元。";

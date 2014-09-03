@@ -11,13 +11,8 @@ class PayonlineAction extends ACommonAction
     {
 		$payconfig = FS("Webconfig/payconfig");
 
-		$this->assign('guofubao_config',$payconfig['guofubao']);
-		$this->assign('ips_config',$payconfig['ips']);
 		$this->assign('chinabank_config',$payconfig['chinabank']);
-		$this->assign('baofoo_config', $payconfig['baofoo']);
-		$this->assign('shengpay_config', $payconfig['shengpay']);
 		$this->assign('tenpay_config', $payconfig['tenpay']);
-		$this->assign('ecpss_config', $payconfig['ecpss']);
         $this->display();
     }
     public function save()

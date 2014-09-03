@@ -70,7 +70,7 @@ class CapitalOnlineAction extends ACommonAction
 		$field= 'p.*,m.user_name';
 		$list = M('member_payonline p')->field($field)->join("{$this->pre}members m ON p.uid=m.id")->where($map)->limit($Lsql)->order("p.id DESC")->select();
 		
-        $this->assign("way", array('off'=>'线下充值','gfb'=>'国付宝','ips'=>'环迅支付','chinabank'=>'网银在线','baofoo'=>'宝付','shengpay'=>'盛付通','tenpay'=>'财付通'));
+        $this->assign("way", array('off'=>'线下充值','chinabank'=>'网银在线','tenpay'=>'财付通'));
         $this->assign("bj", array("gt"=>'大于',"eq"=>'等于',"lt"=>'小于'));
         $this->assign("list", $list);
 		$this->assign("status",C('PAYLOG_TYPE'));

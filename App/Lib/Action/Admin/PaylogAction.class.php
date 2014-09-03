@@ -127,7 +127,7 @@ class PaylogAction extends ACommonAction
 	
 	public function _listFilter($list){
 	 	$listType = C('PAYLOG_TYPE');
-	 	$payType = array('off'=>'线下充值','gfb'=>'国付宝','ips'=>'环迅支付','chinabank'=>'网银在线','baofoo'=>'宝付','shengpay'=>'盛付通','tenpay'=>'财付通','ecpss'=>'汇潮支付');
+	 	$payType = array('off'=>'线下充值','chinabank'=>'网银在线','tenpay'=>'财付通');
 		$this->assign("payType",$payType);
 		$row=array();
 		foreach($list as $key=>$v){
@@ -191,7 +191,7 @@ class PaylogAction extends ACommonAction
 		$listType[-1]="不限制";
 		$this->assign('type_list',$listType);
 		$field= 'id,uid,status,money,add_time,tran_id,way,off_bank,off_way,deal_user';
-		$map['way']=array("in",'gfb,ips,chinabank,baofoo,shengpay,tenpay');
+		$map['way']=array("in",'chinabank,tenpay');
 		$this->_list(D('Paylog'),$field,$map,'id','DESC',$xtime);
         $this->display();
     }
