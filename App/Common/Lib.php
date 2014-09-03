@@ -2840,7 +2840,9 @@ function memberCreditsLog($uid, $type, $acredits, $info = "无")
     $data['add_time'] = time();
     $data['add_ip'] = get_client_ip();
     $newid = $Creditslog->add($data);
-    $xid = m("members")->where("id={$uid}")->setField("credits", $data['account_credits']);
+    if ($newid) {
+        $xid = m("members")->where("id={$uid}")->setField("credits", $data['account_credits']);
+    }
     if ($xid) {
         $Creditslog->commit();
         $done = true;
