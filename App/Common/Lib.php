@@ -3688,7 +3688,36 @@ function setBackUrl($per = "", $suf = "")
     session("listaction", $query);
 }
 
+//---------- modify in 2014 ----------
+//通过"奖品ID"获取"奖品名称"
+function get_prize_name($id)
+{
+    $stype = "prizelist";
+    $list = array();
+    if (!s($stype)) {
+        $rule = m("prize")->field("id,prize_name")->select();
+        foreach ($rule as $v) {
+            $list[$v['id']] = $v['prize_name'];
+        }
+        s($stype, $list, 3600 * c("ADMIN_CACHE_TIME"));
+        if (!$id) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    } else {
+        $list = s($stype);
+        if ($id === false) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    }
+    return $row;
+}
 
+
+//数据操作类
 class MY_FUNC {
     /*
      * 获取整数值

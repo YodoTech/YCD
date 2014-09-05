@@ -226,23 +226,26 @@ class ACommonAction extends Action
 
 	//删除数据
 	public function doDel(){
-        $model = D(ucfirst($this->getActionName()));
-        if (!empty($model)) {
-			$id = $_REQUEST['idarr'];
-            if (isset($id)) {
+    $model = D(ucfirst($this->getActionName()));
+    if (!empty($model)) {
+	    $id = $_REQUEST['idarr'];
+      if (isset($id)) {
 				if (method_exists($this, '_doDelFilter')) {
 					$this->_doDelFilter($id);
 				}
 				$pk = $model->getPk();
 				if (false !== $model->where("{$pk} in ({$id})")->delete()) {
+          if (method_exists($this, '_AfterDoDel')) {
+            $this->_AfterDoDel();
+          }
 					$this->success(L('删除成功'),'',$id);
 				} else {
 					$this->error(L('删除失败'));
 				}
-            } else {
-                $this->error('非法操作');
-            }
-        }
+      } else {
+          $this->error('非法操作');
+      }
+    }
 	}
 	
 	public function memberheaderuplad(){

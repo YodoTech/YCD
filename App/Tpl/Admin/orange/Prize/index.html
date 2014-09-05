@@ -1,0 +1,62 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<script type="text/javascript">
+var delUrl = '__URL__/doDel';
+var addUrl = '__URL__/add';
+var addTitle = '添加奖品';
+</script>
+<div class="so_main">
+  <div class="page_tit">奖品列表</div>
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="href" action="__URL__/add" value="添加奖品" />
+    <htmlA:commonBtn type="jsfun" action="del();" value="删除奖品" />
+  </div>
+  
+  <div class="list">
+    <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th style="width:30px;">
+        <input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+        <label for="checkbox"></label>
+      </th>
+      <th class="line_l">ID</th>
+      <th class="line_l">奖品名称</th>
+      <th class="line_l">奖品图片</th>
+      <th class="line_l">所需积分</th>
+      <th class="line_l">累计兑换数量</th>
+      <th class="line_l">是否启用</th>
+      <th class="line_l">操作</th>
+    </tr>
+    <volist id="vo" name="list">
+      <php>$vo['prize_img'] = array_shift(unserialize($vo['prize_img']));</php>
+      <tr overstyle='on' id="list_{$vo.id}">
+        <td><input type="checkbox" name="checkbox" id="checkbox2" onclick="checkon(this)" value="{$vo.id}"></td>
+        <td>{$vo.id}</td>
+        <td>{$vo.prize_name}</td>
+        <td><a href="__ROOT__/{$vo.prize_img.img}" target="_blank">查看</a></td>
+        <td>{$vo.need_credits}</td>
+        <td>{$vo.cumulate_num}</td>
+        <td>
+          <if condition="$vo.is_used eq 0">
+            <span style="color:red;">已停用</span>
+          <elseif condition="$vo.is_used eq 1"/>
+            <span style="color:#00CC00;">已启用</span>
+          </if>
+        </td>
+        <td>
+          <a href="__URL__/edit?id={$vo['id']}">编辑</a>&nbsp;
+          <a href="javascript:void(0);" onclick="del({$vo['id']});">删除</a>
+        </td>
+      </tr>
+    </volist>
+    </table>
+  </div>
+  
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="href" action="__URL__/add" value="添加奖品"/>
+    <htmlA:commonBtn type="jsfun" action="del();" value="删除奖品" />
+  </div>
+</div>
+<include file="Public:_footer" />

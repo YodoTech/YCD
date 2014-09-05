@@ -1,0 +1,63 @@
+<include file="Public:_header_common" />
+<title>积分兑换 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<script>
+$(function() {
+    $('.btn2').on('click', function() {
+        var _this = $(this);
+        var id = _this.attr('rel');
+        $.jBox.tip('加载中...', 'loading');
+        $.post('__URL__/ajax_convert', {id:id}, function(d) {
+            $.jBox.closeTip();
+            if(d.status) {
+                $.jBox(d.content, {
+                    title: '积分兑换',
+                    width: 'auto',
+                    buttons: {'取消': true}
+                });
+            } else {
+                $.jBox.error(d.message, '提示');
+            }
+        },'json');
+        return false;
+    });
+});
+</script>
+<include file="Public:_header_main" />
+<!--中部开始-->
+<div class="nyconter">
+    <if condition="$UID gt 0">
+    <else/>
+    <div class="zhiyinul3 mt10">
+        <span class="fn-left mt10 pt10">您还未登录，请先&nbsp;</span><span class="btn fn-left"><a class="w130" style="margin:10px 0 0 10px;" href="__APP__/member/common/login?redirect_uri=__APP__/prize/">登录</a></span>
+    </div>
+    </if>
+    <ul class="licai2_3 fn-clear">
+        <volist name="list" id="vb">
+        <li>
+            <p class="jdt_bg"><img src="__ROOT__/{$vb.prize_img.img|get_thumb_pic=###}" title="{$vb.prize_img.info}" /></p>
+            <h4 title="{$vb.prize_name}">{$vb.prize_name}</h4>
+            <p>兑换条件：{$vb.need_credits}&nbsp;积分</p>
+            <p class="fn-clear">已成功兑换&nbsp;{$vb.cumulate_num}&nbsp;份</p>
+            <p class="btn"><a href="javascript:;" class="btn2" rel="{$vb.id}">我要兑换</a></p>
+        </li>
+        </volist>
+    </ul>
+    <div class="nybt">积分兑换制度</div>
+    <div class="zhiyinul3">
+        <h2>积分获取方法</h2>
+        <p>1、投资人充值后，每投资一个自然标的投资金额*自然标的有效期/100为实际有效积分 （注意：积分是通过投资后所产生的，而充值并不能带来积分)</p>
+        <p>2、钱多多平台也会不定期推出活动，参加此类活动也可获得积分，欢迎广大投资人时刻关注</p>
+        <h2>积分的使用与兑换</h2>
+        <p>1、累计的积分可以在积分区兑换礼品，兑换成功后于15个工作日内寄出。</p>
+        <p>2、积分可以参加钱多多平台上特定的活动，如积分抽奖等</p>
+        <h2>积分注意事项</h2>
+        <p>1、非实名绑定用户不享受积分。</p>
+        <p>2、如查实非法信用卡多次恶意套现投资等行为积分自动清零。</p>
+        <p>3、积分有效期: 账号有效期内永久有效</p>
+        <p>4、积分兑换的礼品以实物为准</p>
+        <p>5、最终解释权归钱多多平台所有</p>
+    </div>
+</div>
+<include file="Public:_footer" />

@@ -140,7 +140,13 @@ function LoginSubmit(ctrl) {
 				if(d.status==0){
 					$.jBox.tip(d.message,"tip");	
 				}else{
-					window.location.href="/member/";
+                    var redirect_uri = $('#redirect_uri').val();
+                    if (redirect_uri=='') {
+                        redirect_uri = '/member/';
+                    } else {
+                        redirect_uri = decodeURIComponent(redirect_uri);
+                    }
+                    window.location.href=redirect_uri;
 				}
 			}
 		}

@@ -1,0 +1,10 @@
+以下目录需要写权限:
+(1)应用缓存
+/App/Runtime/
+(2)头像上传
+/Style/header/customavatars/
+/Style/header/tempUpload/
+(3)文件上传
+/UF/Uploads/
+(4)后台配置
+/Webconfig/

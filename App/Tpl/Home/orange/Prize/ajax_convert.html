@@ -1,0 +1,57 @@
+<style type="text/css">
+.pop-tb-con{padding-top:0px}.mar20{margin:20px 0px}.pop-tb-l{border-bottom:#e5e5e5 0px solid;border-left:#e5e5e5 0px solid;width:198px;float:left;height:260px;border-top:#e5e5e5 0px solid;border-right:#e5e5e5 1px solid;padding-top:10px}.pop-tb-l ul li{line-height:30px;width:100%;text-align:center;}.pop-tb-r{padding-left:20px;width:400px;float:right;padding-top:10px}.pop-tb-r ul li{line-height:30px;height:30px;float:none;}
+</style>
+<script>
+function doConvert() {
+	$.jBox.tip('加载中...', 'loading');
+	$.ajax({
+		url: '__URL__/convert',
+		type: 'POST',
+		dataType: 'json',
+		data: $('#convertForm').serializeArray(),
+		success: function(d) {
+			if(d.status) {
+                $.jBox.success(d.message, '提示');
+                window.location.reload();
+            } else {
+                $.jBox.error(d.message, '提示');
+            }
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.jBox.error(textStatus, '提示');
+		}
+	}).always(function() {
+		$.jBox.closeTip();
+	});
+	return false;
+}
+</script>
+<div class="pop-tb-con clearfix">
+	<div class="pop-tb-l">
+		<ul>
+			<li><img src="__ROOT__/{$vo.prize_img.img|get_thumb_pic=###}" title="{$vo.prize_img.info}" /></li>
+			<li><h2>{$vo.prize_name}</h2></li>
+			<li>
+				兑换条件：&nbsp;{$vo.need_credits}&nbsp;积分
+			</li>
+		</ul>
+	</div>
+	<div class="pop-tb-r">
+		<form method="post" id="convertForm" action="#">
+			<input type="hidden" name="id" value="{$vo.id}" />
+			<input type="hidden" name="cookieKey" value="{$cookieKey}" />
+			<ul>
+				<li>
+					您的可用积分：&nbsp;{$vm['credits'] - $vl['cumulate_cost']}
+				</li>
+			</ul>
+			<p>
+				<span class="btn"><a href="javascript:;" onclick="doConvert()" class="w130">确认兑换</a></span>
+			</p>
+			<p>&nbsp;</p>
+			<p class="red">
+				注意：兑换成功后客服人员会及时与您取得联系
+			</p>
+		</form>
+	</div>
+</div>

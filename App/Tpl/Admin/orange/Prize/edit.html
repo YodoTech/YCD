@@ -1,0 +1,135 @@
+<include file="Public:_header" />
+<link href="__ROOT__/Style/Swfupload/swfupload.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/swfupload.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/plugins/swfupload.queue.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Swfupload/handlers.js"></script>
+<script type="text/javascript">
+$(function() {
+	//swf上传图片
+	swfu = new SWFUpload({
+		// Backend Settings
+		upload_url: "__URL__/swfupload",
+		post_params: {"PHPSESSID": "<php> echo session_id(); </php>", "dopost" : ""},
+
+		// File Upload Settings
+		file_size_limit : "2 MB",	// 2MB
+		file_types : "*.jpg; *.gif; *.png",
+		file_types_description : "选择 JPEG/GIF/PNG 格式图片",
+		file_upload_limit : 1,
+
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		button_image_url : "../images/SmallSpyGlassWithTransperancy_17x18.png",
+		button_placeholder_id : "spanButtonPlaceholder",
+		button_width: 250,
+		button_height: 18,
+		button_text : '<span class="button">选择本地图片 <span class="buttonSmall">(单图最大为 2 MB)</span></span>',
+		button_text_style : '.button { font-family: "宋体", sans-serif; font-size: 12px; } .buttonSmall { font-size: 10pt; }',
+		button_text_top_padding: 0,
+		button_text_left_padding: 18,
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_cursor: SWFUpload.CURSOR.HAND,
+		
+		// Flash Settings
+		flash_url : "__ROOT__/Style/Swfupload/swfupload.swf",
+
+		custom_settings : {
+			upload_target : "divFileProgressContainer"
+		},
+		
+		// Debug Settings
+		debug: false
+	});
+	//swf上传图片
+
+	//初始化操作
+	setTimeout(function() {
+		var stats = swfu.getStats();
+		stats.successful_uploads++;
+		swfu.setStats(stats);
+	}, 1000);
+});
+function rightPic(o) {return false;}
+function leftPic(o) {return false;}
+//swf上传后删除图片start
+function delPic(id) {
+	var imgpath = $("#albCtok"+id).find("input[type='hidden']").eq(0).val();
+	var datas = {'picpath':imgpath,'oid':id};
+	$.post("__URL__/swfupload?delpic", datas, picdelResponse,'json');
+}
+
+function picdelResponse(res) {
+	var imgdiv = $("#albCtok"+res.data);
+	imgdiv.remove();
+	ui.success(res.info);
+	ui.box.close();
+}
+//swf上传后删除图片end
+function subcheck() {
+	var prize_name = $.trim($('#prize_name').val());
+	var imglen = $(':hidden[name="swfimglist[]"]').length;
+	var need_credits = parseInt($('#need_credits').val());
+	if (prize_name == '') {
+		ui.error('请填写奖品名称!');return false;
+	}
+	if (imglen != 1) {
+		ui.error('请上传奖品图片!');return false;
+	}
+	if (isNaN(need_credits)) {
+		ui.error('请填写所需积分!');return false;
+	}
+	return true;
+}
+</script>
+<tagLib name="htmlA" />
+<div class="so_main">
+	<div class="page_tit">修改奖品</div>
+	<div class="form2">
+		<form method="post" action="__URL__/doEdit" onsubmit="return subcheck();">
+			<input type="hidden" name="id" value="{$vo.id}" />
+			<dl class="lineD"><dt>奖品名称：</dt><dd><htmlA:input id="prize_name" value="{$vo.prize_name}" tip="*"/></dd></dl>
+			<dl class="lineD"><dt>奖品图片：</dt>
+				<dd>
+					<!-- img start -->
+					<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;"><span id="spanButtonPlaceholder"></span></div>
+					<!-- img end -->
+				</dd>
+			</dl>
+			<dl class="lineD"><dt>图片预览：</dt>
+				<dd>
+					<table cellpadding="0" cellspacing="0" width="100%">
+				    <tr id="handfield">
+				        <td colspan="4" class="bline">
+				       	<table width='100%' height='160' style="margin:0 0 20px 0">
+				       		<tr>
+				       			<td>
+				       				<div id="divFileProgressContainer" style="height:75px;"></div>
+							 		<div id="thumbnails">
+										<php>$x=1000;$imglist=unserialize($vo['prize_img']);foreach($imglist as $v){ $x--;</php>
+										<div class="albCt" id="albCtok<php>echo $x;</php>">
+										<img width="120" height="120" src="__ROOT__/<php>echo get_thumb_pic($v['img']);</php>"><a onclick="javascript:delPic(<php>echo $x;</php>)" href="javascript:;">[删除]</a><a onclick="javascript:leftPic(<php>echo $x;</php>)" href="javascript:;">[前移]</a><a onclick="javascript:rightPic(<php>echo $x;</php>)" href="javascript:;">[后移]</a><div style="margin-top:10px">注释：<input type="text" style="width:190px;" value="<php>echo $v['info'];</php>" name="picinfo[]"><input type="hidden" value="__ROOT__/<php>echo $v['img'];</php>" name="swfimglist[]"></div>
+										</div>
+										<php>}unset($imglist);</php>
+							 		</div>
+								</td>
+							</tr>
+						</table>
+				        </td>
+				    </tr>
+					</table>
+				</dd>
+			</dl>
+			<dl class="lineD"><dt>所需积分：</dt><dd><htmlA:input id="need_credits" value="{$vo.need_credits}" tip="*"/></dd></dl>
+			<dl class="lineD"><dt>是否启用：</dt><dd><htmlA:radio id="is_used" default="1|是,0|否" value="key|vo.is_used" /></dd></dl>
+			<div class="page_btm">
+				<input type="submit" class="btn_b" value="确定" />
+			</div>
+		</form>
+	</div>
+</div>
+<include file="Public:_footer" />

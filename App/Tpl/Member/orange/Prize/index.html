@@ -1,0 +1,31 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>积分兑换 - 会员中心 - {$glo.web_name}</title>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/member/">会员中心</a>&nbsp;>&nbsp;积分兑换</div>
+    <div class="gywm fn-clear">
+        <div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx33 fn-clear">
+                <div class="hyxx33_1">
+                    <p><span class="btn"><a href="__APP__/prize/" class="w130">我要兑换</a></span></p>
+                </div>
+            </div>
+            <div class="hyxx30">
+                <div id="rotate">
+                    <ul class="ajaxdata hyxx30ul fn-clear">
+                        <li><a href="#fragment-1" ajax_href="__URL__/log/">兑换记录</a></li>
+                    </ul>
+                </div>
+                <div class="hyxx31">
+                    <div class="fn-clear" id="fragment-1" style="display:none">
+                        <!--兑换记录-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />

@@ -68,7 +68,11 @@ $menu_left[$i][$i."-".$j][] = array('上传资料管理',U('/admin/memberdata/in
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('留言管理','#',1);
 $menu_left[$i][$i."-".$j][] = array('留言列表',U('/admin/feedback/index'),1);
-
+//积分兑换管理
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('积分兑换管理','#',1);
+$menu_left[$i][$i."-".$j][] = array('奖品列表',U('/admin/prize/index'),1);
+$menu_left[$i][$i."-".$j][] = array('兑换日志',U('/admin/prize/log'),1);
 
 $i++;
 $menu_left[$i]= array('充值提现','#',1);

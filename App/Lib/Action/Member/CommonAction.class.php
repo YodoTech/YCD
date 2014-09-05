@@ -6,11 +6,14 @@ class CommonAction extends MCommonAction {
 		$this->display();
     }
 	
-    public function login(){
+    public function login() {
+    	$redirect_uri = urlencode($_GET['redirect_uri']);
+    	$this->assign('redirect_uri', $redirect_uri);
+    	
 		$this->display();
     }
 	
-    public function register(){
+    public function register() {
 		if($_GET['invite']){
 			//$uidx = M('members')->getFieldByUserName(text($_GET['invite']),'id');
 			//if($uidx>0) session("tmp_invite_user",$uidx);
@@ -30,7 +33,7 @@ class CommonAction extends MCommonAction {
     	}
     }
 	
-	private function actlogin_bak(){
+	private function actlogin_bak() {
 		(false!==strpos($_POST['sUserName'],"@"))?$data['user_email'] = text($_POST['sUserName']):$data['user_name'] = text($_POST['sUserName']);
 		$vo = M('members')->field('id,user_name,user_email,user_pass')->where($data)->find();
 		if($vo){
@@ -40,7 +43,6 @@ class CommonAction extends MCommonAction {
 			ajaxmsg("用户名不存在",0);	
 		}
 	}
-	
 	
 	public function actlogin(){
 		setcookie('LoginCookie','',time()-10*60,"/");

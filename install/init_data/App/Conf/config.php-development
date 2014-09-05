@@ -55,7 +55,7 @@ return array(
 		'/^([a-zA-z]+)\/([a-zA-z]+)\/(\d+).html$/' => 'Home/help/view?id=:3',//文章内容页
 		'/^aaa\/sss.html$/' => 'Admin/index/login/',//后台路径
 	),
-	'SYS_URL'	=>array('admin','borrow','member','invest','donate','tool','feedback','service','bid','guide'),
+	'SYS_URL'	=>array('admin','borrow','member','invest','donate','tool','feedback','service','bid','guide', 'prize'),
 	'EXC_URL'	=>array('invest/tool/index.html','borrow/tool/index.html','borrow/tool/tool2.html','borrow/tool/tool2.html'),
 	//友情链接
     'FRIEND_LINK'=>array(
