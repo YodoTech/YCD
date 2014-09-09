@@ -1,11 +1,25 @@
 <include file="orange:Public:_header_common" group="Home" />
 <title>新用户注册-- {$glo.web_name}</title>
-
 <script type="text/javascript">
 var imgpath="__ROOT__/Style/M/";
 var curpath="__URL__";
 </script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/M/reg.js"></script>
+<style>
+.zhuceym3R ul.pwdStrong { width: 306px; margin: 0; padding: 0;}
+.zhuceym3R ul.pwdStrong li { padding: 13px 0; text-align: center;}
+.zhuceym3R ul.pwdStrong li#strength_L { width: 33%;}
+.zhuceym3R ul.pwdStrong li#strength_M { width: 34%;}
+.zhuceym3R ul.pwdStrong li#strength_H { width: 33%;}
+</style>
+<script>
+$(function() {
+    $('#txtPwd').on('keyup blur', function() {
+        pwStrength($(this).val());
+    });
+    pwStrength($('#txtPwd').val());
+});
+</script>
 <include file="orange:Public:_header_main" group="Home"/>
 <!--中部开始-->
 <div class="nyconter">
@@ -49,6 +63,16 @@ var curpath="__URL__";
                 <span><input id="txtPwd" name="txtPwd" type="password" /></span>
             </li>
             <li id="dvPwd"></li>
+        </ul>
+        <ul class="fn-clear">
+            <li class="zhuceym3L fn-left">密码强度</li>
+            <li class="zhuceym3R no-border fn-left">
+                <ul class="pwdStrong fn-clear">
+                    <li id="strength_L">弱</li>
+                    <li id="strength_M">中</li>
+                    <li id="strength_H">强</li>
+                </ul>
+            </li>
         </ul>
         <ul class="fn-clear">
             <li class="zhuceym3L fn-left"><span>*</span>重复密码</li>

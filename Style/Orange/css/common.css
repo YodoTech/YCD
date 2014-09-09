@@ -76,7 +76,7 @@ a:hover{ text-decoration:underline;}
 img{ margin:0; padding:0; border:none;}
 p,div,span{ margin:0; padding:0;}
 /*网站头部样式*/
-header{ position: relative; z-index: 99999; -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .2); -webkit-border-shadow: 0 1px 4px rgba(0, 0, 0, .2); box-shadow: 0 1px 4px rgba(0, 0, 0, .2);}
+header{ position: relative; z-index: 1000; -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .2); -webkit-border-shadow: 0 1px 4px rgba(0, 0, 0, .2); box-shadow: 0 1px 4px rgba(0, 0, 0, .2);}
 .topnav{ height:24px; margin:0; padding:0; background:#2f3032; font-size:12px; line-height:24px;}
 .topnav ul{ width:1170px; margin:0 auto; padding:0; background:#2f3032;}
 .topnav ul li{ color:#fff; float:right; padding:0 4px; text-decoration:none;}

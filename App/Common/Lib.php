@@ -1458,11 +1458,16 @@ function notice($type, $uid, $data = array())
         $smtp->SMTPAuth = true;// Enable SMTP authentication
         $smtp->Username = $msgconfig['stmp']['user'];// SMTP username
         $smtp->Password = $msgconfig['stmp']['pass'];// SMTP password
-        $smtp->SMTPSecure = 'tls';// Enable encryption, 'ssl' also accepted
+        if (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" || $_SERVER["HTTPS"] == "") {
+            $smtp->SMTPSecure = 'tls';// Enable encryption, 'ssl' also accepted
+        } else {
+            $smtp->SMTPSecure = 'ssl';// Enable encryption, 'ssl' also accepted
+        }
 
         $smtp->From = $msgconfig['stmp']['user'];
         $smtp->FromName = $datag['web_name'];
         
+        $stmp->CharSet = 'utf-8';
         $smtp->isHTML(true);// Set email format to HTML
     } else {
         import("ORG.Net.Email");

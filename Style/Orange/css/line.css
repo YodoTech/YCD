@@ -1,0 +1,51 @@
+#onService_panel{position:fixed; width:100px; right:-102px; top:30%;_position:absolute; _top:expression(eval(document.documentElement.scrollTop + 150)); z-index:99999; color:#000;font-size:12px;}
+#onService_panel dd, #onService_panel dl {margin:0;padding:0;}
+
+.line_boxs .boxs_t_l,.line_boxs .boxs_t_r,.line_boxs .boxs_b_l,.line_boxs .boxs_b_r,#lineList .line_open,#lineList .line_close,#lineList small,#lineMessage .submitBut{background-image: url(../images/line/online_service.png); background-repeat:no-repeat; }
+
+/*--在线公用盒子样式--*/
+.line_boxs .boxs_t_l,.line_boxs .boxs_t_r,.line_boxs .boxs_b_l,.line_boxs .boxs_b_r{display:block; width:10px; height:10px; position:absolute;}
+.line_boxs .boxs_t_m,.line_boxs .boxs_b_m{background-image: url(../images/line/service_panel_bg_top_b.png); background-repeat:repeat-x; margin:0px 9px; height:10px; display:block;}
+.line_boxs .boxs_t,.line_boxs .boxs_b{height:10px; position:relative; overflow:hidden;}
+.line_boxs .boxs_t_l,.line_boxs .boxs_b_l{left:0px; top:0px;}
+.line_boxs .boxs_t_l{background-position:-79px -39px;}
+.line_boxs .boxs_t_r{background-position:-89px -39px;}
+.line_boxs .boxs_t_r,.line_boxs .boxs_b_r{right:0px; top:0px;}
+.line_boxs .boxs_b_l{background-position:-79px -49px;}
+.line_boxs .boxs_b_r{background-position:-89px -49px;}
+.line_boxs .boxs_t_m{background-position:0px 0px;}
+.line_boxs .boxs_b_m{background-position:0px -10px;}
+.line_boxs .boxs_m_l,.line_boxs .boxs_m_r{background-image: url(../images/line/service_panel_bg_left_b.png); background-repeat:repeat-y;}
+.line_boxs .boxs_m_l{background-position:left 0; padding-left:10px; }
+.line_boxs .boxs_m_r{ background-position:right 0; padding-right:10px;}
+.line_boxs .box_m_m{background-color:#f1f1f1; min-height:10px; _height:10px;}
+/*---在线客服内部样式---*/	
+#lineList{padding:20px 1px 1px; position:relative; z-index:1;}
+/*--在线客服打开关闭按钮--*/
+#lineList .line_open{width:35px; height:146px; background-position:0 -39px; position:absolute; left:-45px; top:35%; overflow:hidden;cursor:pointer; }
+#lineList .line_open_en{background-position:0 -239px;}
+#lineList .line_open_f{background-position:0 -390px;}
+#lineList .line_open:hover{background-position:-37px -39px;}
+#lineList .line_open_en:hover{background-position:-37px -239px;}
+#lineList .line_open_f:hover{background-position:-37px -390px;}
+#lineList .line_close{display:block; width:16px; height:16px; background-position:-68px -16px; position:absolute; top:-0px; left:0px; cursor:pointer;}
+#lineList .line_close:hover{background-position:-84px -16px;}
+/*--在线客服图标--*/
+#lineList .line_icon{margin-bottom:10px; border-radius:5px; padding:5px 0 0; cursor:pointer;}
+#lineList .line_icon:hover{background-color:#ddd;}
+#lineList .pic,#lineList .name{display:block; text-align:center;}
+#lineList .name{font:700 14px/24px "微软雅黑","Microsoft Yahei";}
+
+/*--在线客服tab--*/
+#lineList .line_tab{position:absolute; display:none;}
+#lineList .line_tab_c{position:relative;}
+#lineList .line_tab_c small{display:block; position:absolute; }
+#lineList .line_tab_c small.sanjiao{width:36px; height:36px; top:10px; right:-42px; background-position:-6px 0px; overflow:hidden;}
+#lineList .line_tab_c small.tab_close{background-position:-68px 0px; right:-5px; top:-5px; width:16px; height:16px; cursor:pointer;}
+#lineList .line_tab_c small.tab_close:hover{background-position:-84px 0px;}
+
+#lineQQTab{right:100px; top:100px; width:96px;}
+#lineQQ{min-height:80px; _height:80px;}
+#lineQQ small{top:30px;}
+#lineQQ dt{font:700 14px/30px "微软雅黑"; text-align:center;}
+#lineQQ dd{line-height:24px;}

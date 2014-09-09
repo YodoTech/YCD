@@ -21,6 +21,8 @@
 /*color*/
 .red {color: red;}
 .white {color: white;}
+/*border*/
+.no-border {border: none!important;}
 /*margin*/
 .mt10 {margin-top: 10px;}
 .mb10 {margin-bottom: 10px;}
