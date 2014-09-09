@@ -44,7 +44,7 @@ class IndexAction extends HCommonAction {
 		
 		//正在进行的贷款
 		$searchMap = array();
-		$searchMap['borrow_status']=array("in",'2,4,6,7');
+		$searchMap['borrow_status']=array("in",'2,6,7');
 		$searchMap['is_tuijian']=0;
 		$parm=array();
 		$parm['map'] = $searchMap;

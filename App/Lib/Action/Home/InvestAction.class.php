@@ -21,14 +21,14 @@ class InvestAction extends HCommonAction {
 			$maprow[$vs] = text($surl[$vs]);
 		}
 		//searchMap
-		if(in_array($maprow['borrow_status'],array(2,3,4,6,7,8,9))){
+		if(in_array($maprow['borrow_status'],array(2,3,6,7,8,9))){
 			if($maprow['borrow_status']==9){
-				$searchMap['borrow_status']=array("in",'2,4,6,7');
+				$searchMap['borrow_status']=array("in",'2,6,7');
 			}else{
 				$searchMap['borrow_status']=$maprow['borrow_status'];
 			}
 		}else{
-			$searchMap['borrow_status']=array("in",'2,4');
+			$searchMap['borrow_status']=array("in",'2');
 		}
 		if(!empty($maprow['borrow_name'])) $searchMap['b.borrow_name'] = array("like","%{$maprow['borrow_name']}%");
 		if(!empty($maprow['repayment_type'])) $searchMap['b.repayment_type'] =intval($maprow['repayment_type']);
@@ -45,7 +45,7 @@ class InvestAction extends HCommonAction {
 		//searchMap
 		//if(is_array($searchMap['borrow_status'])) $searchMap['collect_time']=array('gt',time());
 		if($maprow['borrow_status']==''){
-			$searchMap['borrow_status']=array("in",'2,4,6,7');
+			$searchMap['borrow_status']=array("in",'2,6,7');
 		}
 		$parm['map'] = $searchMap;
 		$parm['pagesize'] = 4;
