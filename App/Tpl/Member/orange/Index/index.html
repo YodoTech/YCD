@@ -44,7 +44,7 @@
                         <if condition="($verifyStatus['user_leve'] neq 0) AND (time() lt $verifyStatus['time_limit']) ">
                         <span><a href="__APP__/member/vip"><img alt="VIP会员" title="VIP会员" src="__ROOT__/Style/Orange/images/hyxxicon_6.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/vip"><img alt="普通会员" title="普通会员" src="__ROOT__/Style/Orange/images/hyxxicon_6h.jpg"/></a></span>";
+                        <span><a class="a1" href="__APP__/member/vip"><img alt="普通会员" title="普通会员" src="__ROOT__/Style/Orange/images/hyxxicon_6h.jpg"/></a></span>
                         </if>
                         <span class="sp1" style="width:auto;">冻结金额：{$minfo.money_freeze|Fmoney=###}</span>
                         <span class="sp1" style="width:auto;">可用金额：{:Fmoney($minfo['account_money']+$minfo['back_money'])}</span>

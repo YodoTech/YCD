@@ -67,8 +67,8 @@ $(document).ready(function() {
     <div class="topnav">
         <ul class="fn-clear">
             <li><a href="/service/index.html">在线客服</a></li>
-            <li><a href="javascript:addBookmark('{$glo.web_name}','__APP__/')">加入收藏</a></li>
-            <li><a href="/member/">我的账户</a></li>
+            <li><a href="javascript:addBookmark('{$glo.web_name} - {$glo.index_title}','{:C('WEB_URL')}')">加入收藏</a></li>
+            <li><a href="__APP__/member/">我的账户</a></li>
             <li><a href="#">移动客户端</a></li>
         </ul>
     </div>
@@ -111,7 +111,7 @@ $(document).ready(function() {
                 <else/>
                     <ul class="zc_dl fn-clear">
                         <li class="li1 fn-left"><a href="__APP__/member/common/register/">注 册</a></li>
-                        <li class="li2 fn-right"><a href="__APP__/member/common/login/">登 录</a></li>
+                        <li class="li2 fn-right"><a href="__APP__/member/common/login/?redirect_uri=__SELF__">登 录</a></li>
                     </ul>
                 </if>
             </div>

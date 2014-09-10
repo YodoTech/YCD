@@ -134,7 +134,7 @@ function InnerMsg(){
           <p class="p1 btn"><a href="javascript:;" onclick="addFriend(2)">列入我的黑名单</a></p>
         </div>
       <else/>
-        <div class="listR_btn fn-clear">请 <a href="/member/login/">登录</a> 或 <a href="/member/register/">注册</a> 后查看</div>
+        <div class="listR_btn fn-clear">请 <a href="/member/common/login/?redirect_uri=__SELF__">登录</a> 或 <a href="/member/common/register/">注册</a> 后查看</div>
       </if>
     </div>
   </div>
@@ -220,7 +220,7 @@ function InnerMsg(){
               <li class="w100">{$minfo.fin_car}</li>
             </ul>
           <else/>
-            <p style="text-align:center; line-height:50px;">请 <a href="/member/login/">登录</a> 或 <a href="/member/register/">注册</a> 后查看</p>
+            <p style="text-align:center; line-height:50px;">请 <a href="/member/common/login/">登录</a> 或 <a href="/member/common/register/">注册</a> 后查看</p>
           </if>
           <if condition="$vo.borrow_type eq 2">
             <strong>担保奖励与担保信息</strong>（一旦借款者逾期十天以上未还款,将由担保人垫付本息给投标者）
