@@ -40,6 +40,7 @@ $(function() {
     <div class="banner">
       <div class="slideBox" style="margin:auto;">
         <ul class="items">
+          <php>$adArr = get_ad(2);</php>
           <volist name="adArr" id="ad">
           <li><a href="{$ad.url}"><img src="{$ad.img}"></a></li>
           </volist>
