@@ -1,10 +1,11 @@
-<include file="Public:_header_common" />
-<title>我的账户-- {$glo.web_name}</title>
+<include file="orange:Public:_header_common" group="Home" />
+<title>重设密码 - {$glo.web_name}</title>
 <script type="text/javascript" src="__ROOT__/Style/Js/ajaxfileupload.js"></script>
-<include file="default:Public:_header_main" group="Home"/>
-
-<div style="height:300px; width:100%">
-
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+	<div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;重设密码</div>
+	<div style="height:300px; width:100%"></div>
 </div>
 <script type="text/javascript">
 var mbTest = /^(13|14|15|18)[0-9]{9}$/;
@@ -14,42 +15,44 @@ var msg = "";
 var closeAction = function (){
 	window.location.href="__APP__/index";
 }
-
 var apppath = "__APP__";
-
-function jfun_setpass() {
-	var pass1 = $('#pass').val();
-	var pass2 = $('#repass').val();
-	if ($.trim(pass1) == '' || pass1.length<6) {
-		$.jBox.tip('请输入新密码,且新密码的长度不要小于6位');
-		return;
-	}
-	if ($.trim(pass2) != $.trim(pass1)) {
-		$.jBox.tip('新密码与重复密码必须相同');
-		return;
-	}
-	$.jBox.tip("提交中......","loading");
-	$.ajax({
-		url: "__URL__/dosetnewpass/",
-		type: "post",
-		dataType: "json",
-		data: {"pass":pass1},
-		success: function(result) {
-			if (result.status == 0) {
-				$.jBox.tip("修改失败，请重试",'fail');
+$.jBox("get:__URL__/setnewpass/", {
+	title: "{$glo.web_name}验证中心",
+	width: "auto",
+	draggable: false,
+	buttons: {'设置新密码':true,'关闭':false},
+	submit: function(v, h, f) {
+		if (v) {
+			h.find('.reg_wrong').hide('fast', function() { $(this).remove();});
+			var pass1 = $('#pass').val();
+			var pass2 = $('#repass').val();
+			if ($.trim(pass1) == '' || pass1.length<6) {
+				$('<div class="reg_wrong pt10 pb10 ml10" style="display:none;">请输入新密码,且新密码的长度不要小于6位</div>').prependTo(h).show('fast');
+				return false;
 			}
-			else {
-				alert("修改成功，点击确定后跳转到登陆界面");
-				window.location.href="__APP__/member/common/login/";
+			if ($.trim(pass2) != $.trim(pass1)) {
+				$('<div class="reg_wrong pt10 pb10 ml10" style="display:none;">新密码与重复密码必须相同</div>').prependTo(h).show('fast');
+				return false;
 			}
+			$.jBox.tip("提交中......","loading");
+			$.ajax({
+				url: "__URL__/dosetnewpass/",
+				type: "post",
+				dataType: "json",
+				data: {"pass":pass1},
+				success: function(result) {
+					if (result.status == 0) {
+						$.jBox.tip("修改失败，请重试",'fail');
+					} else {
+						alert("修改成功，点击确定后跳转到登陆界面");
+						window.location.href="__APP__/member/common/login/";
+					}
+				}
+			});
+		} else {
+			return true;
 		}
-	});
-}
-	
-	$.jBox("get:__URL__/setnewpass/", {
-		title: "{$glo.web_name}验证中心",
-		width: "auto",
-		buttons: {'设置新密码':'jfun_setpass()','关闭': true }
-	});
+	}
+});
 </script>
-<include file="default:Public:_footer_inner" group="Home" />
+<include file="orange:Public:_footer" group="Home" />

@@ -207,7 +207,7 @@ class CommonAction extends MCommonAction {
 				session('u_user_name',$data['user_name']);
 				//memberMoneyLog($newid,1,$this->glo['award_reg'],"注册奖励");
 				if (Notice(1, $newid, array('email',$data['user_email']))) {
-					ajaxmsg();
+					ajaxmsg('邮件已发送');
 				} else {
 					ajaxmsg('请手动发送激活邮件');
 				}
@@ -248,8 +248,7 @@ class CommonAction extends MCommonAction {
 	}
 	
 	public function setnewpass(){
-		$d['content'] = $this->fetch();
-		echo json_encode($d);
+		$this->display();
 	}
 	
 	public function dosetnewpass(){
@@ -342,8 +341,7 @@ class CommonAction extends MCommonAction {
 	}
 
 	public function getpassword(){
-		$d['content'] = $this->fetch();
-		echo json_encode($d);
+		$this->display();
 	}
 
 	public function dogetpass(){
