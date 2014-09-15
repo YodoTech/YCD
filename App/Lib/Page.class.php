@@ -30,7 +30,7 @@ class Page
      
     protected  $ajax_func_name;
      
-    public     $plus = 4;         //分页偏移量
+    protected  $plus = 4;         //分页偏移量
      
     protected  $url;
      
@@ -141,7 +141,7 @@ class Page
      * 得到第一页
      * @return string
      */
-    public function first_page($name = '第一页')
+    protected function first_page($name = '第一页')
     {
         if($this->now_page > 5)
         {
@@ -155,7 +155,7 @@ class Page
      * @param $name
      * @return string
      */
-    public function last_page($name = '最后一页')
+    protected function last_page($name = '最后一页')
     {
         if($this->now_page < $this->total_pages - 5)
         {
@@ -168,7 +168,7 @@ class Page
      * 上一页
      * @return string
      */
-    public function up_page($name = '上一页')
+    protected function up_page($name = '上一页')
     {
         if($this->now_page != 1)
         {
@@ -181,7 +181,7 @@ class Page
      * 下一页
      * @return string
      */
-    public function down_page($name = '下一页')
+    protected function down_page($name = '下一页')
     {
         if($this->now_page < $this->total_pages)
         {
@@ -201,7 +201,7 @@ class Page
             return '';
         }
         
-        $className = 'show_' . c("PAGE_THEME");
+        $className = 'show_' . c("DEFAULT_THEME");
          
         $classNames = get_class_methods($this);
  
@@ -212,7 +212,7 @@ class Page
         return '';
     }
      
-    protected function show_pc()
+    protected function show_orange()
     {
         if($this->total_pages != 1)
         {
