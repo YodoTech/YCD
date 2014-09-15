@@ -2633,7 +2633,7 @@ function getMoneyLog($map, $size)
         return;
     }
     if ($size) {
-        import("ORG.Util.Page");
+        import("@.Page");
         $count = m("member_moneylog")->where($map)->count("id");
         $p = new Page($count, $size);
         $page = $p->show();

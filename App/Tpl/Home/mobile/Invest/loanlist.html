@@ -1,0 +1,32 @@
+<include file="mobile:Public:_header_common" group="Home" />
+<title>散标投资列表 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.knob.js"></script>
+<script>
+$(function() {
+  $('.knob').knob();
+});
+</script>
+<include file="mobile:Public:_header_main" group="Home" />
+<!--中部开始-->
+<div data-role="content" data-theme="f">
+    <volist name="list.list" id="vb">
+    <ul class="indul1 fn-clear">
+        <li>
+          <p class="jdt_bg"><input data-role="none" class="knob" data-width="80" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".15" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+            <p><a href="{$vb.id|getInvestUrl=###}" data-role="button" data-corners="false" class="ui-btn-h" data-theme="h">我要投标</a></p>
+        </li>
+        <li class="li1">
+          <h2 class="fn-text-overflow">{$vb.borrow_name|cnsubstr=###,8}</h2>
+            <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
+            <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
+            <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
+            <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
+        </li>
+    </ul>
+    </volist>
+    <div class="ui-grid-d">{$list.page}</div>
+</div>
+<!--中部结束-->
+<include file="mobile:Public:_footer" group="Home" />

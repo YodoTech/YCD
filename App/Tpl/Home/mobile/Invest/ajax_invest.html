@@ -1,0 +1,50 @@
+<ul>
+	<li>投标进度：{$vo.progress} %</li>
+	<if condition="$vo.borrow_status gt 5">
+	<else/>
+	<li>还需投标：{$vo.need|Fmoney=###}</li>
+	</if>
+</ul>
+<form method="post" name="investForm" id="investForm" action="__URL__/investmoney">
+	<input type="hidden" name="borrow_id" id="borrow_id" value="{$vo.id}" />
+	<input type="hidden" name="cookieKey" id="cookieKey" value="{$cookieKey}" />
+	<ul>
+		<li>
+			您的可用余额： {$account_money|default=0.00} 元
+			<a href="__APP__/member/charge#fragment-1">我要充值</a>
+		</li>
+		<li>
+			还需借款: <span class="red">{$vo.need|Fmoney=###}</span>
+		</li>
+		<li>
+			投标金额：
+			<input type="text" id="invest_money" onkeyup="value=value.replace(/[^0-9]/g,'')" size="11" name="money" value="{$vo.toubiao}" />
+			&nbsp;元
+		</li>
+		<li>
+			支付密码：
+			<if condition="$has_pin eq 'yes'">
+				<input type="password" id="pin" name="pin" value="" />
+			<else/>
+				<a href="__APP__/member/user#fragment-3" class="red">请先设一个支付交易密码</a>
+			</if>
+		</li>
+		<if condition="!empty($vo['password'])">
+		<li>
+			定向标密码:
+			<input type="password" id="borrow_pass" name="borrow_pass" value="" />
+		</li>
+		</if>
+	</ul>
+	<p>
+		<input type="button" onclick="PostData('investBtn')" value="确认付款" />
+		<input type="button" onclick="PostCancel()" value="取消" />
+	</p>
+	<p class="red">
+		注意:点击确认表示您将投标金额并同意支付,同一用户对同一个标限投5次
+	</p>
+</form>
+<script type="text/javascript">
+borrow_min = {$vo.borrow_min|default=0};
+borrow_max = {$vo.borrow_max|default=0};
+</script>

@@ -1,0 +1,35 @@
+<ul>
+	<li>担保进度：{$vo.vouch_progress} %</li>
+	<li>还需担保: {$vo.vouch_need|Fmoney=###}</li>
+</ul>
+<form method="post" name="vouchForm" id="vouchForm" action="__URL__/vouchmoney">
+	<input type="hidden" name="borrow_id" value="{$vo.id}" />
+	<input type="hidden" name="cookieKey" id="cookieKey" value="{$cookieKey}" />
+	<ul>
+		<li>
+			可用投资担保额度： {$invest_vouch_cuse|default=0.00} 元
+			<a href="__APP__/member/memberinfo">申请额度</a>
+		</li>
+		<li>担保奖励: {$vo.reward_vouch_rate}%</li>
+		<li>
+			担保金额：
+			<input type="text" id="vouch_money" onkeyup="value=value.replace(/[^0-9]/g,'')" size="11" name="vouch_money" value="" />
+			&nbsp;元
+		</li>
+		<li>
+			支付密码：
+			<if condition="$has_pin eq 'yes'">
+				<input type="password" id="pin" name="pin" value="" />
+			<else/>
+				<a href="__APP__/member/user#fragment-3" class="red">请先设一个支付交易密码</a>
+			</if>
+		</li>
+	</ul>
+	<p>
+		<input type="button" onclick="PostDataVouch('vouchBtn')" value="确认担保" />
+		<input type="button" onclick="PostCancel()" value="取消" />
+	</p>
+	<p class="red">
+		注意:点击确认表示您将担保并同意支付,同一用户对同一个标限投5次
+	</p>
+</form>

@@ -1,0 +1,115 @@
+<script src="__ROOT__/Style/My97DatePicker/WdatePicker.js"></script>
+<style>
+ul.xiangxi{ width:100%;}
+ul.xiangxi li{ width:84%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:5px 8% 0;}
+ul.xiangxi li span{ float:left; text-align:left;}
+
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ys_ts{ font-size:.7rem; color:#fa6f15; padding-left:30px; line-height:1.5rem;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">尊敬的{$glo.web_name}用户，{$glo.web_name}为您记录和保存了您的提现记录，敬请审阅</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">时间从：</div>
+    <div class="ui-block-b">
+        <input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+        至
+        <input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" readonly="readonly" class="Wdate timeInput_Day" onFocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b btn"><a id="btn_search" href="javascript:;" onclick="getBind();" data-role="button" class="ui-btn-h fn-left" data-theme="h">查看</a></div>
+</div>
+<ul class="xiangxi fn-clear">
+    <li class="fn-clear">
+        <span class="w130">编号</span>
+        <span class="w130">申请时间</span>
+        <span class="w130">提现金额</span>
+        <span class="w130">审核状态</span>
+        <span class="w130">操作</span>
+    </li>
+    <volist name="list" id="vo">
+    <li class="fn-clear" id="back_{$vo.id}">
+        <span class="w130">{$vo.id}</span>
+        <span class="w130">{$vo.add_time|date="Y-m-d H:i",###}</span>
+        <span class="w130">{$vo.withdraw_money}</span>
+        <span class="w130">{$vo.status}</span>
+        <span class="w130"><if condition="$vo.withdraw_status eq '0'"><a href="javascript:;" onclick="cx({$vo.id});">撤消提现</a><else/>--</if></span>
+    </li>
+    </volist>
+</ul>
+<div id="pager" data="fragment-2" class="ui-grid-d ajaxpagebar">{$pagebar}</div>
+<script type="text/javascript">
+function cx(id) {
+	$.ajax({
+		url: "__URL__/backwithdraw?id="+id,
+		data: {},
+		timeout: 5000,
+		cache: false,
+		type: "get",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) {
+				if(d.status == 1) {
+					MY_COMMON_OP.alert('恭喜，撤消成功');
+					$("#back_"+id).remove();
+				}
+				else MY_COMMON_OP.alert('对不起，操作失败');
+			}
+		}
+	});
+}
+//返回数字
+function NumberCheck(t) {
+	var num = t.value;
+	var re=/^\d+\.?\d*$/;
+	if(!re.test(num)){
+		isNaN(parseFloat(num))?t.value=0:t.value=parseFloat(num);
+	}
+}
+
+function getBind() {
+	x = makevar(['start_time','end_time']);
+	$.ajax({
+		url: "__URL__/withdrawlog",
+		data: x,
+		timeout: 5000,
+		cache: false,
+		type: "get",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) $("#fragment-2").html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+		}
+	});
+}
+
+//Ajax Page
+$('.ajaxpagebar a').click(function() {
+	try {	
+		var geturl = $(this).attr('href');
+		var id = $(this).parent().parent().attr('data');
+		var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+              	if(d) $("#"+id).html(d.html);//更新客户端信息，作个判断，避免报错
+            }
+        });
+	} catch(e) {};
+	return false;
+});
+
+//刷新样式
+$('.btn a').button();
+</script>

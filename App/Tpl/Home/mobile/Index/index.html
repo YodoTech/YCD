@@ -2,20 +2,55 @@
 <title>{$glo.index_title}</title>
 <meta http-equiv="keywords" content="{$glo.web_keywords}" />
 <meta http-equiv="description" content="{$glo.web_descript}" />
+<link href="__ROOT__/Style/Mobile/css/jquery.touchSlider.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.knob.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.touchSlider.js"></script>
 <script>
 $(function() {
   $('.knob').knob();
+  $('.main_image').touchSlider({
+    flexible : true,
+    speed : 200,
+    btn_prev : $('#btn_prev'),
+    btn_next : $('#btn_next'),
+    paging : $('.flicking_con a'),
+    counter : function (e) {
+      $('.flicking_con a').removeClass('on').eq(e.current-1).addClass('on');
+    }
+  });
+  timer = setInterval(function() { $('#btn_next').click();}, 5000);
+  $('.main_image').bind('touchstart', function() {
+    clearInterval(timer);
+  }).bind('touchend', function() {
+    timer = setInterval(function() { $('#btn_next').click();}, 5000);
+  });
 });
 </script>
 <include file="Public:_header_main" />
 <!--中部开始-->
 <div data-role="content" data-theme="f">
   <div class="banner">
-    <php>$adArr = get_ad(3);</php>
-    <volist name="adArr" id="ad">
-    <a href="{$ad.url}"><img src="{$ad.img}"></a>
-    </volist>
+    <php>$adArr = get_ad(2);</php>
+    <!-- ad start -->
+    <notempty name="adArr">
+    <div class="flicking_con">
+      <div class="flicking_inner">
+        <volist name="adArr" id="ad" key="i">
+        <a href="#">{$i}</a>
+        </volist>
+      </div>
+    </div>
+    <div class="main_image">
+      <ul>
+        <volist name="adArr" id="ad" key="i">
+        <li><a href="{$ad.url}"><img src="{$ad.img}" /></a></li>
+        </volist>
+      </ul>
+      <a href="javascript:;" id="btn_prev" class="fn-hide"></a>
+      <a href="javascript:;" id="btn_next" class="fn-hide"></a>
+    </div>
+    </notempty>
+    <!-- ad end -->
   </div>
   <volist name="listBorrow.list" id="vb">
   <ul class="indul1 fn-clear">

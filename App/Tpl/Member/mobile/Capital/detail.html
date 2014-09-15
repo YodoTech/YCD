@@ -1,0 +1,108 @@
+<script src="__ROOT__/Style/My97DatePicker/WdatePicker.js"></script>
+<tagLib name="htmlA" />
+<style>
+ul.xiangxi{ width:100%;}
+ul.xiangxi li{ width:84%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:5px 8% 0;}
+ul.xiangxi li span{ float:left; text-align:left;}
+
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">尊敬的{$glo.web_name}用户，{$glo.web_name}为您记录和保存了您的资金历史明细.(<!--明细中事件的"类型"如为<奖励类型>则"余额"指奖励帐户余额-->'可用余额','冻结金额','待收金额',都是指此次事件后相应的帐户余额)</div>
+<div class="ts">资金历史记录了您各种交易产生的支出和收入的明细，请选择事件类型和时间，然后点击“查看”按钮浏览。</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">事件类型：</div>
+    <div class="ui-block-b">
+        <htmlA:select id="log_type" value="key|search.log_type" datakey='log_type' addStr="data-role='none'" />
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">起止日期：</div>
+    <div class="ui-block-b">
+        <input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" readonly="readonly" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+        至
+        <input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" readonly="readonly" onfocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b btn"><a id="btn_search" href="javascript:;" data-role="button" class="ui-btn-h fn-left" data-theme="h" onclick="sdetail();">查看</a></div>
+</div>
+
+
+<ul class="xiangxi fn-clear">
+    <li class="fn-clear">
+        <span class="w130">发生日期</span>
+        <span class="w130">类型</span>
+        <span class="w130">影响金额</span>
+        <span class="w130">可用余额</span>
+        <span class="w130">冻结金额</span>
+        <span class="w130">待收金额</span>
+    </li>
+    <volist name="list" id="vo">
+    <li class="fn-clear">
+        <span class="w130">{$vo.add_time|date="Y-m-d H:i",###}</span>
+        <span class="w130">{$vo.type}</span>
+        <span class="w130"><span style=<if condition="$vo.affect_money lt 0">"color:#FF0000;"<else/>"color:#009900;"</if>>{$vo.affect_money}</span></span>
+        <span class="w130">{$vo['account_money']+$vo['back_money']}</span>
+        <span class="w130">{$vo.freeze_money}</span>
+        <span class="w130">{$vo.collect_money}</span>
+        <span style="width:100%;">说明：{$vo.info}</span>
+    </li>
+    </volist>
+</ul>
+<div id="pager" data="fragment-1" class="ui-grid-d ajaxpagebar">{$pagebar}</div>
+<script type="text/javascript">
+//返回数字
+function NumberCheck(t) {
+	var num = t.value;
+	var re=/^\d+\.?\d*$/;
+	if(!re.test(num)){
+		isNaN(parseFloat(num))?t.value=0:t.value=parseFloat(num);
+	}
+}
+
+function sdetail() {
+	x = makevar(['log_type','start_time','end_time']);
+	$.ajax({
+		url: "__URL__/detail",
+		data: x,
+		timeout: 5000,
+		cache: false,
+		type: "get",
+		dataType: "json",
+		success: function (d, s, r) {
+			if(d) $("#fragment-1").html(d.html);//更新客户端信息 作个判断，避免报错
+		}
+	});
+}
+
+//Ajax Page
+$('.ajaxpagebar a').click(function() {
+    try {   
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端信息，作个判断，避免报错
+            }
+        });
+    } catch(e) {};
+    return false;
+});
+
+//刷新样式
+$('.btn a').button();
+</script>

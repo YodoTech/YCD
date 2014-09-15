@@ -1,6 +1,10 @@
 <?php
 return array(
-	'DEFAULT_THEME' => is_mobile()?'mobile':'orange',//移动设备浏览，则切换模板
+	//模板主题配置
+	'DEFAULT_THEME' => IS_MOBILE?'mobile':'orange',//移动设备浏览，则切换模板
+	//分页主题配置
+	'PAGE_THEME' => IS_MOBILE?'mobile':'pc',
+	
 	//'配置项'=>'配置值'
 	'MEMBER_PAGE_SIZE'=>15,//后台列表默认显示条数
 	'VIP_PAGE_SIZE'=>15,//后台列表默认显示条数

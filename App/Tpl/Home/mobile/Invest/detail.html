@@ -1,0 +1,228 @@
+<include file="mobile:Public:_header_common" group="Home" />
+<title>{$vo.borrow_name} - 我要投资 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<style>
+ul.xiangxi li{ width:100%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:10px 0 0 37px;}
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+#result {border:1px solid red;}
+</style>
+<script>
+function checkUser(uid) {
+  if (uid > 0) {
+    return true;
+  } else {
+    MY_COMMON_OP.alert('请先登录', function() {
+      window.location.href = '__APP__/member/common/login/';
+    });
+    return false;
+  }
+}
+function invest(id) {
+  if (checkUser({$UID})) {
+    $.getJSON('__URL__/ajax_invest', {id:id}, function(d, textStatus) {
+      if (d) {
+        if (d.status == 1) {
+          $('#result').html(d.content).show('slow');
+          $('#investBtn').hide();
+        } else {
+          MY_COMMON_OP.alert(d.message);
+        }
+      }
+    });
+  }
+  return false;
+}
+
+function vouch(id) {
+  if (checkUser({$UID})) {
+    $.getJSON('__URL__/ajax_vouch', {id:id}, function(d, textStatus) {
+      if (d){
+        if (d.status == 1) {
+          $('#result').html(d.content).show('slow');
+          $('#vouchBtn').hide();
+        } else {
+          MY_COMMON_OP.alert(d.message);
+        }
+      }
+    });
+  }
+  return false;
+}
+function PostCancel(btnId) {
+  $('#result').html('').hide('slow');
+  $('#' + btnId).show();
+}
+$(function() {
+  $('#investBtn').on('click', function() { invest('{$vo.id}');return false;});
+  $('#vouchBtn').on('click', function() { vouch('{$vo.id}');return false;});
+});
+</script>
+<include file="mobile:Public:_header_main" group="Home" />
+<!--中部开始-->
+<div data-role="content" data-theme="f">
+  <h1><span><a href="__APP__/invest/loanlist.html"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>{$vo.borrow_name}</h1>
+  <ul class="xiangxi fn-clear">
+    <li>借款金额：{$vo.borrow_money|Fmoney=###}</li>
+    <li>借款用途：{$Bconfig['BORROW_USE'][$vo['borrow_use']]}</li>
+    <li>最小投标金额：{$vo.borrow_min|Fmoney=###}</li>
+    <li>最大投标金额：<if condition="$vo.borrow_max eq 0">没有限制<else/>{$vo.borrow_max|Fmoney=###}</if></li>
+    <li>借款期限：{$vo.borrow_duration}<if condition="$vo.repayment_type eq 1">天<else/>个月</if></li>
+    <li>年化利率：{$vo.borrow_interest_rate}%<if condition="$vo.repayment_type eq 1">/天</if></li>
+    <if condition="$vo.reward_type eq 1">
+      <li>奖励投标：按投标金额比例奖励{$vo.reward_num}%</li>
+    <elseif condition="$vo.reward_type eq 2"/>
+      <li>奖励投标：按固定金额分摊奖励{$vo.reward_num}元</li>
+    </if>
+    <li>还款方式：{$Bconfig['REPAYMENT_TYPE'][$vo['repayment_type']]}</li>
+    <li><span id="endtime"><span class="fn-left">剩余时间：</span><span id="loan_time"><em class='value'>--</em>天<em class='value'>--</em>时<em class='value'>--</em>分<em class='value'>--</em>秒</span></span></li>
+  </ul>
+  <div id="result" class="fn-hide"></div>
+  <div class="btn">
+    <if condition="$vo.borrow_status eq 3">
+      <a data-role="button" class="ui-btn-h" data-theme="h" href="javascript:;">已流标</a>
+    <elseif condition="$vo.borrow_status eq 4"/>
+      <a data-role="button" class="ui-btn-h" data-theme="h" href="javascript:;">等待复审</a>
+    <elseif condition="$vo.borrow_status eq 6"/>
+      <a data-role="button" class="ui-btn-h" data-theme="h" href="javascript:;">还款中</a>
+    <elseif condition="$vo.borrow_status gt 6"/>
+      <a data-role="button" class="ui-btn-h" data-theme="h" href="javascript:;">已完成</a>
+    <else/>
+      <a data-role="button" class="ui-btn-h" data-theme="h" href="#" id="investBtn">投标</a>
+    </if>
+    <if condition="$vo.borrow_type eq 2">
+      <if condition="$vo.vouch_progress eq '100'">
+        <a data-role="button" class="ui-btn-h" data-theme="h" href="javascript:;">担保已完成</a>
+      <elseif condition="$vo.borrow_status eq 3 || $vo.borrow_status eq 4 || $vo.borrow_status eq 6 || $vo.borrow_status gt 6 "/>
+      <else/>
+        <a data-role="button" class="ui-btn-h" data-theme="h" href="#" id="vouchBtn">立即担保</a>
+      </if>
+    </if>
+  </div>
+  <input id="hid" type="hidden" value="{$vo.lefttime}" />
+</div>
+<script>
+//----- 剩余时间 -----
+var seconds;
+var pers = {$vo.progress|default=0}/100;
+var timer = null;
+function setLeftTime() {
+  seconds = parseInt($('#hid').val(), 10);
+  timer = setInterval(showSeconds,1000);
+}
+
+function showSeconds() {
+  var day1 = Math.floor(seconds / (60 * 60 * 24));
+  var hour = Math.floor((seconds - day1 * 24 * 60 * 60) / 3600);
+  var minute = Math.floor((seconds - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+  var second = Math.floor(seconds - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+  if (day1 < 0) {
+    clearInterval(timer);
+    $('#endtime').html('<span class="red">投标已经结束！</span>');
+  } else if (pers >= 1) {
+    clearInterval(timer);
+    $('#endtime').html('<span class="red">投标已经结束！</span>');
+  } else {
+    $('#loan_time').html(day1 + ' 天 ' + hour + ' 小时 ' + minute + ' 分 ' + second + ' 秒');
+  }
+  seconds--;
+}
+if (pers >= 1) {
+  $('#endtime').html('<span class="red">投标已经结束！</span>');
+} else {
+  setLeftTime();
+}
+
+//----- 投标/担保 -----
+var investmoney = 0;
+var borrowidMS = 0;
+var borrow_min = 0;
+var borrow_max = 0;
+
+function PostData(id) {
+  var tendValue = parseFloat($("#invest_money").val());
+  var pin = $("#pin").val();
+  var borrow_pass = (typeof $("#borrow_pass").val() == "undefined") ? "" : $("#borrow_pass").val();
+  var borrow_id = $("#borrow_id").val();
+  tendValue = isNaN(tendValue) ? 0 : tendValue;
+  if (pin == "") {
+    MY_COMMON_OP.alert("请输入支付密码");
+    return false;
+  }
+  if (tendValue < borrow_min) {
+    MY_COMMON_OP.alert("本标最低投标金额为" + borrow_min + "元，请重新输入投标金额");
+    return false;
+  } else if (tendValue > borrow_max && borrow_max != 0) {
+    MY_COMMON_OP.alert("本标最大投标总金额为" + borrow_max + "元，请重新输入投标金额");
+    return false;
+  }
+  $.ajax({
+    url: "__URL__/investcheck",
+    type: "post",
+    dataType: "json",
+    data: {
+      "money": tendValue,
+      'pin': pin,
+      'borrow_id': borrow_id,
+      "borrow_pass": borrow_pass
+    },
+    success: function(d) {
+      if (d.status == 1) {
+        investmoney = tendValue;
+        MY_COMMON_OP.confirm(d.message, (function() {
+          document.forms.investForm.submit();
+        }));
+      } else if (d.status == 2) { // 无担保贷款多次提醒
+        MY_COMMON_OP.confirm(d.message, (function() {
+          window.location.href = '__APP__/member/charge#fragment-1';
+        }));
+      } else if (d.status == 3) { // 无担保贷款多次提醒
+        MY_COMMON_OP.alert(d.message);
+      } else {
+        MY_COMMON_OP.alert(d.message);
+      }
+    }
+  });
+}
+
+function PostDataVouch(id) {
+  var tendValue = parseFloat($("#vouch_money").val());
+  var pin = $("#pin").val();
+  tendValue = isNaN(tendValue) ? 0 : tendValue;
+  if (pin == "") {
+    MY_COMMON_OP.alert("请输入支付密码");
+    return false;
+  }
+  if (tendValue < 50) {
+    MY_COMMON_OP.alert("最低担保额度50元");
+    return false;
+  }
+
+  $.ajax({
+    url: "__URL__/vouchcheck",
+    type: "post",
+    dataType: "json",
+    data: {
+      "vouch_money": tendValue,
+      'pin': pin
+    },
+    success: function(d) {
+      if (d.status == 1) {
+        investmoney = tendValue;
+        MY_COMMON_OP.confirm(d.message, (function() {
+          document.forms.vouchForm.submit();
+        }));
+      } else if (d.status == 2) { // 无担保贷款多次提醒
+        MY_COMMON_OP.confirm(d.message, (function() {
+          window.location.href = "__APP__/member/moneylimit#fragment-1";
+        }));
+      } else {
+        MY_COMMON_OP.alert(d.message);
+      }
+    }
+  });
+}
+</script>
+<!--中部结束-->
+<include file="mobile:Public:_alert" group="Home" />
+<include file="mobile:Public:_footer" group="Home" />

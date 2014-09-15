@@ -121,4 +121,6 @@ function is_mobile() {
     }
     return false;
 }
+//生成常量，方便调用
+defined('IS_MOBILE') or define('IS_MOBILE', is_mobile());
 ?>
