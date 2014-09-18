@@ -1467,6 +1467,7 @@ function notice($type, $uid, $data = array())
         $smtp->From = $msgconfig['stmp']['user'];
         $smtp->FromName = $datag['web_name'];
         
+        $stmp->Encoding = 'base64';
         $stmp->CharSet = 'utf-8';
         $smtp->isHTML(true);// Set email format to HTML
     } else {
