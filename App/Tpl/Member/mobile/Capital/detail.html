@@ -1,4 +1,5 @@
-<script src="__ROOT__/Style/My97DatePicker/WdatePicker.js"></script>
+<link href="__ROOT__/Style/Mobile/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" />
+<script src="__ROOT__/Style/Mobile/js/mobiscroll.custom-2.5.4.min.js"></script>
 <tagLib name="htmlA" />
 <style>
 ul.xiangxi{ width:100%;}
@@ -11,22 +12,25 @@ ul.xiangxi li span{ float:left; text-align:left;}
 .ui-grid-b .ui-block-a{ width:30%; text-align:right;}
 .ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
 .ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e{ width:50%;font-size:.9rem; line-height:1.8rem; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e .ui-icon-select{ font-size:.9rem; line-height:1.8rem; text-align:left; padding-left:4px; }
+.ui-grid-b .ui-block-e .ui-icon-select:after {display: block;   content: '▼';font-size: 14px;   text-align: center; line-height:1.5em; color:#fa6f15;}
 .ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
 </style>
 <div class="ts">尊敬的{$glo.web_name}用户，{$glo.web_name}为您记录和保存了您的资金历史明细.(<!--明细中事件的"类型"如为<奖励类型>则"余额"指奖励帐户余额-->'可用余额','冻结金额','待收金额',都是指此次事件后相应的帐户余额)</div>
 <div class="ts">资金历史记录了您各种交易产生的支出和收入的明细，请选择事件类型和时间，然后点击“查看”按钮浏览。</div>
 <div class="ui-grid-b">
     <div class="ui-block-a">事件类型：</div>
-    <div class="ui-block-b">
-        <htmlA:select id="log_type" value="key|search.log_type" datakey='log_type' addStr="data-role='none'" />
+    <div class="ui-block-e">
+        <htmlA:select id="log_type" value="key|search.log_type" datakey='log_type' addStr="data-icon='select'" />
     </div>
 </div>
 <div class="ui-grid-b">
     <div class="ui-block-a">起止日期：</div>
     <div class="ui-block-b">
-        <input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" readonly="readonly" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\\\'end_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+        <input type="text" id="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" data-role="none"/>
         至
-        <input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" readonly="readonly" onfocus="WdatePicker({minDate:'#F{$dp.$D(\\\'start_time\\\')||\\\'2020-10-01\\\'}'})" data-role="none"/>
+        <input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" data-role="none"/>
     </div>
 </div>
 <div class="ui-grid-b">
@@ -103,6 +107,37 @@ $('.ajaxpagebar a').click(function() {
     return false;
 });
 
+//mobiscroll
+var plugdatetime = function($dateTxt, opt) {
+    $dateTxt.mobiscroll('destroy').mobiscroll(
+        $.extend({
+            preset: 'date',
+            theme: 'sense-ui',
+            mode: 'scroller',
+            display: 'bottom',
+            monthText: '月',
+            dayText: '日',
+            yearText: '年',
+            setText: '确定',
+            cancelText: '取消',
+            dateOrder: 'yymmdd',//面板中日期排列格式
+            dateFormat: 'yy-mm-dd'
+        }, opt)
+    );
+};
+
+plugdatetime($('#start_time'), {
+    onBeforeShow: function(inst) {
+        inst.settings.maxDate = $('#end_time').val()==''?new Date('2020-10-01'):new Date($('#end_time').val());
+    }
+});
+plugdatetime($('#end_time'), {
+    onBeforeShow: function(inst) {
+        inst.settings.minDate = $('#start_time').val()==''?new Date('2020-10-01'):new Date($('#start_time').val());
+    }
+});
+
 //刷新样式
 $('.btn a').button();
+$('#log_type').selectmenu();
 </script>

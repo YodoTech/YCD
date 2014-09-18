@@ -2,53 +2,30 @@
 <title>{$glo.index_title}</title>
 <meta http-equiv="keywords" content="{$glo.web_keywords}" />
 <meta http-equiv="description" content="{$glo.web_descript}" />
-<link href="__ROOT__/Style/Mobile/css/jquery.touchSlider.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.knob.js"></script>
-<script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.touchSlider.js"></script>
+<script type="text/javascript" src="__ROOT__/Style/Mobile/js/jquery.mobileSlider.js"></script>
+<style>
+.banner .focus span{width:10px;height:10px;margin-right:10px;border-radius:50%;background:#666;font-size:0}
+.banner .focus span.current{background:#fff}
+</style>
 <script>
 $(function() {
   $('.knob').knob();
-  $('.main_image').touchSlider({
-    flexible : true,
-    speed : 200,
-    btn_prev : $('#btn_prev'),
-    btn_next : $('#btn_next'),
-    paging : $('.flicking_con a'),
-    counter : function (e) {
-      $('.flicking_con a').removeClass('on').eq(e.current-1).addClass('on');
-    }
-  });
-  timer = setInterval(function() { $('#btn_next').click();}, 5000);
-  $('.main_image').bind('touchstart', function() {
-    clearInterval(timer);
-  }).bind('touchend', function() {
-    timer = setInterval(function() { $('#btn_next').click();}, 5000);
-  });
+  $('.banner').mobileSlider({width:640,height:320,during:3000});
 });
 </script>
 <include file="Public:_header_main" />
 <!--中部开始-->
 <div data-role="content" data-theme="f">
-  <div class="banner">
-    <php>$adArr = get_ad(2);</php>
+  <div class="banner fn-hide">
+    <php>$adArr = get_ad(3);</php>
     <!-- ad start -->
     <notempty name="adArr">
-    <div class="flicking_con">
-      <div class="flicking_inner">
-        <volist name="adArr" id="ad" key="i">
-        <a href="#">{$i}</a>
-        </volist>
-      </div>
-    </div>
-    <div class="main_image">
-      <ul>
-        <volist name="adArr" id="ad" key="i">
-        <li><a href="{$ad.url}"><img src="{$ad.img}" /></a></li>
-        </volist>
-      </ul>
-      <a href="javascript:;" id="btn_prev" class="fn-hide"></a>
-      <a href="javascript:;" id="btn_next" class="fn-hide"></a>
-    </div>
+    <ul>
+      <volist name="adArr" id="ad" key="i">
+      <li><a href="{$ad.url}"><img src="{$ad.img}" /></a></li>
+      </volist>
+    </ul>
     </notempty>
     <!-- ad end -->
   </div>

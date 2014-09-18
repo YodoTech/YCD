@@ -5,10 +5,13 @@
 .btn a{width: 100%;}
 ul.xiangxi { border:1px solid red;}
 ul.xiangxi li{ width:100%; font-size:.9rem; line-height:1.8rem;}
-.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
-.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 0; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:40%; text-align:right;}
 .ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
 .ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e{ width:50%;font-size:.9rem; line-height:1.8rem; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e .ui-icon-select{ font-size:.9rem; line-height:1.8rem; text-align:left; padding-left:4px; }
+.ui-grid-b .ui-block-e .ui-icon-select:after {display: block;	content: '▼';font-size: 14px;	text-align: center; line-height:1.5em; color:#fa6f15;}
 .ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
 </style>
 <div class="ts">尊敬的{$voinfo.real_name}先生，提现操作涉及您的资金安全，敬请仔细操作。</div>
@@ -16,72 +19,68 @@ ul.xiangxi li{ width:100%; font-size:.9rem; line-height:1.8rem;}
 	<ul class="xiangxi fn-left ml10 mb10 pl10"></ul>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">您当前的银行账号：</div>
+    <div class="ui-block-a">当前银行账号：</div>
     <div class="ui-block-b">{$vobank.bank_num|hidecard=###,3,'还没有登记您的银行账号'}</div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">您当前的银行名称：</div>
-    <div class="ui-block-b">
-    	<htmlA:select id="bank_name" value="key|vobank.bank_name" datakey='bank_list' addstr='style="width: auto;" data-role="none"' />
-    	<span class="red">*</span>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;当前银行名称：</div>
+    <div class="ui-block-e">
+    	<htmlA:select id="bank_name" value="key|vobank.bank_name" datakey='bank_list' addstr='data-icon="select"' />
     </div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">您银行账户户主姓名：</div>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;账户户主姓名：</div>
     <div class="ui-block-b">
     	<span id="spname">{:cnsubstr($voinfo['real_name'],1,0,'utf-8',false).str_repeat("*",strlen($voinfo['real_name'])-1)}</span>
-    	<span class="red">*</span>
     </div>
 </div>
 <php>if($vobank.bank_num != '') {</php>
 <div class="ui-grid-b">
-    <div class="ui-block-a">输入您的当前的银行帐号：</div>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;当前银行帐号：</div>
     <div class="ui-block-b">
 		<input id="txt_oldaccount" type="text" data-role="none">
-		<span class="red">*</span>&nbsp;(为了您的资金安全，请输入您当前的银行账号)
+		&nbsp;(为了您的资金安全，请输入您当前的银行账号)
     </div>
 </div>
 <php>}</php>
 <div class="ui-grid-b">
-    <div class="ui-block-a">输入您新的银行帐号：</div>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;新的银行帐号：</div>
     <div class="ui-block-b">
     	<input id="txt_account" type="text" data-role="none">
-		<span class="red">*</span>&nbsp;(信用卡帐号无法提现，请不要误填)
+		&nbsp;(信用卡帐号无法提现，请不要误填)
     </div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">确认您新的银行帐号：</div>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;确认银行帐号：</div>
     <div class="ui-block-b">
     	<input id="txt_confirmaccount" type="text" data-role="none">
-		<span class="red">*</span>&nbsp;(请再次确认您添加的银行账号)
+		&nbsp;(请再次确认您添加的银行账号)
     </div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">开户银行所在省份：</div>
-    <div class="ui-block-b">
-    	<select name="selectp" id="province" data-icon="select" data-role="none">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户所在省份：</div>
+    <div class="ui-block-e">
+    	<select name="selectp" id="province" data-icon="select">
 			<option value="0">请选择省份 </option>
 		</select>
-		<span class="red">*</span>
     </div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">开户银行所在市：</div>
-    <div class="ui-block-b">
-    	<select name="selectc" id="city" data-icon="select" data-role="none">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户所在城市：</div>
+    <div class="ui-block-e">
+    	<select name="selectc" id="city" data-icon="select">
 			<option value="0">请选择城市</option>
 		</select>
-		<select name="selectc" id="district" data-icon="select" data-role="none" style="display:none">
+		<select name="selectc" id="district" data-role="none" style="display:none">
 			<option value="0">请选择地区</option>
 		</select>
-		<span class="red">*</span>
     </div>
 </div>
 <div class="ui-grid-b">
-    <div class="ui-block-a">输入开户行支行名称：</div>
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户行支行名称：</div>
     <div class="ui-block-b">
     	<input name="txt_bankName" id="txt_bankName" value="{$vobank.bank_address}" type="text" data-role="none">
-		<span class="red">*</span>&nbsp;(如不能确定，请拨打开户行的客服热线咨询)
+		&nbsp;(如不能确定，请拨打开户行的客服热线咨询)
     </div>
 </div>
 <div class="ui-grid-b">
@@ -192,4 +191,5 @@ var s = new GetAreaSelect('#province','#city','#district',<empty name="vobank['b
 
 //刷新样式
 $('.btn a').button();
+$('#bank_name,#province,#city').selectmenu();
 </script>

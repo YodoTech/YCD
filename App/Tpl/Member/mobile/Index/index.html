@@ -22,8 +22,9 @@ ul.xiangxi li{ width:100%; border-bottom:1px solid #b1b1b1; font-size:.9rem; lin
 <div data-role="content" data-theme="f">
     <h1><span><a href="javascript:;"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>用户中心</h1>
     <div class="btn fn-clear">
-        <div class="fn-left">{:session('u_user_name')}&nbsp;</div>
-        <div class="ui-verify fn-left">
+        <div>{:session('u_user_name')}</div>
+        <div class="mt10"><a href="__APP__/member/common/actlogout" data-role="button" class="ui-btn-h" data-theme="h">注销</a></div>
+        <div class="ui-verify mt10">
             <if condition="$verifyStatus['phone_status'] eq 1 ">
             <span><a href="javascript:;"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
             <else />
@@ -50,7 +51,6 @@ ul.xiangxi li{ width:100%; border-bottom:1px solid #b1b1b1; font-size:.9rem; lin
             <span><a class="a1" href="javascript:;"><img alt="普通会员" title="普通会员" src="__ROOT__/Style/Orange/images/hyxxicon_6h.jpg"/></a></span>
             </if>
         </div>
-        <a href="__APP__/member/common/actlogout" data-role="button" class="ui-btn-h fn-right" data-theme="h">注销</a>
     </div>
     <ul class="xiangxi fn-clear">
         <li>资产总额：{:Fmoney($minfo['account_money']+$minfo['back_money']+$minfo['money_collect']+$minfo['money_freeze'])}</li>

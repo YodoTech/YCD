@@ -11,11 +11,13 @@
 <link href="__ROOT__/Style/Mobile/css/common.css" rel="stylesheet" type="text/css">
 <link href="__ROOT__/Style/Orange/css/extend.css" rel="stylesheet" type="text/css">
 <script src="__ROOT__/Style/Mobile/js/jquery-1.9.1.min.js"></script>
-<script src="__ROOT__/Style/Mobile/js/jquery.mobile-1.4.3.min.js"></script>
-<script src="__ROOT__/Style/Mobile/js/common.js"></script>
 <script>
-$(document).ready(function() {
-	//JQM 全局配置
+$(document).bind("mobileinit", function() {
+	//覆盖的代码
 	$.mobile.ajaxEnabled = false;
+	$.mobile.hashListeningEnabled = false;
+	//$.mobile.linkBindingEnabled = false;
 });
 </script>
+<script src="__ROOT__/Style/Mobile/js/jquery.mobile-1.4.3.min.js"></script>
+<script src="__ROOT__/Style/Mobile/js/common.js"></script>
