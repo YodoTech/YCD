@@ -192,7 +192,7 @@ class BorrowinAction extends MCommonAction {
 		exit(json_encode($data));
 	}
 
-	public function cancel(){
+	public function cancel(){ajaxmsg("操作不允许");//停用
 		$id = intval($_POST['id']);
 		$newid = M('borrow_info')->where("borrow_uid={$this->uid} AND id={$id} AND borrow_status=0")->delete();
 		if($newid) ajaxmsg("撤消成功");
