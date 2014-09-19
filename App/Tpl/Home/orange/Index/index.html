@@ -11,18 +11,21 @@
 <script type="text/javascript">
 $(function() {
   $('.knob').knob();
-  $('#getting-started').countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
-    $(this).html(event.strftime('<span>%D天</span>%H : %M : %S'));
+  $('#getting-started').hide().countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
+    var t = event.strftime('<span>%D天</span>%H : %M : %S');
+    $(this).html(t).fadeIn('2000');
   });
   //jcarousellite
   $('.banner .show ul li:eq(0)').show();
   var speed = 5000, iNum = 0;
   $('.banner .focus a').bind('click',function() {
-    var aIndex = $('.banner .focus a').index(this);
-    $('.on').removeClass('on');
-    $(this).addClass('on');
-    $('.banner .show ul li').fadeOut().eq(aIndex).fadeIn();
-    iNum = aIndex;
+    if (!$(this).hasClass('on')) {
+      var aIndex = $('.banner .focus a').index(this);
+      $('.on').removeClass('on');
+      $(this).addClass('on');
+      $('.banner .show ul li').fadeOut().eq(aIndex).fadeIn();
+      iNum = aIndex;
+    }
     return false;
   });
   var autoPlay = function() {
