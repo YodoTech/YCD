@@ -122,9 +122,7 @@ $(function() {
         <if condition="$borrow_type eq 2">
         <ul class="fn-clear">
           <li class="ysd3L fn-left">是否有担保奖励：</li>
-          <li class="ysd3R fn-left">
-              <span><input type="checkbox" class="x_checkbox" name="is_reward_vouch" id="is_reward_vouch" onclick="is_reward_vouch_do()" title="复审通过后会直接从借款中扣除相应的奖励金额给担保人" /></span>
-          </li>
+          <li class="ysd3L fn-left w300" style="text-align:left;"><input type="checkbox" class="x_checkbox" name="is_reward_vouch" id="is_reward_vouch" onclick="is_reward_vouch_do()" title="复审通过后会直接从借款中扣除相应的奖励金额给担保人" /></li>
         </ul>
         </if>
       </div>
@@ -147,12 +145,12 @@ $(function() {
       </div>
       <div class="hyxx33 fn-clear" id="_is_reward_vouch" style="display:none">
         <h2>担保奖励</h2>
-        <ul class="fn-clear">
+        <ul class="fn-clear" style="padding-top:20px;">
           <li class="ysd3L fn-left">担保比例：</li>
             <li class="ysd3R fn-left">
-                <span><input onkeyup="NumberCheck(this)" type="text" class="x_input" name="vouch_rate" title="担保奖励按照所要借款的百分比给担保人，比如借100，奖励是3%，担保人借出50，则奖励50*3%=1.5" />
-                %</span>
+              <span><input onkeyup="NumberCheck(this)" type="text" class="x_input" name="vouch_rate" title="担保奖励按照所要借款的百分比给担保人，比如借100，奖励是3%，担保人借出50，则奖励50*3%=1.5" /></span>
             </li>
+            <li class="ysd3L fn-left w300 ml10" style="text-align:left;">%</li>
         </ul>
         <ul class="fn-clear">
           <li class="ysd3L fn-left">指定担保人：</li>
