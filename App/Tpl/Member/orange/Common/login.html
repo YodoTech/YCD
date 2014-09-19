@@ -4,6 +4,7 @@
 <script type="text/javascript">
 var imgpath="__ROOT__/Style/M/";
 var curpath="__URL__";
+$(function(){ $('.partner').hover(function(){ $(this).addClass('hover');},function(){ $(this).removeClass('hover');});});
 </script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/M/login.js"></script>
 <include file="orange:Public:_header_main" group="Home" />
@@ -41,10 +42,12 @@ var curpath="__URL__";
         <div class="dengluym2">没有账号？&nbsp;<a href="__APP__/member/common/register/">免费注册</a></div>
         <div class="dengluym3">
             <ul class="fn-clear">
-                <li class="li1 fn-left">您还可以使用合作账号登录</li>
-                <li class="li2 fn-right">
-                    <a href="__APP__/member/oauth/qq/"><img src="__ROOT__/Style/Orange/images/qq.jpg" alt="腾讯登陆"></a>
-                    <!-- <a style=" margin-left:10px;" href="__APP__/member/oauth/sina/"><img src="__ROOT__/Style/Orange/images/sina.jpg" alt="微博登陆"></a> -->
+                <li class="li1">您还可以使用合作账号登录</li>
+                <li class="li2">
+                    <div class="bottom">
+                        <a id="partner-qq" class="partner" href="__APP__/member/oauth/qq/">腾讯账号</a>
+                        <a id="partner-weibo" class="partner" href="__APP__/member/oauth/sina/">新浪微博</a>
+                    </div>
                 </li>
             </ul>
         </div>  

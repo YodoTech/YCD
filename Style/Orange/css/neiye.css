@@ -280,10 +280,15 @@ ul.jiekuan2_2 li.li2 span.sp1{width:122px; height:88px; padding:60px 0px 0 0px; 
 .dengluym .dengluym3{ width:304px; border-top:1px solid #fff; margin:20px 0 0; padding:4px 0 0 0;}
 .dengluym .dengluym3 ul{ width:296px; margin:4px 4px 0; padding:0;}
 .dengluym .dengluym3 ul li{margin:0; padding:0; color:#fff;}
-.dengluym .dengluym3 ul li.li1{ width:210px; height:26px;}
-.dengluym .dengluym3 ul li.li2{ width:20px; height:20px; margin:2px 0 0 0;}
-.dengluym .dengluym3 ul li.li2 a img{ background:none; border:none; margin:0; padding:0;}
+.dengluym .dengluym3 ul li.li1{ width:180px; height:26px;}
+.dengluym .dengluym3 ul li.li2{ width:100px; height:20px; margin:2px 0 0 0;}
 
+.dengluym .dengluym3 .bottom { position: relative;}
+.dengluym .dengluym3 .bottom a.partner { height: 20px; background-image: url(../images/login_partner.png); background-repeat: no-repeat; position: absolute; text-indent: -9999px;}
+#partner-qq { width: 20px; background-position: 0 0; top: 0px; right: 45px;}
+#partner-weibo { width: 26px; background-position: 100% 0; right: 0; top: 0px;}
+#partner-qq.hover { background-position: 0 -30px;}
+#partner-weibo.hover { background-position: 100% -30px;}
 
 /*文章页*/
 .art1{ width:1132px; margin:10px auto 30px; border:1px solid #c6c6c6; padding:0; border-top:5px solid #fa6f15;}

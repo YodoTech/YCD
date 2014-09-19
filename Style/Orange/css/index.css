@@ -90,13 +90,17 @@
 	margin:0 auto;
 }
 .banner .focus a {
-	width:14px;
-	height:14px;
-	background:url(../images/ico01.png) no-repeat left -24px;
+	width:12px;
+	height:12px;
+	/*background:url(../images/ico01.png) no-repeat left -24px;*/
+	background-color:#fff;
+	border-radius:100%;
+
 	float:left;
 	margin-left:10px;
 	display:inline-block;
 }
 .banner .focus a.on {
-	background:url(../images/ico01.png) no-repeat left top;
+	/*background:url(../images/ico01.png) no-repeat left top;*/
+	background-color:#2f3032;
 }
