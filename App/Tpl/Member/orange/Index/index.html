@@ -22,14 +22,14 @@
                     <p class="p1 fn-clear"><span><a href="__APP__/member/charge#fragment-1" title="充值">充&nbsp;值</a></span><span><a href="__APP__/member/withdraw#fragment-1" title="提现" class="a1">提&nbsp;现</a></span></p>
                     <p class="p2 fn-clear">
                         <if condition="$verifyStatus['phone_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-2"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-2"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
                         </if>
                         <if condition="$verifyStatus['id_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-3"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-3"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
                         </if>
                         <if condition="$memberinfo.pin_pass eq ''">
                         <span><a class="a1" href="__APP__/member/user#fragment-3"><img title="支付密码，未设置" alt="支付密码未设置" src="__ROOT__/Style/Orange/images/hyxxicon_3h.jpg" /></a></span>
@@ -37,9 +37,9 @@
                         <span><a href="__APP__/member/user#fragment-3"><img title="支付密码，已设置" alt="支付密码已设置" src="__ROOT__/Style/Orange/images/hyxxicon_3.jpg" /></a></span>
                         </if>
                         <if condition="$verifyStatus['email_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-1"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-1"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
                         </if>
                         <if condition="($verifyStatus['user_leve'] neq 0) AND (time() lt $verifyStatus['time_limit']) ">
                         <span><a href="__APP__/member/vip"><img alt="VIP会员" title="VIP会员" src="__ROOT__/Style/Orange/images/hyxxicon_6.jpg" /></a></span>

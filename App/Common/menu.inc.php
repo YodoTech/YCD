@@ -124,6 +124,9 @@ $menu_left[$i][$i."-".$j][] = array('用户组权限管理',U('/admin/acl/'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('文件管理','#',0);
 $menu_left[$i][$i."-".$j][] = array('文件管理',U('/admin/mfields/'),1);
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('日志管理','#',1);
+$menu_left[$i][$i."-".$j][] = array('短信发送记录',U('/admin/sms/log'),1);
 
 $i++;
 $menu_left[$i]= array('数据库','#',1);

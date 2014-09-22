@@ -2612,15 +2612,40 @@ function getBorrowInterestRate($rate, $duration)
 function sendsms($mob, $content)
 {
     $msgconfig = fs("Webconfig/msgconfig");
-    $uid = $msgconfig['sms']['user'];
-    $pwd = $msgconfig['sms']['pass'];
-    $mob = $mob;
-    $content = urlencode(auto_charset($content, "utf-8", "gbk"));
-    $sendurl = "http://service.winic.org:8009/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $content . "&time=";
-    $xhr = new COM("MSXML2.XMLHTTP");
-    $xhr->open("GET", $sendurl, false);
-    $xhr->send();
-    $data = explode("/", $xhr->responseText);
+    $uid = urlencode(auto_charset($msgconfig['sms']['user'],"utf-8","gbk"));
+    $pwd = urlencode($msgconfig['sms']['pass']);
+    $mob = urlencode($mob);
+    $content = urlencode(auto_charset($content,"utf-8","gbk"));
+    $sendurl = "http://service.winic.org/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $content . "&time=";
+    $pos = strpos(PHP_OS, 'WIN');
+    if ($pos === false) {//Linux
+        $arr = file($sendurl);
+        $result = $arr[0];
+    } else {//Windows
+        $xhr = new COM("MSXML2.XMLHTTP");
+        $xhr->open("GET", $sendurl, false);
+        $xhr->send();
+        $result = $xhr->responseText;
+    }
+    $data = explode("/", $result);
+    
+    //记录日志
+    $d = array(
+        'to' => $mob,
+        'content' => urldecode($content),
+        'result' => $result,
+        'add_ip' => get_client_ip(),
+        'add_time' => time()
+    );
+    if (session('admin')) {
+        $d['uid'] = session("admin_id");
+        $d['is_admin'] = 1;
+    } else {
+        $d['uid'] = session('u_id');
+        $d['is_admin'] = 0;
+    }
+    M('sms_log')->save($d);
+
     if ($data[0] == "000") {
         return true;
     } else {

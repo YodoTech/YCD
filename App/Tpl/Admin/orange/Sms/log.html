@@ -1,0 +1,38 @@
+<include file="Public:_header" />
+<div class="so_main">
+  <div class="page_tit">短信发送日志</div>
+  <div class="Toolbar_inbox">
+    <div class="page right">{$pagebar}</div>&nbsp;
+  </div>
+  <div class="list">
+    <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th class="line_l">ID</th>
+      <th class="line_l">发送用户</th>
+      <th class="line_l">号码</th>
+      <th class="line_l">发送内容</th>
+      <th class="line_l">返回内容</th>
+      <th class="line_l">发送状态</th>
+      <th class="line_l">IP地址</th>
+      <th class="line_l">发送时间</th>
+    </tr>
+    <volist id="vo" name="list">
+        <tr overstyle='on'>
+          <td>{$vo.id}</td>
+          <td>{$vo.uname}/{$vo.utype}</td>
+          <td>{$vo.to}</td>
+          <td>{$vo.content}</td>
+          <td>{$vo.result}</td>
+          <td>{$vo.state}</td>
+          <td>{$vo.add_ip}</td>
+          <td>{$vo.add_time|date='Y年m月d日H时',###}</td>
+        </tr>
+    </volist>
+    </table>
+  </div>
+  
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>&nbsp;
+  </div>
+</div>
+<include file="Public:_footer" />

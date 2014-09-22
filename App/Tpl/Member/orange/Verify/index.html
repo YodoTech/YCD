@@ -12,7 +12,7 @@ function sendMobileValidSMSCode() {
 	var mobile = $("#txt_phone").val();
 	if (mobile == "") {
 		$("#btnSendMsg").html("获取验证码");
-		$('#sendSMSTip').html("请输入手机号码");
+		$('#sendSMSTip').html("<span class='red'>请输入手机号码</span>");
 		return;
 	}
 	if (mbTest.test(mobile)) {
