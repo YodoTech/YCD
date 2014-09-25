@@ -1,0 +1,78 @@
+<include file="mobile:Public:_header_common" group="Home" />
+<title>会员中心 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<style>
+ul.xiangxi li{ width:100%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:5px 0 0 37px;}
+.btn{ width:74%; margin:10px auto 0; padding:0;}
+.btn a.ui-btn-h{ width:45%;}
+.ui-grid-e{ padding:20px 0 0 0;}
+.ui-grid-e .ui-block-a,.ui-grid-e .ui-block-b,.ui-grid-e .ui-block-c,.ui-grid-e .ui-block-d{ width:25%; text-align:center; border-left:1px solid #fff;}
+.ui-grid-e .ui-block-a{ border-left:none;}
+.ui-grid-e .ui-block-a a,.ui-grid-e .ui-block-b a,.ui-grid-e .ui-block-c a,.ui-grid-e .ui-block-d a{ width:100%; height:44px; line-height:44px; padding:0; margin:0; border:none; box-shadow:none; background:#2f3032; color:#fff; font-size:.8rem;}
+.ui-grid-e .ui-block-a a:hover,.ui-grid-e .ui-block-b a:hover,.ui-grid-e .ui-block-c a:hover,.ui-grid-e .ui-block-d a:hover{color:#fa6f15;}
+/* verify */
+.ui-verify span {width: 34px;height: 34px;float: left;margin-right: 10px;}
+.ui-verify span a {padding: 2px 5px;border-radius: 3px;margin: 0;background: #fa6f15;}
+.ui-verify span a.a1 {background: #2f3032;}
+</style>
+<!--{$uclogin}-->
+<include file="mobile:Public:_header_main" group="Home" />
+<!--中部开始-->
+<div data-role="content" data-theme="f">
+    <h1><span><a href="javascript:;"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>用户中心</h1>
+    <div class="btn fn-clear">
+        <div>{:session('u_user_name')}</div>
+        <div class="mt10"><a href="__APP__/member/common/actlogout" data-role="button" class="ui-btn-h" data-theme="h">注销</a></div>
+        <div class="ui-verify mt10">
+            <if condition="$verifyStatus['phone_status'] eq 1 ">
+            <span><a href="javascript:;"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
+            <else />
+            <span><a class="a1" href="javascript:;"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
+            </if>
+            <if condition="$verifyStatus['id_status'] eq 1 ">
+            <span><a href="__APP__/member/verify#fragment-1"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
+            <else />
+            <span><a class="a1" href="__APP__/member/verify#fragment-1"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
+            </if>
+            <if condition="$memberinfo.pin_pass eq ''">
+            <span><a class="a1" href="__APP__/member/user#fragment-1"><img title="支付密码，未设置" alt="支付密码未设置" src="__ROOT__/Style/Orange/images/hyxxicon_3h.jpg" /></a></span>
+            <else/>
+            <span><a href="__APP__/member/user#fragment-1"><img title="支付密码，已设置" alt="支付密码已设置" src="__ROOT__/Style/Orange/images/hyxxicon_3.jpg" /></a></span>
+            </if>
+            <if condition="$verifyStatus['email_status'] eq 1 ">
+            <span><a href="javascript:;"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
+            <else />
+            <span><a class="a1" href="javascript:;"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
+            </if>
+            <if condition="($verifyStatus['user_leve'] neq 0) AND (time() lt $verifyStatus['time_limit']) ">
+            <span><a href="javascript:;"><img alt="VIP会员" title="VIP会员" src="__ROOT__/Style/Orange/images/hyxxicon_6.jpg" /></a></span>
+            <else />
+            <span><a class="a1" href="javascript:;"><img alt="普通会员" title="普通会员" src="__ROOT__/Style/Orange/images/hyxxicon_6h.jpg"/></a></span>
+            </if>
+        </div>
+    </div>
+    <ul class="xiangxi fn-clear">
+        <li>资产总额：{:Fmoney($minfo['account_money']+$minfo['back_money']+$minfo['money_collect']+$minfo['money_freeze'])}</li>
+        <li>可用余额：{:Fmoney($minfo['account_money']+$minfo['back_money'])}</li>
+        <li>冻结总额：{$minfo.money_freeze|Fmoney=###}</li>
+        <if condition="$lastInvest.gettime gt 0">
+            <li>最近待收金额：{:Fmoney(getFloatvalue($lastInvest['capital']+$lastInvest['interest'],2))}</li>
+            <li>最近待收时间：{$lastInvest.gettime|mydate="Y-m-d",###,'无待收'}</li>
+        </if>
+        <li>待收总额：{$minfo.money_collect|Fmoney=###}</li>
+        <li>待收利息：{$capitalinfo.tj.willgetInterest|Fmoney=###}</li>
+        <li>提现总额：{$list.tx.withdraw_money|Fmoney=###}</li>
+        <li>充值总额：{:Fmoney($list['27']['money']+$list['3']['money'])}</li>
+        <li>借款管理费：{$list.18.money|Fmoney=###}</li>
+    </ul>
+    <div class="btn fn-clear"><a href="__APP__/member/charge#fragment-1" data-role="button" class="ui-btn-h fn-left" data-theme="h">充值</a><a href="__APP__/member/withdraw#fragment-1" data-role="button" class="ui-btn-h fn-right" data-theme="h">提现</a></div>
+     <div class="ui-grid-e">
+         <div class="ui-block-a"><a href="__APP__/member/capital#fragment-1" data-role="button" data-corners="false">资金明细</a></div>
+         <div class="ui-block-b"><a href="__APP__/member/charge#fragment-2" data-role="button" data-corners="false">充值记录</a></div>
+         <div class="ui-block-c"><a href="__APP__/member/withdraw#fragment-2" data-role="button" data-corners="false">提现记录</a></div>
+         <div class="ui-block-d"><a href="__APP__/member/bank#fragment-1" data-role="button" data-corners="false">银行卡管理</a></div>  
+    </div>
+</div>
+<!--中部结束-->
+<include file="mobile:Public:_footer" group="Home" />

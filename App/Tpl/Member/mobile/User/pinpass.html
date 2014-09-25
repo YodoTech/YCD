@@ -1,0 +1,117 @@
+<style>
+ul.xiangxi { border:1px solid red;}
+ul.xiangxi li{ width:100%; font-size:.9rem; line-height:1.8rem;}
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+.btn .ui-btn{ width:45%;}
+.ui-grid-b{ width:100%;  padding:0 0 0 37px; border-bottom:1px solid #b1b1b1; font-size:.9rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:35%;}
+.ui-grid-b .ui-block-b{ width:30%;}
+.ui-grid-b .ui-block-b input{ width:100%;}
+.ui-grid-b .ui-block-c{ width:30%; padding-left:10px;}
+.ui-grid-b .ui-block-c a{ color:#fa6f15;}
+.ui-grid-b .ui-block-c img{ width:54px; height:18px; margin:4px 0 0 0;}
+.ts{ padding:5px 10px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<script type="text/javascript">
+function showErr_pin() {
+	$(".alertDiv_pin").show('slow');
+}
+function clearErr_pin() {
+	$(".alertDiv_pin ul").html("");
+}
+function addErr_pin(err) {
+	$(".alertDiv_pin ul").append("<li>" + err + "</li>");
+}
+function hideErr_pin() {
+	$(".alertDiv_pin").hide();
+}
+function hasErr_pin() {
+	return $(".alertDiv_pin ul li").length > 0;
+}
+</script>
+<div class="ts">您可以通过经常性修改支付密码更好的保护您的账号安全，以避免您受到意外损失</div>
+<div class="alertDiv_pin fn-clear fn-hide">
+	<ul class="xiangxi fn-left ml10 mb10 pl10"></ul>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a mt10 mb10">用户名：</div>
+    <div class="ui-block-b mt10 mb10">{:session('u_user_name')}</div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a mt10 mb10">请输入原支付密码：</div>
+    <div class="ui-block-b">
+    	<input id="oldpassword_pin" name="oldpassword_pin" type="password" data-role="none">
+    	<span class="red">(如未修改过，则与原登陆密码相同)</span>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a mt10 mb10">请输入新支付密码：</div>
+    <div class="ui-block-b">
+    	<input id="newpassword_pin" name="newpassword_pin" type="password" data-role="none">
+    	<span class="red">(输入您的新支付密码)</span>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a mt10 mb10">请再输入新支付密码：</div>
+    <div class="ui-block-b">
+    	<input id="newpassword_pin1" name="newpassword_pin1" type="password" data-role="none">
+		<span class="red">(再输入一次您的新支付密码)</span>
+    </div>
+</div>
+<div class="btn fn-clear">
+	<a href="#" onclick="UpdatePwd_pin()" data-role="button" class="ui-btn-h fn-left" data-inline="true" data-theme="h">确认</a>
+	<a href="javascript:;" data-role="button" class="ui-btn-h fn-left" data-inline="true" data-theme="h">取消</a>
+</div>
+<div class="ts">
+	<p>1、经常性修改支付密码能有效的保护您的帐号安全。</p>
+	<p>2、涉及到您的资金安全，请勿设置简单的支付密码，不要设置和其它网站相同的支付密码。</p>
+</div>
+<script type="text/javascript">
+function UpdatePwd_pin() {
+	var oldpwd = $('#oldpassword_pin').val();
+	var newspwd1 = $('#newpassword_pin').val();
+	var newspwd2 = $('#newpassword_pin1').val();
+	clearErr_pin();
+	hideErr_pin();
+	if (oldpwd == '') {
+		addErr_pin('原支付密码必须填写！');
+	}
+	if (newspwd1 == '') {
+		addErr_pin('新支付密码必须填写！');
+	}
+	if (newspwd2 == '') {
+		addErr_pin('确认新支付密码必须填写！');
+	}
+	if (newspwd2 != newspwd1) {
+		addErr_pin('两次支付密码不一致！');
+	}
+	if (hasErr_pin()) {
+		showErr_pin();
+		return false;
+	}
+	else {
+		MY_COMMON_OP.loadStart('加载中...', 'b', false);
+		$.ajax({
+			url: '__URL__/changepin/',
+			type: 'post',
+			dataType: 'json',
+			data: {'oldpwd':oldpwd,'newpwd1':newspwd1,'newpwd2':newspwd2},
+			success: function(d) {
+				MY_COMMON_OP.loadStop();
+				if (d.status == '2') {
+					addErr_pin(d.message);
+					showErr_pin();
+					return;
+				} else if (d.status == '1') {
+					MY_COMMON_OP.alert('恭喜，支付密码修改成功！');
+				} else {
+					MY_COMMON_OP.alert(d.message);
+				}
+			}
+		})
+	}
+}
+//刷新样式
+$('.btn a').button();
+</script>

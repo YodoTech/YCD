@@ -1,0 +1,23 @@
+<include file="mobile:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>资金管理 - 会员中心 - {$glo.web_name}</title>
+<include file="mobile:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div data-role="content" data-theme="f">
+    <h1><span><a href="__APP__/member/"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>资金管理</h1>
+    <div class="tabs fn-hide">
+        <a href="#fragment-1" ajax_href="__URL__/charge/"></a>
+        <a href="#fragment-2" ajax_href="__URL__/chargelog/"></a>
+    </div>
+    <div class="tabs-body">
+        <div id="fragment-1" style="display:none">
+            <!-- 在线充值 -->
+        </div>
+        <div id="fragment-2" style="display:none">
+            <!-- 充值记录 -->
+        </div>
+    </div>
+</div>
+<!--中部结束-->
+<include file="mobile:Public:_alert" group="Home" />
+<include file="mobile:Public:_footer" group="Home" />

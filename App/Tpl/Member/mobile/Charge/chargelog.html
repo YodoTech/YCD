@@ -1,0 +1,132 @@
+<link href="__ROOT__/Style/Mobile/css/mobiscroll.custom-2.5.0.min.css" rel="stylesheet" />
+<script src="__ROOT__/Style/Mobile/js/mobiscroll.custom-2.5.4.min.js"></script>
+<style>
+ul.xiangxi{ width:100%;}
+ul.xiangxi li{ width:84%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:5px 8% 0;}
+ul.xiangxi li span{ float:left; text-align:left;}
+
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ys_ts{ font-size:.7rem; color:#fa6f15; padding-left:30px; line-height:1.5rem;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">
+    <php>if(!isset($_GET['start_time'])){</php>截止<span class="red"><php>echo date("Y-m-d H:i:s",time());</php></span><php>}else{</php>从<span class="red"><php>echo date("Y-m-d",$_GET['start_time']);</php></span>到<span class="red"><php>echo date("Y-m-d",$_GET['end_time']);</php></span>期间<php>}</php>您的充值成功金额是：<span class="red"> ￥{$success_money|default="0.00"}</span>，充值失败金额是：<span class="red"> ￥{$fail_money|default="0.00"}</span>。
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">金额从：</div>
+    <div class="ui-block-b">
+        <input type="text" class="txtInput" onblur="NumberCheck(this)" id="moneyBegin" name="moneyBegin">至<input type="text" onblur="NumberCheck(this)" class="txtInput" id="moneyEnd" name="moneyEnd">
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">时间从：</div>
+    <div class="ui-block-b">
+        <input type="text" id="start_time" name="start_time" value="<php>if($search['start_time']){echo date('Y-m-d',$search['start_time']);}</php>" data-role="none"/>至
+        <input type="text" value="<php>if($search['end_time']){echo date('Y-m-d',$search['end_time']);}</php>" id="end_time" name="end_time" data-role="none"/>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b btn"><a id="btn_search" href="javascript:;" onclick="getBind();" data-role="button" class="ui-btn-h fn-left" data-theme="h">查看</a></div>
+</div>
+<ul class="xiangxi fn-clear">
+    <li class="fn-clear">
+        <span class="w130">编号</span>
+        <span class="w130">充值时间</span>
+        <span class="w130">充值金额</span>
+        <span class="w130">充值状态</span>
+    </li>
+    <volist name="list" id="vo">
+    <li class="fn-clear">
+        <span class="w130">{$vo.id}</span>
+        <span class="w130">{$vo.add_time|date="Y-m-d H:i",###}</span>
+        <span class="w130">{$vo.money}</span>
+        <span class="w130">{$vo.status}</span>
+    </li>
+    </volist>
+</ul>
+<div id="pager" data="fragment-2" class="ui-grid-d ajaxpagebar">{$pagebar}</div>
+<script type="text/javascript">
+//返回数字
+function NumberCheck(t){
+    var num = t.value;
+    var re=/^\d+\.?\d*$/;
+    if(!re.test(num)){
+        isNaN(parseFloat(num))?t.value=0:t.value=parseFloat(num);
+    }
+}
+
+function getBind(){
+    x = makevar(['moneyBegin','moneyEnd','start_time','end_time']);
+    $.ajax({
+        url: "__URL__/chargelog",
+        data: x,
+        timeout: 5000,
+        cache: false,
+        type: "get",
+        dataType: "json",
+        success: function (d, s, r) {
+            if(d) $("#fragment-2").html(d.html);//更新客户端竞拍信息 作个判断，避免报错
+        }
+    });
+}
+
+//Ajax Page
+$('.ajaxpagebar a').click(function() {
+    try {   
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().parent().attr('data');
+        var x={};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.html);//更新客户端信息，作个判断，避免报错
+            }
+        });
+    } catch(e) {};
+    return false;
+});
+//mobiscroll
+var plugdatetime = function($dateTxt, opt) {
+    $dateTxt.mobiscroll('destroy').mobiscroll(
+        $.extend({
+            preset: 'date',
+            theme: 'sense-ui',
+            mode: 'scroller',
+            display: 'bottom',
+            monthText: '月',
+            dayText: '日',
+            yearText: '年',
+            setText: '确定',
+            cancelText: '取消',
+            dateOrder: 'yymmdd',//面板中日期排列格式
+            dateFormat: 'yy-mm-dd'
+        }, opt)
+    );
+};
+
+plugdatetime($('#start_time'), {
+    onBeforeShow: function(inst) {
+        inst.settings.maxDate = $('#end_time').val()==''?new Date('2020-10-01'):new Date($('#end_time').val());
+    }
+});
+plugdatetime($('#end_time'), {
+    onBeforeShow: function(inst) {
+        inst.settings.minDate = $('#start_time').val()==''?new Date('2020-10-01'):new Date($('#start_time').val());
+    }
+});
+
+
+//刷新样式
+$('.btn a').button();
+</script>

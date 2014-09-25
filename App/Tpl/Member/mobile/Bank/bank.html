@@ -1,0 +1,195 @@
+<script type="text/javascript" src="__ROOT__/Style/js/area.js" language="javascript"></script>
+<tagLib name="htmlA" />
+<style>
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+ul.xiangxi { border:1px solid red;}
+ul.xiangxi li{ width:100%; font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 0; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:40%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e{ width:50%;font-size:.9rem; line-height:1.8rem; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-e .ui-icon-select{ font-size:.9rem; line-height:1.8rem; text-align:left; padding-left:4px; }
+.ui-grid-b .ui-block-e .ui-icon-select:after {display: block;	content: '▼';font-size: 14px;	text-align: center; line-height:1.5em; color:#fa6f15;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">尊敬的{$voinfo.real_name}先生，提现操作涉及您的资金安全，敬请仔细操作。</div>
+<div class="alertDiv fn-clear fn-hide">
+	<ul class="xiangxi fn-left ml10 mb10 pl10"></ul>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">当前银行账号：</div>
+    <div class="ui-block-b">{$vobank.bank_num|hidecard=###,3,'还没有登记您的银行账号'}</div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;当前银行名称：</div>
+    <div class="ui-block-e">
+    	<htmlA:select id="bank_name" value="key|vobank.bank_name" datakey='bank_list' addstr='data-icon="select"' />
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;账户户主姓名：</div>
+    <div class="ui-block-b">
+    	<span id="spname">{:cnsubstr($voinfo['real_name'],1,0,'utf-8',false).str_repeat("*",strlen($voinfo['real_name'])-1)}</span>
+    </div>
+</div>
+<php>if($vobank.bank_num != '') {</php>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;当前银行帐号：</div>
+    <div class="ui-block-b">
+		<input id="txt_oldaccount" type="text" data-role="none">
+		&nbsp;(为了您的资金安全，请输入您当前的银行账号)
+    </div>
+</div>
+<php>}</php>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;新的银行帐号：</div>
+    <div class="ui-block-b">
+    	<input id="txt_account" type="text" data-role="none">
+		&nbsp;(信用卡帐号无法提现，请不要误填)
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;确认银行帐号：</div>
+    <div class="ui-block-b">
+    	<input id="txt_confirmaccount" type="text" data-role="none">
+		&nbsp;(请再次确认您添加的银行账号)
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户所在省份：</div>
+    <div class="ui-block-e">
+    	<select name="selectp" id="province" data-icon="select">
+			<option value="0">请选择省份 </option>
+		</select>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户所在城市：</div>
+    <div class="ui-block-e">
+    	<select name="selectc" id="city" data-icon="select">
+			<option value="0">请选择城市</option>
+		</select>
+		<select name="selectc" id="district" data-role="none" style="display:none">
+			<option value="0">请选择地区</option>
+		</select>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"><span class="red">*</span>&nbsp;开户行支行名称：</div>
+    <div class="ui-block-b">
+    	<input name="txt_bankName" id="txt_bankName" value="{$vobank.bank_address}" type="text" data-role="none">
+		&nbsp;(如不能确定，请拨打开户行的客服热线咨询)
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b btn"><a id="btn_set" href="javascript:;" data-role="button" class="ui-btn-h fn-left" data-theme="h">提交更新</a></div>
+</div>
+<div class="ts">
+	<p>请用户尽量填写较大的银行（如农行、工行、建行、中国银行等），避免填写那些比较少见的银行（如农村信用社、平安银行、恒丰银行等）。否则提现资金很容易会被退票。</p>
+	<p>请您填写完整联系方式，以便遇到问题时，工作人员可以及时联系到您。</p>
+</div>
+<script>
+var newTitle = '{$glo.web_name}提醒您：';
+$(function() {
+	$("#btn_set").click(function() {
+		clearErr();
+		if ($("#bank_name").val()=="") {
+			addErr("请选择开户行");
+		}
+		if ($("#txt_account").val().length < 1) {
+			addErr("请输入您的银行帐号");
+		}
+		if ($("#txt_account").val().length < 9) {
+			addErr("请输入正确的银行卡号");
+		}
+		if ($("#txt_bankName").val().length < 1) {
+			addErr("请输入开户支行名称");
+		}
+		if ($("#province").val()=="") {
+			addErr("请选择开户行所在省份");
+		}
+		if ($("#city").val()=="") {
+			addErr("请选择开户行所在市");
+		}
+		if ($("#txt_confirmaccount").val() != $("#txt_account").val()) {
+			addErr("更新失败。两次输入银行账号不一致，请重新输入！");
+			$("#txt_confirmaccount").val("");
+			$("#txt_confirmaccount").focus();
+		}
+		if (hasErr()) {
+			showErr();
+			return false;
+		} else {
+			MY_COMMON_OP.loadStart('加载中...', 'b', false);
+			$.ajax({
+				url: "__URL__/bindbank",
+				type: "post",
+				dataType: "json",
+				data: {
+					account: $("#txt_account").val(),
+					oldaccount: $("#txt_oldaccount").val(),
+					province: $("#province").find("option:selected").text(),
+					cityName: $("#city").find("option:selected").text(),
+					bankaddress: $("#txt_bankName").val(),
+					bankname: $("#bank_name").val()
+				},
+				success: function(d) {
+					MY_COMMON_OP.loadStop();
+					if (d.status == 1) {
+						MY_COMMON_OP.alert("恭喜，您的银行卡更新成功！", (function() {
+							window.loaction.reload();
+						}));
+					} else if (d.status == 0) {
+						MY_COMMON_OP.alert(d.message);
+					}
+				}
+			});
+		}
+	});
+	var ops = '添加';
+	if (ops == '添加') {
+		$("#trOldAccount").css("display", "none")
+	}
+	$("#bankname").html($("#" + 'sel_bankList2' + " :selected").html());
+	$("#txt_account").bind("keyup", function() {
+		$this = $(this);
+		$this.val($this.val().toString().replace(/[^\d]+/, ""));
+	});
+});
+function checkSub() {
+	$("input[type='text']").each(function() {
+		if ($(this).val().length < 1)
+			return false;
+	});
+	return true;
+}
+
+//根据隐藏的银行卡账户判断是更新还是新增
+function showErr() {
+	$(".alertDiv").show('slow');
+}
+function clearErr() {
+	$(".alertDiv ul").html("");
+	hideErr();
+}
+function addErr(err) {
+	$(".alertDiv ul").append("<li>" + err + "</li>");
+}
+function hideErr() {
+	$(".alertDiv").hide();
+}
+function hasErr() {
+	return $(".alertDiv ul li").length > 0;
+}
+
+//...
+var areaurl="__URL__/getarea/";
+var s = new GetAreaSelect('#province','#city','#district',<empty name="vobank['bank_province']">2<else/>{$vobank.bank_province}</empty>,<empty name="vobank['bank_city']">52<else/>{$vobank.bank_city}</empty>);
+
+//刷新样式
+$('.btn a').button();
+$('#bank_name,#province,#city').selectmenu();
+</script>

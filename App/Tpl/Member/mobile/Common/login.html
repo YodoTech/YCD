@@ -1,0 +1,51 @@
+<include file="mobile:Public:_header_common" group="Home" />
+<title>用户登陆 - {$glo.web_name}</title>
+<meta http-equiv="keywords" content="{$glo.web_keywords}" />
+<meta http-equiv="description" content="{$glo.web_descript}" />
+<style>
+ul.xiangxi li{ width:100%; border-bottom:1px solid #b1b1b1; font-size:.9rem; line-height:1.8rem; padding:10px 0 0 37px;}
+.btn{ width:40%; margin:10px auto 0; padding:0;}
+.btn2{ width:40%; margin:30px auto 0; padding:0;color:#fa6f15; font-size:.9rem; line-height:1.8rem; }
+.btn2 a{ color:#fa6f15; border:none; box-shadow:none; width:50%; font-size:.9rem; margin:0; padding:0;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:24%;}
+.ui-grid-b .ui-block-b{ width:40%;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ui-grid-b .ui-block-c{ width:30%; padding-left:10px;}
+.ui-grid-b .ui-block-c a{ color:#fa6f15;}
+.ui-grid-b .ui-block-c img{ width:60px; height:20px; margin:4px 0 0 0;}
+</style>
+<script>var curpath='__URL__';</script>
+<script type="text/javascript" src="__ROOT__/Style/Mobile/js/M/login.js"></script>
+<script>
+$(function() {
+    $('#submitBtn').on('click', function() {
+        LoginSubmit(this);
+        return false;
+    });
+});
+</script>
+<include file="mobile:Public:_header_main" group="Home" />
+<!--中部开始-->
+<div data-role="content" data-theme="f">
+    <div class="ui-grid-b" id="txtWrong"></div>
+    <div class="ui-grid-b">
+        <div class="ui-block-a">账户：</div>
+        <div class="ui-block-b"><input type="text" placeholder="请输入用户名或邮箱" id="txtUser" data-role="none"></div>
+    </div>
+    <div class="ui-grid-b">
+        <div class="ui-block-a">密码：</div>
+        <div class="ui-block-b"><input type="password" id="txtPwd" data-role="none"></div>
+    </div>
+    <div class="ui-grid-b">
+        <div class="ui-block-a">验证码：</div>
+        <div class="ui-block-b"><input type="text" maxlength="4" id="txtCode" data-role="none"></div>
+        <div class="ui-block-c"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></div>
+    </div>
+    <input type="hidden" id="redirect_uri" value="{$redirect_uri}" />
+    <div class="btn"><a id="submitBtn" href="#" data-role="button" class="ui-btn-h" data-theme="h">登&nbsp;录</a></div>
+    <div class="btn2 fn-clear"><a href="__APP__/member/common/getpassword/" data-role="button" data-corners="false" class="fn-left">忘记密码</a><!-- <a href="javascript:;" data-role="button" data-corners="false" class="fn-right">注册账户</a> --></div>
+</div>
+<!--中部结束-->
+<include file="mobile:Public:_alert" group="Home" />
+<include file="mobile:Public:_footer" group="Home" />

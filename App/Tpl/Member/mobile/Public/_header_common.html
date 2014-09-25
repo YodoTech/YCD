@@ -1,0 +1,59 @@
+<script>
+function makevar(v) {
+    var d = {};
+    for(i in v) {
+        var id = v[i];
+        var o = $(":input[name='"+id+"']");
+        switch(o.prop('type')) {
+            case 'text':;
+            case 'textarea': d[id] = $.trim(o.val());break;
+            case 'radio': d[id] = o.filter(':checked').val();break;
+            case 'select-one': d[id] = o.children('option:selected').val();break;
+            default: d[id] = $.trim(o.val());break;
+        }
+        if(typeof d[id] == "undefined") d[id] = "";
+    }
+    return d;
+}
+function ajaxGetData(url,targetid,data) {
+	if (!url) return;
+	data = data || {};
+	var thtml = '<div class=\"loading\"><img src=\"__ROOT__/Style/Orange/images/loading.gif\"></div>';
+	$('#' + targetid).html(thtml).show();
+	
+	$.ajax({
+		url: url,
+		data: data,
+		timeout: 10000,
+		cache: true,
+		type: 'get',
+		dataType: 'json',
+		success: function (d, s, r) {
+			if (d) $('#' + targetid).html(d.html);
+		}
+	});
+}
+function getTabContent(target) {
+	var $target = $(target);
+	var geturl = $target.attr('ajax_href');
+	var hasget = $target.attr('get') || 0;
+	var nowurl = $target.attr('href');
+	var vid = nowurl.split('#');
+	if(hasget != 1) ajaxGetData(geturl, vid[1]);
+	$target.attr('get', '1');
+}
+
+$(function() {
+	$('.tabs a').on('click', function() {
+		getTabContent(this);
+		return false;
+	}).each(function(i) {
+		var $this = $(this);
+		var id = $this.attr('href');
+		if (id.indexOf(window.location.hash) != -1 || i === 0) {
+			$this.trigger('click');
+			$('.tabs-body').children(id).show().siblings().hide();
+		}
+	});
+});
+</script>

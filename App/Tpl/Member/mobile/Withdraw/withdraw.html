@@ -1,0 +1,192 @@
+<script src="__ROOT__/Style/M/js/amounttochinese.js"></script>
+<script>
+$(function() {
+	//$("#btnSendMsg").click(sendSMS);
+	$("#txt_Amount").bind("keyup", function() {
+		$this = $(this);
+		$this.val($this.val().toString().replace(/[^(\d|\.)]+/, ""));
+	});
+	$("#txt_Amount").focus(function() {
+		$("#d_money").css("display", "none");
+	});
+});
+var suretx = function(d,h,v){
+	if(d === true) {
+		$.ajax({
+			url: "__URL__/actwithdraw",
+			type: "post",
+			dataType: "json",
+			data: {"pwd":$("#txtPassword").val(),"amount":$("#txt_Amount").val()},
+			success: function(d) {
+				if (d.status == 2) {
+					MY_COMMON_OP.alert(d.message);
+				} else if(d.status == 1) {
+					MY_COMMON_OP.alert(d.message);
+				} else {
+					MY_COMMON_OP.alert("支付密码错误！");
+				}
+			}
+		});
+	}
+}
+var arrWrong = "<img  src='__ROOT__/Style/M/images/zhuce2.gif'/>&nbsp";
+function SetError(val, cont) {
+	$("#d_money").css("display", "block");
+	$("#d_money").html(val + cont);
+	$("#d_money").attr("class", "reg_wrong");
+}
+
+function drawMoney() {
+	if (testAmount()) {
+		if ($("#txtPassword").val().length < 1) {
+			MY_COMMON_OP.alert("您好，请输入支付密码后再点击确认提现！");
+			return;
+		}
+		if (parseFloat($("#txt_Amount").val()) <= parseFloat($("td.tdContent span").html()) && $("#txtPassword").eq(0).val().length > 0 && parseFloat($("#txt_Amount").val()) > 0) {
+			$.ajax({
+				url: "__URL__/validate",
+				type: "post",
+				dataType: "json",
+				data: {"pwd":$("#txtPassword").val(),"amount":$("#txt_Amount").val()},
+				success: function(d) {
+					if (d.status == 2) {
+						MY_COMMON_OP.alert(d.message);
+					}
+					else if(d.status == 1) {
+						MY_COMMON_OP.confirm(d.message, suretx);
+					} else {
+						MY_COMMON_OP.alert("支付密码错误！");
+					}
+				}
+			});
+		} 
+	}
+}
+
+function testAmount() {
+	var testreuslt = true;
+	if ($("#txt_Amount").val() == '') {
+		SetError(arrWrong, "请输入提现金额，如1000.10。");
+		testreuslt = false;
+	}
+	if (!(/^\d+(.)?\d{1,2}$/.test($("#txt_Amount").val()))) {
+		SetError(arrWrong, "请输入正确的提现金额，如1001.20。");
+		testreuslt = false;
+	}
+	if (parseFloat($("#txt_Amount").val()) < 100) {
+		SetError(arrWrong, "提现金额不能小于100。");
+		testreuslt = false;
+	}
+	if (parseFloat($("#txt_Amount").val()) > 30000) {
+		SetError(arrWrong, "提现金额不能大于30000。");
+		testreuslt = false;
+	}
+	if (parseFloat($("#currentMoeny").html()) < parseFloat($("#txt_Amount").val())) {
+		SetError(arrWrong, "您的账户余额不足以提现。");
+		testreuslt = false;
+	}
+	if (testreuslt) {
+		showChineseAmount();
+	}
+	return testreuslt;
+}
+
+function showChineseAmount() {
+	var regamount = /^(([1-9]{1}[0-9]{0,})|([0-9]{1,}\.[0-9]{1,2}))$/;
+	var reg = new RegExp(regamount);
+	if (reg.test($("#txt_Amount").val())) {
+		var amstr = $("#txt_Amount").val();
+		var leng = amstr.toString().split('.').length;
+		if (leng == 1) {
+			$("#txt_Amount").val($("#txt_Amount").val() + ".00");
+		}
+		$("#d_money").html(Arabia_to_Chinese($("#txt_Amount").val()));
+		$("#d_money").css("display", "");
+		$("#d_money").css("color", "red");
+		$("#d_money").removeClass("reg_wrong");
+	}
+	else {
+		$("#d_money").html("");
+	}
+}
+</script>
+<style>
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">尊敬的{$vo.real_name}，您可以将账户中的余额提取到银行卡中，敬请仔细操作</div>
+<div class="ts">
+	<p>1、尊敬的{$vo.real_name}，提现操作涉及您的资金变动，请仔细核对您的提现信息；</p>
+	<p>2、一般用户单日提现上限为30万元；</p>
+	<p>3、涉及到您的资金安全，请仔细操作。</p>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">您的银行账号是：</div>
+    <div class="ui-block-b">
+    	<div>
+			{$vo.bank_num|hidecard=###,3,'还没有登记您的银行账号'}
+			[<a href="__APP__/member/bank#fragment-1">点此修改</a>]
+		</div>
+		<div>
+			{$vo.bank_name} -- {$vo.bank_address}
+		</div>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">您的真实姓名：</div>
+    <div class="ui-block-b">
+    	{$vo.real_name}（必须和您银行账户姓名一致）
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">联络手机：</div>
+    <div class="ui-block-b">
+    	{$vo.user_phone|default="还未验证"}（{$glo.web_name}划款时会通知您）
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">提款期限：</div>
+    <div class="ui-block-b">
+    	72小时/24小时（72小时内打款，到帐时间因各个银行不同）
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">可提现金额：</div>
+    <div class="ui-block-b">
+    	[<span id="currentMoeny">{$vo.all_money}元</span>] <br />（单笔提现金额会员限制为100-30000元，其中回款金额：{$vo.back_money}元；非回款金额：{$vo.account_money}元）
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">手续费：</div>
+    <div class="ui-block-b">
+    	会员提现金额在回款总金额之内的免收手续费，超出的部分每笔提现收取手续费为提现金额的{$fee.0.0}%，{$fee.0.1}元封顶；如账户余额大于提现手续费，则系统自动在账户余额中扣除手续费，否则提现费用在提现金额中扣除。
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">提现金额：</div>
+    <div class="ui-block-b">
+    	<div>
+			<input name="txt_Amount" id="txt_Amount" onblur="testAmount();" type="text" data-role="none">
+		</div>
+		<div id="d_money"></div>
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a">支付密码：</div>
+    <div class="ui-block-b">
+    	<input name="txtPassword" id="txtPassword" type="password" data-role="none">（为了保证您的提款安全，请输入您的支付密码。）
+    </div>
+</div>
+<div class="ui-grid-b">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b btn">
+    	<a href="javascript:;" data-role="button" class="ui-btn-h fn-left" data-theme="h" onclick="drawMoney()">确认提现</a>
+    </div>
+</div>
+<div class="ts">
+	<p>提示：如果您要加快提现速度，请在每日上午提现。{$glo.web_name}周一到周五的提现处理时间在下午2点之后，周末在下午或者晚上。</p>
+	<p>在法定节日期间，用户申请提现，安排支付时间，{$glo.web_name}会以公告形式发布。</p>
+</div>

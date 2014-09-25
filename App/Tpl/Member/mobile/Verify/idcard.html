@@ -1,0 +1,186 @@
+<style>
+.btn{ width:50%; margin:10px auto 0; padding:0;}
+.btn a{width: 100%;}
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:40%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input[type=text]{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ts{ padding:5px 10px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<if condition="$id_status eq '1'">
+	<div class="ts">亲爱的[{:session('u_user_name')}]，您好，您已通过身份认证</div>
+<elseif condition="$id_status eq '3'"/>
+	<div class="ts">亲爱的[{:session('u_user_name')}]，您好，你提交的身份认证正在审核中...</div>
+<else/>
+	<div class="ts">您必须填写您的真实姓名和身份证号码，虚假的身份信息，是不能通过验证的。</div>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a">真实姓名：</div>
+	    <div class="ui-block-b">
+	    	<input type="text" id="realname" data-role="none">
+	    	<span class="red" id="realnameErr"></span>
+	    </div>
+	</div>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a">身份证号：</div>
+	    <div class="ui-block-b">
+	    	<input type="text" onkeyup="value=this.value.replace(/[^0-9|x|X]+/g,'')" maxlength="18" id="idcard" data-role="none">
+			<span class="red" id="idcardErr"></span>
+	    </div>
+	</div>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a">身份证正面图片：</div>
+	    <div class="ui-block-b">
+			<input type="file" onchange="ajaxFileUploads();" id="imgfile" name="imgfile" style="width:160px;height:21px;line-height:21px;font-size:14px;font-weight:bold;margin:5px;ime-mode:Disabled;" data-role="none">
+			<span style="margin-left:40px">
+				<img id="loading_makeclub" style="display:none" src="__ROOT__/Style/Js/loading.gif" />
+			</span>
+			<span class="red" style="margin-left:40px" id="idimg"></span>
+	    </div>
+	</div>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a">身份证反面图片：</div>
+	    <div class="ui-block-b">
+	    	<input type="file" onchange="ajaxFileUploads2();" id="imgfile2" name="imgfile2" style="width:160px;height:21px;line-height:21px;font-size:14px;font-weight:bold;margin:5px;ime-mode:Disabled;" data-role="none">
+			<span style="margin-left:40px">
+				<img id="loading_makeclub2" style="display:none" src="__ROOT__/Style/Js/loading.gif" />
+			</span>
+			<span class="red" style="margin-left:40px" id="idimg2"></span>
+	    </div>
+	</div>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a"></div>
+	    <div class="ui-block-b btn"><a id="verifyBtn" href="javascript:;" onclick="setIdCard();" data-role="button" class="ui-btn-h fn-left" data-theme="h">完成实名验证</a></div>
+	</div>
+	<div class="ts">
+		<p>1、我们将通过全国公民身份信息中心（NCIIC）系统对您提交的身份进行审核。</p>
+		<p>2、实名认证是您绑定银行卡和使用{$glo.web_name}核心功能的必要条件,提现时的银行帐户名以您提交的认证信息为准。</p>
+		<p>3、如果您在验证过程中，出现任何问题，请联系网站客服。</p>
+	</div>
+</if>
+<script type="text/javascript" src="__ROOT__/Style/Js/ajaxfileupload.js"></script>
+<script>
+//验证身份证号方法
+var testIdcard = function(idcard) {
+	var Errors = new Array("验证通过!", "身份证号码位数不对!", "身份证号码出生日期超出范围!", "身份证号码校验错误!", "身份证地区非法!");
+	var area = { 11: "北京", 12: "天津", 13: "河北", 14: "山西", 15: "内蒙古", 21: "辽宁", 22: "吉林", 23: "黑龙江", 31: "上海", 32: "江苏", 33: "浙江", 34: "安徽", 35: "福建", 36: "江西", 37: "山东", 41: "河南", 42: "湖北", 43: "湖南", 44: "广东", 45: "广西", 46: "海南", 50: "重庆", 51: "四川", 52: "贵州", 53: "云南", 54: "西藏", 61: "陕西", 62: "甘肃", 63: "青海", 64: "宁夏", 65: "xinjiang", 71: "台湾", 81: "香港", 82: "澳门", 91: "国外" }
+	var idcard, Y, JYM;
+	var S, M;
+	var idcard_array = new Array();
+	idcard_array = idcard.split("");
+	if (area[parseInt(idcard.substr(0, 2))] == null) return Errors[4];
+	switch (idcard.length) {
+		case 15:
+			if ((parseInt(idcard.substr(6, 2)) + 1900) % 4 == 0 || ((parseInt(idcard.substr(6, 2)) + 1900) % 100 == 0 && (parseInt(idcard.substr(6, 2)) + 1900) % 4 == 0)) {
+				ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$/; //测试出生日期的合法性 
+			} else {
+				ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}$/; //测试出生日期的合法性 
+			}
+			if (ereg.test(idcard))
+				return Errors[0];
+			else
+				return Errors[2];
+			break;
+		case 18:
+			if (parseInt(idcard.substr(6, 4)) % 4 == 0 || (parseInt(idcard.substr(6, 4)) % 100 == 0 && parseInt(idcard.substr(6, 4)) % 4 == 0)) {
+				ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}[0-9Xx]$/; //闰年出生日期的合法性正则表达式 
+			} else {
+				ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$/; //平年出生日期的合法性正则表达式 
+			}
+			if (ereg.test(idcard)) {
+				S = (parseInt(idcard_array[0]) + parseInt(idcard_array[10])) * 7 + (parseInt(idcard_array[1]) + parseInt(idcard_array[11])) * 9 + (parseInt(idcard_array[2]) + parseInt(idcard_array[12])) * 10 + (parseInt(idcard_array[3]) + parseInt(idcard_array[13])) * 5 + (parseInt(idcard_array[4]) + parseInt(idcard_array[14])) * 8 + (parseInt(idcard_array[5]) + parseInt(idcard_array[15])) * 4 + (parseInt(idcard_array[6]) + parseInt(idcard_array[16])) * 2 + parseInt(idcard_array[7]) * 1 + parseInt(idcard_array[8]) * 6 + parseInt(idcard_array[9]) * 3;
+				Y = S % 11;
+				M = "F";
+				JYM = "10X98765432";
+				M = JYM.substr(Y, 1);
+				if (M == idcard_array[17]) {
+					return Errors[0];
+				} else {
+					return Errors[3];
+				}
+			} else {
+				return Errors[2];
+			}
+			break;
+		default:
+			return Errors[1];
+			break;
+	}
+}
+function setIdCard() {
+	var realname = $('#realname').val();
+	var idcard = $('#idcard').val();
+	var isValidForm = true;
+	if ($.trim(realname) == '') {
+		isValidForm = false;
+		$('#realnameErr').html('请输入您的真实姓名。');
+	} else {
+		$('#realnameErr').html('');
+	}
+	
+	if ($.trim(idcard) == '') {
+		isValidForm = false;
+		$('#idcardErr').html('请输入您的身份证号码。');
+	} else {
+		var idcartValidResult = testIdcard($.trim(idcard));
+		if (idcartValidResult.indexOf('通过') == -1) {
+			isValidForm = false;
+			$('#idcardErr').html(idcartValidResult);
+		}
+	}
+	if (isValidForm) {
+		$('#realnameErr').html('');
+		$('#idcardErr').html('');
+	} else {
+		return false;
+	}
+	$.ajax({
+		url: "__URL__/saveid/",
+		type: "post",
+		dataType: "json",
+		data: {"realname":realname,"idcard":idcard},
+		success: function(result) {
+			if (result.status == 0) {
+				$('#idcardErr').html(result.message);
+			} else {
+				MY_COMMON_OP.alert('验证成功', (function() {
+					window.location.href = '/member/';
+				}));
+			}
+		}
+	});
+}
+function ajaxFileUploads() {
+	$("#loading_makeclub").ajaxStart(function(){ $(this).show();}).ajaxComplete(function(){ $(this).hide();});
+	$.ajaxFileUpload({
+		url:'__URL__/ajaxupimg/',
+		secureuri:false,
+		fileElementId:'imgfile',
+		dataType:'json',
+		success: function (data, status) {
+			if (data.status == 1) {
+				$("#idimg").css('color','green').html('上传成功');
+			} else {
+				$("#idimg").css('color','red').html('上传失败，请重试');
+			}
+		}
+	});
+}
+function ajaxFileUploads2() {
+	$("#loading_makeclub2").ajaxStart(function(){ $(this).show();}).ajaxComplete(function(){ $(this).hide();});
+	$.ajaxFileUpload({
+		url:'__URL__/ajaxupimg2/',
+		secureuri:false,
+		fileElementId:'imgfile2',
+		dataType:'json',
+		success: function (data, status) {
+			if (data.status == 1) {
+				$("#idimg2").css('color','green').html('上传成功');
+			} else {
+				$("#idimg2").css('color','red').html('上传失败，请重试');
+			}
+		}
+	});
+}
+//刷新样式
+$('#verifyBtn').button();
+</script>

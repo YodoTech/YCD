@@ -1,0 +1,46 @@
+<script>var bankimg = '__ROOT__/Style/M/', Himg = '__ROOT__/Style/H/';</script>
+<script src="__ROOT__/Style/M/js/recharge.js"></script>
+<style>
+.ui-grid-b{ width:100%;  padding:10px 0 0 24px; font-size:1rem;  line-height:1.8rem;}
+.ui-grid-b .ui-block-a{ width:30%; text-align:right;}
+.ui-grid-b .ui-block-b{ width:50%;font-size:.9rem; line-height:1.8rem;}
+.ui-grid-b .ui-block-b input{ width:100%; border-radius:3px; border:1px solid #fa6f15;}
+.ys_ts{ font-size:.7rem; color:#fa6f15; padding-left:30px; line-height:1.5rem;}
+.ts{ padding:5px 23px 5px 37px; font-size:.9rem;  line-height:1.5rem; color:#F00;}
+</style>
+<div class="ts">请输入充值金额（币种：人民币，单位：元）</div>
+<if condition="$payConfig['chinabank']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1'">
+	<div class="ts">温馨提示：网站当前尚未开启任何在线支付，敬请期待。</div>
+<else/>
+	<div class="ts">温馨提示：最低充值金额50元。充值免手续费！充值资金可用于进行验证、投标、还款等。充值成功后资金会立刻划拨到您的帐户。</div>
+</if>
+<!--资金输入-->
+<if condition="$payConfig['chinabank']['enable'] neq '1' && $payConfig['tenpay']['enable'] neq '1'">
+<else/>
+	<div class="ui-grid-b">
+	    <div class="ui-block-a">充值金额</div>
+	    <div class="ui-block-b">
+	    	<input type="text" id="t_money" data-role="none">元
+			<img src="__ROOT__/Style/M/images/bank/fukan.jpg" alt="登录到网银充值" onclick="submitform(this)">
+		</div>
+	</div>
+	<if condition="$payConfig['tenpay']['enable'] eq '1'">
+		<input type="hidden" value="tenpay" id="pd_bank" name="pd_bank">
+	<else/>
+		<input type="hidden" value="chinabank" id="pd_bank" name="pd_bank">
+	</if>
+	<input type="hidden" value="0" id="pa_MP" name="pa_MP">
+	<if condition="$payConfig['chinabank']['enable'] eq '1'">
+		<input type="radio" data="chinabank" onclick="checkbank(this);" id="r_chinabank" name="mybank">
+		<div onmouseout="this.style.borderColor='#cccccc'" data="chinabank" onmouseover="this.style.borderColor='#FF9933'" onclick="checkbank(this);" title="网银在线" id="d_chinabank">
+			<img alt="网银在线" src="__ROOT__/Style/M/images/bank/chinabank.jpg" height="36px">
+		</div>
+	</if>
+	<if condition="$payConfig['tenpay']['enable'] eq '1'">
+		<input type="radio" data="tenpay" onclick="checkbank(this);" id="r_tenpay" name="mybank">
+		<div onmouseout="this.style.borderColor='#cccccc'" data="tenpay" onmouseover="this.style.borderColor='#FF9933'" onclick="checkbank(this);" title="财付通" id="d_tenpay">
+			<img alt="财付通" src="__ROOT__/Style/M/images/bank/tenpay.jpg" height="36px">
+		</div>
+	</if>
+</if>
+<div class="ts">在您使用以上各家银行充值之前，请注意各个银行的支付金额的上限。</div>
