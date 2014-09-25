@@ -15,10 +15,22 @@ $(function() {
     <ul class="indul1 fn-clear">
         <li>
           <p class="jdt_bg"><input data-role="none" class="knob" data-width="80" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".15" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
-            <p><a href="{$vb.id|getInvestUrl=###}" data-role="button" data-corners="false" class="ui-btn-h" data-theme="h">我要投标</a></p>
+            <p><a href="{$vb.id|getInvestUrl=###}" data-role="button" data-corners="false" class="ui-btn-h" data-theme="h">
+                <if condition="$vb.borrow_status eq 2">
+                    我要投标
+                <elseif condition="$vb.borrow_status eq 3"/>
+                    已流标
+                <elseif condition="$vb.borrow_status eq 4"/>
+                    已满标
+                <elseif condition="$vb.borrow_status eq 6"/>
+                    还款中
+                <elseif condition="$vb.borrow_status gt 6"/>
+                    已完成
+                </if>
+            </a></p>
         </li>
         <li class="li1">
-          <h2 class="fn-text-overflow">{$vb.borrow_name|cnsubstr=###,8}</h2>
+          <h2 class="fn-text-overflow">{:getIco($vb)}{$vb.borrow_name|cnsubstr=###,8}</h2>
             <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
             <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
             <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>

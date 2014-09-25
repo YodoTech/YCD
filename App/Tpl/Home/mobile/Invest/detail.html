@@ -61,7 +61,7 @@ $(function() {
 <include file="mobile:Public:_header_main" group="Home" />
 <!--中部开始-->
 <div data-role="content" data-theme="f">
-  <h1><span><a href="__APP__/invest/loanlist.html"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>{$vo.borrow_name}</h1>
+  <h1><span><a href="__APP__/invest/loanlist.html"><img src="/Style/Mobile/images/fanhui.jpg"></a></span>{:getIco($vo)}{$vo.borrow_name}</h1>
   <ul class="xiangxi fn-clear">
     <li>借款金额：{$vo.borrow_money|Fmoney=###}</li>
     <li>借款用途：{$Bconfig['BORROW_USE'][$vo['borrow_use']]}</li>
