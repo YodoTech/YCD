@@ -756,8 +756,23 @@ class BorrowAction extends ACommonAction
 				$verify_info['deal_user'] = $this->admin_id;
 				$verify_info['deal_time'] = time();
 				$verify_info['deal_status'] = $bs;
-				if($vm['first_verify_time']>0) M('borrow_verify')->save($verify_info);
-				else  M('borrow_verify')->add($verify_info);
+				if($vm['first_verify_time']>0) {
+					M('borrow_verify')->save($verify_info);
+					$did = $vm['id'];
+				} else {
+					$did = M('borrow_verify')->add($verify_info);
+				}
+				if ($did) {//日志记录
+					m('data_verify_log')->add(array(
+						'type' 			=> 'borrowverify1',
+						'did' 			=> $did,
+						'op_status' 	=> $verify_info['deal_status'],
+						'op_info' 		=> $verify_info['deal_info'],
+						'op_credits' 	=> 0,
+						'op_uid' 		=> $verify_info['deal_user'],
+						'op_time' 		=> time()
+					));
+				}
 			}
 			if($vm['borrow_status']<>2 && $_POST['borrow_status']==2 && empty($vm['password'])==true) autoInvest(intval($_POST['id']));
 			//if($vm['borrow_status']<>2 && $_POST['borrow_status']==2)) autoInvest(intval($_POST['id']));

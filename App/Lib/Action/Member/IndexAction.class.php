@@ -71,7 +71,7 @@ class IndexAction extends MCommonAction {
 
 	    //推荐的贷款
 		$searchMap = array();
-		$searchMap['borrow_status']=array("in",'2,6');
+		$searchMap['borrow_status']=array("in",'2,4,6,7');
 		$searchMap['is_tuijian']=1;
 		//$searchMap['collect_time']=array('gt',time());
 		$parm=array();
