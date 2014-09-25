@@ -4,7 +4,17 @@
 <script type="text/javascript">
 var imgpath="__ROOT__/Style/M/";
 var curpath="__URL__";
-$(function(){ $('.partner').hover(function(){ $(this).addClass('hover');},function(){ $(this).removeClass('hover');});});
+$(function(){
+    $('.partner').hover(function(){ $(this).addClass('hover');},function(){ $(this).removeClass('hover');});
+    $('#btnReg').on('click', function() {
+        LoginSubmit(this);
+        return false;
+    });
+    $('#loginForm').on('submit', function() {
+        $('#btnReg').trigger('click');
+        return false;
+    });
+});
 </script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/M/login.js"></script>
 <include file="orange:Public:_header_main" group="Home" />
@@ -13,31 +23,35 @@ $(function(){ $('.partner').hover(function(){ $(this).addClass('hover');},functi
 <div class="nyconter">
     <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;登录</div>
     <div class="dengluym">
-        <ul class="fn-clear">
-            <li>
-                <img src="/Style/Orange/images/zcicon_1.jpg" />
-                <span><input type="text" title="请输入用户名或邮箱" id="txtUser"></span>
-                <div id="dvUser" style="padding-top: 50px;"></div>
-            </li>
-            <li>
-                <img src="/Style/Orange/images/zcicon_2.jpg" />
-                <span><input type="password" class="in_r_1" id="txtPwd"></span>
-                <div id="dvPwd" style="padding-top: 50px;"></div>
-            </li>
-            <li class="li2 fn-clear">
-                <span class="sp1 fn-left"><input type="text" maxlength="4" id="txtCode"></span>
-                <span class="sp2 fn-left"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></span>
-                <div id="dvCode" style="padding-top: 50px;"></div>
-            </li>
-            <li class="li1 fn-clear">
-                <span class="sp1"><input id="loginstate" type="checkbox" value="7" /></span>
-                <span class="sp2">记住用户名</span>
-                <span class="sp3"><a href="javascript:;" onclick="getPassWord();">忘记密码</a></span>
-            </li>
-            <input type="hidden" id="redirect_uri" value="{$redirect_uri}" />
-        </ul>
+        <form action="#" id="loginForm">
+            <ul class="fn-clear">
+                <li>
+                    <img src="/Style/Orange/images/zcicon_1.jpg" />
+                    <span><input type="text" title="请输入用户名或邮箱" id="txtUser"></span>
+                    <div id="dvUser" style="padding-top: 50px;"></div>
+                </li>
+                <li>
+                    <img src="/Style/Orange/images/zcicon_2.jpg" />
+                    <span><input type="password" class="in_r_1" id="txtPwd"></span>
+                    <div id="dvPwd" style="padding-top: 50px;"></div>
+                </li>
+                <li class="li2 fn-clear">
+                    <span class="sp1 fn-left"><input type="text" maxlength="4" id="txtCode"></span>
+                    <span class="sp2 fn-left"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></span>
+                    <div id="dvCode" style="padding-top: 50px;"></div>
+                </li>
+                <li class="li1 fn-clear">
+                    <span class="sp1"><input id="loginstate" type="checkbox" value="7" /></span>
+                    <span class="sp2">记住用户名</span>
+                    <span class="sp3"><a href="javascript:;" onclick="getPassWord();">忘记密码</a></span>
+                </li>
+                <input type="hidden" id="redirect_uri" value="{$redirect_uri}" />
+            </ul>
+            {/* 使用隐藏的type=submit表单来实现回车提交 */}
+            <input type="submit" class="fn-hide" />
+        </form>
         <div class="dengluym1">
-            <p class="btn"><a href="#" onclick="LoginSubmit(this);return false;" id="btnReg">立即登录</a></p>
+            <p class="btn"><a href="#" id="btnReg">立即登录</a></p>
         </div>
         <div class="dengluym2">没有账号？&nbsp;<a href="__APP__/member/common/register/">免费注册</a></div>
         <div class="dengluym3">

@@ -10,23 +10,20 @@ Target Server Type    : MYSQL
 Target Server Version : 50155
 File Encoding         : 65001
 
-Date: 2014-09-05 14:08:13
+Date: 2014-09-24 17:26:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for lzh_prize_log
+-- Table structure for lzh_coupon_log
 -- ----------------------------
-DROP TABLE IF EXISTS `lzh_prize_log`;
-CREATE TABLE `lzh_prize_log` (
+DROP TABLE IF EXISTS `lzh_coupon_log`;
+CREATE TABLE `lzh_coupon_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned DEFAULT NULL COMMENT '用户ID',
-  `prize_id` int(10) DEFAULT NULL COMMENT '奖品ID',
-  `current_num` int(10) unsigned DEFAULT '0' COMMENT '本次兑换数量',
-  `current_cost` mediumint(9) DEFAULT NULL COMMENT '本次花费积分',
-  `cumulate_cost` mediumint(9) DEFAULT NULL COMMENT '累计花费积分',
-  `info` varchar(255) DEFAULT NULL COMMENT '备注',
+  `uid` int(10) unsigned DEFAULT '0' COMMENT '用户ID',
+  `coupon_id` int(10) unsigned DEFAULT '0' COMMENT '优惠券ID',
+  `info` varchar(200) DEFAULT NULL COMMENT '备注',
   `add_ip` varchar(16) DEFAULT NULL COMMENT '添加IP',
   `add_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)

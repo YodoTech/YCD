@@ -46,8 +46,7 @@ function BlurCode() {
     var str = $(txt).val();
     if (pat.test(str)) {
         $("#dvCode").html(GetP("reg_ok", arrOk["dvCode"]));
-    }
-    else {
+    } else {
         $(td).html(GetP("reg_wrong", arrWrong["dvCode"]));
     }
 }
@@ -84,8 +83,7 @@ function BlurPwd() {
     if (pat.test(str)) {
         //格式正确
         $(td).html(GetP("reg_ok", arrOk["dvPwd"]));
-    }
-    else {
+    } else {
         $(td).html(GetP("reg_wrong", arrWrong["dvPwd"]));
     }
 }
@@ -110,15 +108,15 @@ function ClickBox(id) {
 function GetP(clsName, c) { return "<div class='" + clsName + "'>" + c + "</div>"; }
 
 function LoginSubmit(ctrl) {
-
-    $(ctrl).unbind("click");
+    var $ctrl = $(ctrl);
+    $ctrl.off('click');
     var arrTds = new Array("#dvUser", "#dvPwd", "#dvCode");
     BlurEmail();
     BlurPwd();
     BlurCode();
     for (var i = 0; i < arrTds.length; i++) {
         if ($(arrTds[i]).html().indexOf('reg_wrong') > -1) {
-            $(ctrl).click(function() { LoginSubmit(this); });
+            $ctrl.on('click', function() { LoginSubmit(this);return false; });
             return false;
         }
     }
@@ -136,12 +134,13 @@ function LoginSubmit(ctrl) {
 		type: "post",
 		dataType: "json",
 		success: function (d, s, r) {
-			if(d){
-				if(d.status==0){
-					$.jBox.tip(d.message,"tip");	
-				}else{
+			if(d) {
+				if(d.status==0) {
+					$.jBox.tip(d.message,"tip");
+                    $ctrl.on('click', function() { LoginSubmit(this);return false; });
+				} else {
                     var redirect_uri = $('#redirect_uri').val();
-                    if (redirect_uri=='') {
+                    if (redirect_uri == '') {
                         redirect_uri = '/member/';
                     } else {
                         redirect_uri = decodeURIComponent(redirect_uri);

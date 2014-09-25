@@ -73,7 +73,7 @@ function InnerMsg(){
 <!--中部开始-->
 <div class="nyconter">
   <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="/invest/index.html">我要理财</a>&nbsp;>&nbsp;<a href="/invest/loanlist.html">散标投资列表</a>&nbsp;>&nbsp;借款详情</div>
-  <div class="nybt">{$vo.borrow_name}</div>
+  <div class="nybt">{:getIco($vo)}{$vo.borrow_name}</div>
   <div class="licai1 fn-clear">
     <div class="listL fn-left">
       <ul class="fn-clear">
@@ -94,19 +94,21 @@ function InnerMsg(){
             <span class="basic-progress-time"><span id="endtime"><span class="fn-left">剩余时间：</span><span id="loan_time"><em class='value'>--</em>天<em class='value'>--</em>时<em class='value'>--</em>分<em class='value'>--</em>秒</span></span></span>
           </li>
           <li class="fn-clear">
-            <if condition="$vo.borrow_status eq 3">
-              <span class="btn"><a href="javascript:;">已流标</a></span>
-            <elseif condition="$vo.borrow_status eq 4"/>
-              <a href="javascript:;">等待复审</a>
-            <elseif condition="$vo.borrow_status eq 6"/>
-              <a href="javascript:;">还款中</a>
-            <elseif condition="$vo.borrow_status gt 6"/>
-              <a href="javascript:;">已完成</a>
-            <else/>
+            <span class="btn mb10" style="height:auto;float:none;color:#fff;">
               <div style="width:200px;margin:auto;">
-                <span class="btn mb10" style="height:auto;float:none;"><a style="color:#fff;" href="javascript:;" onclick="invest({$vo.id});">投标</a></span>
+                <if condition="$vo.borrow_status eq 3">
+                  <a style="color:#fff;" href="javascript:;">已流标</a>
+                <elseif condition="$vo.borrow_status eq 4"/>
+                  <a style="color:#fff;" href="javascript:;">等待复审</a>
+                <elseif condition="$vo.borrow_status eq 6"/>
+                  <a style="color:#fff;" href="javascript:;">还款中</a>
+                <elseif condition="$vo.borrow_status gt 6"/>
+                  <a style="color:#fff;" href="javascript:;">已完成</a>
+                <else/>
+                  <a style="color:#fff;" href="javascript:;" onclick="invest({$vo.id});">投标</a>
+                </if>
               </div>
-            </if>
+            </span>
             <if condition="$vo.borrow_type eq 2">
               <if condition="$vo.vouch_progress eq '100'">
                 <a href="javascript:;">担保已完成</a>

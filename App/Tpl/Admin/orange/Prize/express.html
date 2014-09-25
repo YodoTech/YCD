@@ -1,0 +1,33 @@
+<tagLib name="htmlA" />
+<style>
+.showError {display: none;color: red;padding: 5px;}
+</style>
+<div class="so_main">
+  <div class="page_tit">寄出操作</div>
+  <div class="form2">
+    <form method="post" action="__URL__/doExpress" onsubmit="return subcheck();">
+      <input type="hidden" name="id" value="{$vo.id}" />
+      <div id="tab_1">
+        <dl class="lineD"><dt>是否寄出：</dt><dd><htmlA:radio id="is_send" value="key|vo.is_send" default="1|是,0|否"/></dd></dl>
+        <dl class="lineD"><dt>操作说明：</dt><dd><htmlA:text id="info" value="{$vo.info}" tip="简短说明"/></dd></dl>
+      </div>
+      <div class="page_btm">
+        <input type="submit" class="btn_b" value="确定" />
+      </div>
+      <div class="showError"></div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+function subcheck() {
+  var $is_send = $("input[name='is_send']:checked");
+  var $info = $("textarea[name='info']");
+  if($is_send.val()=='1' && $info.val()=='') {
+    $('.showError').fadeIn('slow').html("请填写操作说明");
+    $info.focus();
+    setTimeout("$('.showError').fadeOut('slow').html('')", 2000);
+    return false;
+  }
+  return true;
+}
+</script>

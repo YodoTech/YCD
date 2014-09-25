@@ -1385,23 +1385,30 @@ function get_admin_name($id = false)
 function getIco($map)
 {
     $str = "";
+    /* 暂停使用
     if (0 < $map['reward_type']) {
         $str .= "<img src=\"" . __ROOT__ . "/Style/H/images/j.gif\" align=\"absmiddle\">";
     }
+    */
     if ($map['borrow_type'] == 2) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/d.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 3) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/dan_icon.png\" align=\"absmiddle\">&nbsp;";
+    }/* 暂停使用
+    else if ($map['borrow_type'] == 3) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/m.gif\" align=\"absmiddle\">";
     } else if ($map['borrow_type'] == 4) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/jing.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 1) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/xin.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 5) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/ya.gif\" align=\"absmiddle\">";
     }
+    */
+    else if ($map['borrow_type'] == 1) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/xin_icon.png\" align=\"absmiddle\">&nbsp;";
+    } else if ($map['borrow_type'] == 5) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/di_icon.png\" align=\"absmiddle\">&nbsp;";
+    }
+    /* 暂停使用
     if ($map['repayment_type'] == 1) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/t.jpg\" align=\"absmiddle\">";
     }
+    */
     return $str;
 }
 
@@ -2644,7 +2651,7 @@ function sendsms($mob, $content)
         $d['uid'] = session('u_id');
         $d['is_admin'] = 0;
     }
-    M('sms_log')->save($d);
+    M('sms_log')->add($d);
 
     if ($data[0] == "000") {
         return true;
@@ -3746,7 +3753,32 @@ function get_prize_name($id)
     }
     return $row;
 }
-
+//通过"优惠券ID"获取"优惠券编号"
+function get_coupon_code($id)
+{
+    $stype = "couponlist";
+    $list = array();
+    if (!s($stype)) {
+        $rule = m("coupon")->field("id,coupon_code")->select();
+        foreach ($rule as $v) {
+            $list[$v['id']] = $v['coupon_code'];
+        }
+        s($stype, $list, 3600 * c("ADMIN_CACHE_TIME"));
+        if (!$id) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    } else {
+        $list = s($stype);
+        if ($id === false) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    }
+    return $row;
+}
 
 //数据操作类
 class MY_FUNC {

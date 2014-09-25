@@ -8,7 +8,7 @@ function getBorrowList($parm=array()){
 	
 	if($parm['pagesize']){
 		//分页处理
-		import("@.Page");
+		import("ORG.Util.Page");
 		$count = M('borrow_info b')->where($map)->count('b.id');
 		$p = new Page($count, $parm['pagesize']);
 		$page = $p->show();

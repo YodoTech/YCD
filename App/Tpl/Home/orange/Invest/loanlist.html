@@ -89,12 +89,22 @@ $(function() {
     <volist name="list.list" id="vb">
       <li>
         <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
-        <h4 title="{$vb.borrow_name}">{$vb.borrow_name|cnsubstr=###,8}</h4>
+        <h4 title="{$vb.borrow_name}">{:getIco($vb)}{$vb.borrow_name|cnsubstr=###,8}</h4>
         <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
         <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
         <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
         <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
-        <p class="btn"><a href="{$vb.id|getInvestUrl=###}">我要投标</a></p>
+        <p class="btn"><a href="{$vb.id|getInvestUrl=###}">
+          <if condition="$vb.borrow_status eq 2">
+            我要投标
+          <elseif condition="$vb.borrow_status eq 3"/>
+            已流标
+          <elseif condition="$vb.borrow_status eq 6"/>
+            还款中
+          <elseif condition="$vb.borrow_status gt 6"/>
+            已完成
+          </if>
+        </a></p>
       </li>
     </volist>
   </ul>

@@ -1,6 +1,6 @@
 <include file="Public:_header" />
 <div class="so_main">
-  <div class="page_tit">兑换日志</div>
+  <div class="page_tit">优惠券日志</div>
   <div class="Toolbar_inbox">
     <div class="page right">{$pagebar}</div>&nbsp;
   </div>
@@ -8,24 +8,20 @@
     <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <th class="line_l">ID</th>
-      <th class="line_l">兑奖用户</th>
-      <th class="line_l">奖品</th>
-      <th class="line_l">花费积分</th>
+      <th class="line_l">用户</th>
+      <th class="line_l">优惠券</th>
       <th class="line_l">备注</th>
-      <th class="line_l">兑奖时间</th>
       <th class="line_l">IP地址</th>
-      <th class="line_l">操作</th>
+      <th class="line_l">时间</th>
     </tr>
     <volist id="vo" name="list">
         <tr overstyle='on' id="list_{$vo.id}">
           <td>{$vo.id}</td>
-          <td>{$vo.uname}</td>
-          <td>{$vo.prize_id|get_prize_name=###}</td>
-          <td>{$vo.current_cost}</td>
+          <td><php>echo m('members')->getFieldById($vo['uid'], 'user_name');</php></td>
+          <td>{$vo.coupon_id|get_coupon_code=###}</td>
           <td>{$vo.info}</td>
-          <td>{$vo.add_time|date='Y年m月d日H时',###}</td>
           <td>{$vo.add_ip}</td>
-          <td><a href="javascript:void(0);" onclick="expressOp('?id={$vo['id']}');"><if condition="$vo.is_send eq 1">已寄出<elseif condition="$vo.is_send eq 0"/>未寄出</if></a></td>
+          <td>{$vo.add_time|date='Y-m-d H:i',###}</td>
         </tr>
     </volist>
     </table>
@@ -35,9 +31,4 @@
   	<div class="page right">{$pagebar}</div>&nbsp;
   </div>
 </div>
-<script>
-function expressOp(url_arg) {
-  ui.box.load('__URL__/express' + url_arg, {title:'操作'});
-}
-</script>
 <include file="Public:_footer" />

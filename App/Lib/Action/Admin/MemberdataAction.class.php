@@ -69,7 +69,18 @@ class MemberdataAction extends ACommonAction
         //保存当前数据对象
         if ($result = $model->save()) { //保存成功
 			$credits = intval($_POST['deal_credits']);
-			$vd = M('member_data_info')->field("data_name,uid")->find(intval($_POST['id']));
+			$vd = M('member_data_info')->field("id,status,deal_info,deal_credits,deal_user,data_name,uid")->find(intval($_POST['id']));
+			//日志记录
+			m('data_verify_log')->add(array(
+				'type' 			=> 'memberdata',
+				'did' 			=> $vd['id'],
+				'op_status' 	=> $vd['status'],
+				'op_info' 		=> $vd['deal_info'],
+				'op_credits' 	=> $vd['deal_credits'],
+				'op_uid' 		=> $vd['deal_user'],
+				'op_time' 		=> time()
+			));
+			//积分操作
 			if($credits<>0) memberCreditsLog($vd['uid'],1,$credits,$vd['data_name']);
             //成功提示
             $this->assign('jumpUrl', __URL__."/".session('listaction'));

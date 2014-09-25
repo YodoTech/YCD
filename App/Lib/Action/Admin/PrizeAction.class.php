@@ -16,10 +16,19 @@ class PrizeAction extends ACommonAction
 
     public function log()
     {
-    	$field= 'id,uid,prize_id,current_num,current_cost,cumulate_cost,info,add_ip,add_time';
+    	$field= 'id,uid,prize_id,current_num,current_cost,cumulate_cost,info,is_send,add_ip,add_time';
 		$this->_list(D('prize_log'),$field,'','add_time','DESC');
     	$this->display();
     }
+
+    public function _listFilter($list) {
+    	$row = array();
+		foreach($list as $k => $v) {
+			$v['uname']  = m('members')->getFieldById($v['uid'], 'user_name');
+			$row[$k] = $v;
+		}
+		return $row;
+	}
 
     private function _doFilter($m)
     {
@@ -115,6 +124,29 @@ class PrizeAction extends ACommonAction
 			echo "{$_SESSION['count_file']}:".__ROOT__."/".$data['product_thumb'];
 		}
 	}
-	
+
+	public function express() {
+        $id = intval($_REQUEST['id']);
+ 		
+		setBackUrl();
+
+        $this->assign('vo', D('prize_log')->find($id));
+        $this->display();
+	}
+
+	public function doExpress() {
+		$arr = array(
+        	'is_send' => intval($_POST['is_send']),
+        	'info' => text($_POST['info'])
+        );
+        if (m('prize_log')->where('id='.intval($_POST['id']))->save($arr)) {
+            //成功提示
+            $this->assign('jumpUrl', __URL__."/".session('listaction'));
+            $this->success(L('操作成功'));
+        } else {
+            //失败提示
+            $this->error(L('操作失败'));
+        }
+	}
 }
 ?>

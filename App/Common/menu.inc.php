@@ -73,6 +73,11 @@ $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('积分兑换管理','#',1);
 $menu_left[$i][$i."-".$j][] = array('奖品列表',U('/admin/prize/index'),1);
 $menu_left[$i][$i."-".$j][] = array('兑换日志',U('/admin/prize/log'),1);
+//优惠券管理
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('优惠券管理','#',1);
+$menu_left[$i][$i."-".$j][] = array('优惠券列表',U('/admin/coupon/index'),1);
+$menu_left[$i][$i."-".$j][] = array('使用日志',U('/admin/coupon/log'),1);
 
 $i++;
 $menu_left[$i]= array('充值提现','#',1);
