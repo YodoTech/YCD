@@ -2622,8 +2622,8 @@ function sendsms($mob, $content)
     $uid = urlencode(auto_charset($msgconfig['sms']['user'],"utf-8","gbk"));
     $pwd = urlencode($msgconfig['sms']['pass']);
     $mob = urlencode($mob);
-    $content = urlencode(auto_charset($content,"utf-8","gbk"));
-    $sendurl = "http://service.winic.org/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $content . "&time=";
+    $str = urlencode(auto_charset($content,"utf-8","gbk"));
+    $sendurl = "http://service.winic.org/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $str . "&time=";
     $pos = strpos(PHP_OS, 'WIN');
     if ($pos === false) {//Linux
         $arr = file($sendurl);
@@ -2639,7 +2639,7 @@ function sendsms($mob, $content)
     //记录日志
     $d = array(
         'to' => $mob,
-        'content' => urldecode($content),
+        'content' => $content,
         'result' => $result,
         'add_ip' => get_client_ip(),
         'add_time' => time()

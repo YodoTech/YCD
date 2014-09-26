@@ -14,12 +14,12 @@ class SmsAction extends ACommonAction
 
     public function log()
     {
-    	$field= 'id,uid,to,content,result,add_ip,add_time';
+    	$field= 'id,uid,is_admin,to,content,result,add_ip,add_time';
 		$this->_list(D('sms_log'),$field,'','add_time','DESC');
     	$this->display();
     }
 
-    public function _listFilter($m)
+    public function _listFilter($list)
     {
         $row = array();
         foreach($list as $key=>$v) {

@@ -41,7 +41,7 @@
     <div id="content">
         <volist name="list" id="vo">
         <ul class="hyxx10 fn-clear" style="height: auto;">
-            <li class="w130"><a href="#" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,8}</a></li>
+            <li class="w130"><a href="__APP__/invest/{$vo.borrow_id}.html" title="{$vo.borrow_name}">{$vo.borrow_name|cnsubstr=###,8}</a></li>
             <li class="w80">{$vo.capital}</li>
             <li class="w80">{$vo.interest}</li>
             <li class="w80">{$vo.expired_money|default=0.00}</li>
