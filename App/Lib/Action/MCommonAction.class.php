@@ -18,6 +18,11 @@ class MCommonAction extends Action
 		$this->glo = $datag;//供PHP里面使用
 		$this->assign("glo",$datag);//公共参数
 		
+		//注册配置
+		$regconfig = FS('Webconfig/regconfig');
+		$this->regconfig = $regconfig;
+		$this->assign('regconfig', $regconfig);
+
 		//分站
 		$this->assign("subsite",getSubSite());
 		$this->siteInfo = getLocalhost();
@@ -30,7 +35,7 @@ class MCommonAction extends Action
 				$this->assign('UID',$this->uid);
 				$unread=M("inner_msg")->where("uid={$this->uid} AND status=0")->count('id');
 				$this->assign('unread',$unread);
-				if(!in_array(strtolower(ACTION_NAME),array('actlogout','regsuccess','emailverify','verify'))&&$this->verifyStatus===true) redirect(__APP__."/member/");
+				if(!in_array(strtolower(ACTION_NAME),array('actlogout','regsuccess','emailverify','phoneverify','verify'))&&$this->verifyStatus===true) redirect(__APP__."/member/");
 			}else{
 				$loginconfig = FS("Webconfig/loginconfig");
 				$de_val = $this->_authcode(cookie('UKey'),'DECODE',$loginconfig['cookie']['key']);
@@ -45,7 +50,7 @@ class MCommonAction extends Action
 						$this->assign('UID',$this->uid);
 						$unread=M("inner_msg")->where("uid={$this->uid} AND status=0")->count('id');
 						$this->assign('unread',$unread);
-						if(!in_array(strtolower(ACTION_NAME),array('actlogout','regsuccess','emailverify','verify'))&&$this->verifyStatus===true) redirect(__APP__."/member/");
+						if(!in_array(strtolower(ACTION_NAME),array('actlogout','regsuccess','emailverify','phoneverify','verify'))&&$this->verifyStatus===true) redirect(__APP__."/member/");
 					}else{
 						cookie("Ukey",NULL);
 						cookie("Ukey2",NULL);
@@ -220,11 +225,11 @@ class MCommonAction extends Action
     private function verify() {
     	//认证信息
     	$arr = m('members_status')->field('phone_status,email_status')->where("uid={$this->uid}")->find();
-    	if (!empty($arr) && $arr['email_status'] == 1) {
+    	if (!empty($arr) && $arr[$this->regconfig['type'].'_status'] == 1) {
     		$this->verifyStatus = true;
     	} else {
     		$this->verifyStatus = false;
-    		if(!in_array(strtolower(ACTION_NAME),array('actlogout','regaction','regsuccess','emailverify','verify','register'))) {
+    		if(!in_array(strtolower(ACTION_NAME),array('actlogout','regaction','regsuccess','emailverify','phoneverify','verify','register'))) {
     			redirect(__APP__.'/member/common/register/');
     		}
     	}

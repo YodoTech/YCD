@@ -2,6 +2,7 @@
 // 本类由系统自动生成，仅供测试用途
 class CommonAction extends MCommonAction {
 	var $notneedlogin=true;
+
     public function index(){
 		$this->display();
     }
@@ -22,9 +23,7 @@ class CommonAction extends MCommonAction {
 
     	//激活验证
     	if ($this->verifyStatus === false) {
-    		$userEmail = M('members')->getFieldById($this->uid,'user_email');
-    		$this->assign('userEmail', $userEmail);
-    		$this->assign('message','我们给您的邮箱<span style="color:#930303; font-weight:bold; margin:0 3px;">'.$userEmail.'</span>发送了确认邮件，请点击邮件中的链接进行确认。');
+    		$this->assign('userEmailOrPhone', M('members')->getFieldById($this->uid,'user_'.$this->regconfig['type']));
     		$this->display('regcheck');
     	} elseif($this->verifyStatus === true) {
     		//...
@@ -32,7 +31,7 @@ class CommonAction extends MCommonAction {
     		$this->display();
     	}
     }
-	
+
 	private function actlogin_bak() {
 		(false!==strpos($_POST['sUserName'],"@"))?$data['user_email'] = text($_POST['sUserName']):$data['user_name'] = text($_POST['sUserName']);
 		$vo = M('members')->field('id,user_name,user_email,user_pass')->where($data)->find();
@@ -148,8 +147,12 @@ class CommonAction extends MCommonAction {
 	
 	public function regaction(){
 		if ($this->verifyStatus === false) {
-			$data['user_email'] = text($_POST['txtEmail']);
-			if (Notice(1, $this->uid, array('email',$data['user_email']))) {
+			if ('email' == $this->regconfig['type']) {
+				$i = Notice(1, $this->uid);
+			} elseif ('phone' == $this->regconfig['type']) {
+				$i = sendsms(M('members')->getFieldById($this->uid, 'user_phone'), '您好，手机验证码是"'.rand_string($this->uid,6,1,2).'"【圆创贷】');
+			}
+			if ($i) {
 				ajaxmsg('发送成功');
 			} else {
 				ajaxmsg('发送失败，请重试', 0);
@@ -159,19 +162,23 @@ class CommonAction extends MCommonAction {
 		} else {
 			$data['user_name'] = text($_POST['txtUser']);
 			$data['user_pass'] = md5($_POST['txtPwd']);
-			$data['user_email'] = text($_POST['txtEmail']);
+			$data['user_'.$this->regconfig['type']] = text($_POST['txt'.ucfirst($this->regconfig['type'])]);
 			$data['user_role'] = MY_FUNC::intval($_POST['txtRole'], array(1, 2));
 			//数据校验
 			foreach ($data as $v) {
 				if (empty($v)) ajaxmsg('请按要求填写完整', 0);
 			}
 
-			$count = M('members')->where("user_email = '{$data['user_email']}' OR user_name='{$data['user_name']}'")->count('id');
+			if ('email' == $this->regconfig['type']) {
+				$count = M('members')->where("user_email = '{$data['user_email']}' OR user_name='{$data['user_name']}'")->count('id');
+			} elseif ('phone' == $this->regconfig['type']) {
+				$count = M('members')->where("user_phone = '{$data['user_phone']}' OR user_name='{$data['user_name']}'")->count('id');
+			}
 			if($count>0) ajaxmsg("注册失败，用户名或者邮件已经有人使用",0);
 			//uc注册
 			$loginconfig = FS("Webconfig/loginconfig");
 			$uc_mcfg  = $loginconfig['uc'];
-			if($uc_mcfg['enable']==1){
+			if($uc_mcfg['enable'] == 1 && 'email' == $this->regconfig['type']) {
 				require_once C('APP_ROOT')."Lib/Uc/config.inc.php";
 				require C('APP_ROOT')."Lib/Uc/uc_client/client.php";
 				$uid = uc_user_register($data['user_name'], $_POST['txtPwd'], $data['user_email']);
@@ -206,17 +213,24 @@ class CommonAction extends MCommonAction {
 				session('u_id',$newid);
 				session('u_user_name',$data['user_name']);
 				//memberMoneyLog($newid,1,$this->glo['award_reg'],"注册奖励");
-				if (Notice(1, $newid, array('email',$data['user_email']))) {
-					ajaxmsg('邮件已发送');
+				if ('email' == $this->regconfig['type']) {
+					$s = '邮件';
+					$i = Notice(1, $newid);
+				} elseif ('phone' == $this->regconfig['type']) {
+					$s = '验证码';
+					$i = sendsms(M('members')->getFieldById($newid, 'user_phone'), '您好，手机验证码是"'.rand_string($newid,6,1,2).'"【圆创贷】');
+				}
+				if ($i) {
+					ajaxmsg($s.'已发送');
 				} else {
-					ajaxmsg('请手动发送激活邮件');
+					ajaxmsg('请手动发送激活'.$s);
 				}
 			}
 			else  ajaxmsg('注册失败，请重试',0);
 		}
 	}
 	
-	public function emailverify(){
+	public function emailverify() {
 		$code = text($_GET['vcode']);
 		$uk = is_verify(0,$code,1,60*1000);
 		if(false===$uk){
@@ -224,15 +238,32 @@ class CommonAction extends MCommonAction {
 		}else{
 			$this->assign("waitSecond",3);
 			$count = M('members_status')->where("uid={$uk}")->count('uid');
-			$data['email_status']=1;
-			if($count==0){
-				$data['uid']=$uk;
-				$data['email_status']=1;
+			$data['email_status'] = 1;
+			if ($count == 0) {
+				$data['uid'] = $uk;
 				M('members_status')->where("uid={$uk}")->add($data);
-			}else{
+			} else {
 				M('members_status')->where("uid={$uk}")->save($data);
 			}
 			$this->success("验证成功",__APP__."/member");
+		}
+	}
+
+	public function phoneverify() {
+		$code = text($_GET['vcode']);
+		$uk = is_verify(0, $code, 2, 10*60);
+		if (false === $uk) {
+			ajaxmsg('验证校验码不对，请重新输入！', 2);
+		} else {
+			$count = M('members_status')->where("uid={$uk}")->count('uid');
+			$data['phone_status'] = 1;
+			if ($count == 0) {
+				$data['uid'] = $uk;
+				M('members_status')->where("uid={$uk}")->add($data);
+			} else {
+				M('members_status')->where("uid={$uk}")->save($data);
+			}
+			ajaxmsg('验证成功');
 		}
 	}
 	
@@ -295,6 +326,20 @@ class CommonAction extends MCommonAction {
 			exit(json_encode($json));
         }
 	}
+
+	//手机号码验证
+	public function ckphone(){
+		$map['user_phone'] = text($_POST['Phone']);
+		$count = M('members')->where($map)->count('id');
+        
+		if ($count>0) {
+			$json['status'] = 0;
+			exit(json_encode($json));
+        } else {
+			$json['status'] = 1;
+			exit(json_encode($json));
+        }
+	}
 	
 	public function ckcode(){
 		if($_SESSION['verify'] != md5(strtolower($_POST['sVerCode']))) {
@@ -315,28 +360,28 @@ class CommonAction extends MCommonAction {
 	public function regsuccess() {
 		$code = text($_GET['vcode']);
 		$uk = is_verify(0,$code,1,60*1000);
-		if(false === $uk) {
-			//根据当前用户进行判断
-			if ($this->verifyStatus === true) {//已验证
-				//...
-			} elseif ($this->verifyStatus === false) {//待验证
+		if ($this->verifyStatus === true) {//已验证
+			redirect(__APP__.'/member/');
+		} elseif ($this->verifyStatus === false) {//待验证
+			if(false === $uk) {
+				//根据当前用户进行判断
 				$this->assign('userEmail', M('members')->getFieldById($this->uid, 'user_email'));
 	    		$this->assign('message','<span class="red">验证失败</span>，请<a href="#" class="reSend">重发</a>邮件。');
 				$this->display('regcheck');
-			} else {//未登录
-				redirect(__APP__.'/member/login/');
-			}
-		} else {
-			$count = M('members_status')->where("uid={$uk}")->count('uid');
-			$data['email_status']=1;
-			if($count == 0) {
-				$data['uid'] = $uk;
-				$data['email_status'] = 1;
-				M('members_status')->where("uid={$uk}")->add($data);
 			} else {
-				M('members_status')->where("uid={$uk}")->save($data);
+				$count = M('members_status')->where("uid={$uk}")->count('uid');
+				$data['email_status']=1;
+				if($count == 0) {
+					$data['uid'] = $uk;
+					$data['email_status'] = 1;
+					M('members_status')->where("uid={$uk}")->add($data);
+				} else {
+					M('members_status')->where("uid={$uk}")->save($data);
+				}
+				$this->display();
 			}
-			$this->display();
+		} else {//未登录
+			redirect(__APP__.'/member/common/login/');
 		}
 	}
 

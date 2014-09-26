@@ -1,5 +1,6 @@
 ﻿var arrBox = new Array();
 arrBox["dvEmail"] = "请填写真实的电子邮件地址。";
+arrBox["dvPhone"] = "请填写手机号码。";
 arrBox["dvUser"] = "4-20个字母、数字、不可以用汉字。";
 arrBox["dvPwd"] = "6-16个字母、数字、下划线。";
 arrBox["dvRepwd"] = "请再一次输入您的密码。";
@@ -9,6 +10,7 @@ arrBox["dvAgree"] = "请同意我们的条款。";
 
 var arrWrong = new Array();
 arrWrong["dvEmail"] = "请输入电子邮件。";
+arrWrong["dvPhone"] = "请输入正确的手机号码。";
 arrWrong["dvUser"] = "请输入用户名。";
 arrWrong["dvPwd"] = "请输入密码。";
 arrWrong["dvRepwd"] = "未输入或两次输入密码不同。";
@@ -17,16 +19,18 @@ arrWrong["dvCode"] = "请输入验证码。";
 arrWrong["dvAgree"] = "请同意我们的条款。";
 
 var arrOk = new Array();
-arrOk["dvEmail"] = "电子邮件地址可用。";
-arrOk["dvUser"] = "用户名可用。";
-arrOk["dvPwd"] = "密码格式正确。";
-arrOk["dvRepwd"] = "密码格式正确。";
+arrOk["dvEmail"] = "&nbsp;";
+arrOk["dvPhone"] = "&nbsp;";
+arrOk["dvUser"] = "&nbsp;";
+arrOk["dvPwd"] = "&nbsp;";
+arrOk["dvRepwd"] = "&nbsp;";
 arrOk["dvRole"] = "&nbsp;";
-arrOk["dvCode"] = "验证码正确。";
+arrOk["dvCode"] = "&nbsp;";
 arrOk["dvAgree"] = "&nbsp;";
 
 function Init() {
     $('#txtEmail').click(function() { ClickBox("dvEmail"); });
+    $('#txtPhone').click(function() { ClickBox("dvPhone"); });
     $('#txtUser').click(function() { ClickBox("dvUser") });
     $('#txtPwd').click(function() { ClickBox("dvPwd") });
     $('#txtRepwd').click(function() { ClickBox("dvRepwd") });
@@ -35,6 +39,7 @@ function Init() {
     $(':checkbox#txtAgree').click(function() { BlurAgree(); });
 
     $('#txtEmail').blur(function() { BlurEmail(); });
+    $('#txtPhone').blur(function() { BlurPhone(); });
     $('#txtUser').blur(function() { BlurUName(); });
     $('#txtPwd').blur(function() { BlurPwd(); });
     $('#txtRepwd').blur(function() { BlurRepwd(); });
@@ -43,7 +48,7 @@ function Init() {
 
 $(function() {
     Init();
-    $("#txtEmail").focus();
+    $("#txtUser").focus();
     $("#Img1").click(function() { RegSubmit(this); });
     $("#txtCode").keypress(
     function(e) {
@@ -126,8 +131,33 @@ function AsyncEmail(data) {
     }
      else {
        // $("#dvEmail").html(GetP("reg_wrong", "邮箱已经在本站注册<a href='javascript:;' onlick='getPassWord();'>取回密码？</a>"));
-		$("#dvEmail").html(GetP("reg_wrong", "邮箱已经在本站注册<a href='javascript:getPassWord();'>取回密码？</a>"));
+        $("#dvEmail").html(GetP("reg_wrong", "邮箱已经在本站注册<a href='javascript:getPassWord();'>取回密码？</a>"));
     }
+}
+
+function BlurPhone() {
+    var txt = "#txtPhone";
+    var td = "#dvPhone";
+    var pat = new RegExp("^1[0-9]{10}$", "i");
+    var str = $(txt).val();
+    if (pat.test(str)) {
+        $(td).html(GetP("reg_info", "<img style='margin:2px;' src='"+imgpath+"images/zhuce0.gif'/>&nbsp;正在检测手机号码……"));
+        $.ajax({
+            type: "post",
+            async: false,
+            dataType: "json",
+            url: "/member/common/ckphone/",
+            data: {"Phone":str},
+            timeout: 3000,
+            success: function(data) {
+                if (data.status == "1") {
+                    $("#dvPhone").html(GetP("reg_ok", arrOk["dvPhone"]));
+                } else {
+                    $("#dvPhone").html(GetP("reg_wrong", "号码已经在本站注册"));
+                }
+            }
+        });
+    } else { $(td).html(GetP("reg_wrong", arrWrong["dvPhone"])); }
 }
 
 function getPassWord() {
@@ -216,21 +246,23 @@ function GetP(clsName, c) { return "<div class='mt10 ml10 red " + clsName + "'>"
 
 function RegSubmit(ctrl) {
     $(ctrl).unbind("click");
-    var arrTds = new Array("#dvEmail", "#dvUser", "#dvPwd","#dvRepwd", "#dvRole", "#dvCode", "#dvAgree");
-    BlurEmail();
+    var arrTds = new Array("#dvUser", "#dvEmail", "#dvPhone", "#dvPwd", "#dvRepwd", "#dvRole", "#dvCode", "#dvAgree");
     BlurUName();
+    BlurEmail();
+    BlurPhone();
     BlurPwd();
     BlurRole();
     BlurCode();
     BlurAgree();
     for (var i = 0; i < arrTds.length; i++) {
+        if ($(arrTds[i]).length == 0) continue;
         if ($(arrTds[i]).html().indexOf('reg_wrong') > -1) {
             $(ctrl).click(function() { RegSubmit(this); });
             return false;
         }
     }
 
-	var x = makevar(['txtEmail','txtUser','txtPwd','txtRole']);
+	var x = makevar(['txtUser','txtEmail','txtPhone','txtPwd','txtRole']);
 	$.jBox.tip("提交中......","loading");
 	$.ajax({
 		url: curpath+"/regaction/",
