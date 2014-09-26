@@ -9,7 +9,7 @@ function getAreaArticleList($parm){
 	//查询条件 
 	if($parm['pagesize']){
 		//分页处理
-		import("ORG.Util.Page");
+		import("@.Page");
 		$count = M('article_area')->where($map)->count('id');
 		$p = new Page($count, $parm['pagesize']);
 		$page = $p->show();

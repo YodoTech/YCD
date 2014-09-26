@@ -90,8 +90,8 @@ ul.licai2_3 li p span.bg{ border-radius:100px; width:24px; height:24px; margin:3
 ul.licai2_4{ width:385px; margin:0 auto; padding:0px 0 60px;}
 ul.licai2_4 li{ width:25px; height:25px; margin:0 5px; padding:0; border-radius:100px; text-align:center; background:#d5d6d7; line-height:24px; font-size:18px; color:#2f3032;}
 ul.licai2_4 li.li1{ background:none; line-height:16px;}
-ul.licai2_4 li a{width:25px; height:25px; border-radius:100px; display:block; border:1px solid #cfcfcf; background:#fff; line-height:25px; font-size:12px; color:#2f3032;}
-ul.licai2_4 li a:hover{ border:none; background:#fa6f15; color:#fff; text-decoration:none;}
+ul.licai2_4 li a, ul.licai2_4 li.current span{width:25px; height:25px; border-radius:100px; display:block; border:1px solid #cfcfcf; background:#fff; line-height:25px; font-size:12px; color:#2f3032;}
+ul.licai2_4 li a:hover, ul.licai2_4 li.current span{ border:none; background:#fa6f15; color:#fff; text-decoration:none;}
 ul.licai2_4 li.li2 a{ line-height:24px; font-size:18px; }
 
 /*我要借款*/
@@ -140,8 +140,8 @@ ul.jiekuan2_2 li.li2 span.sp1{width:122px; height:88px; padding:60px 0px 0 0px; 
 /*新手指引*/
 .zhiyinul{ width:624px; margin:30px auto; padding:0;}
 .zhiyinul li{ width:204px; margin:0 2px; padding:0; text-align:center; font-size:20px;}
-.zhiyinul li a{ width:204px; height:46px; border-radius:2px; display:block; line-height:46px; color:#2f3032;}
-.zhiyinul li a:hover{ border-radius:2px; background:#fa6f15; color:#fff; text-decoration:none;}
+.zhiyinul li a,.zhiyinul li.current span{ width:204px; height:46px; border-radius:2px; display:block; line-height:46px; color:#2f3032;}
+.zhiyinul li a:hover,.zhiyinul li.current span{ border-radius:2px; background:#fa6f15; color:#fff; text-decoration:none;}
 .zhiyinul li a.a1{border-radius:2px; background:#fa6f15; color:#fff; text-decoration:none;}
 .zhiyinul1{ width:1074px; margin:0 auto; padding:0 0 50px 0;}
 .zhiyinul1 li{ width:537px;}
@@ -188,8 +188,8 @@ ul.jiekuan2_2 li.li2 span.sp1{width:122px; height:88px; padding:60px 0px 0 0px; 
 .gywmlistym{ width:385px; margin:0 auto; padding:20px 0 60px;}
 .gywmlistym li{ width:25px; height:25px; margin:0 5px; padding:0; border-radius:100px; text-align:center; background:#d5d6d7; line-height:24px; font-size:18px; color:#2f3032;}
 .gywmlistym li.li1{ background:none; line-height:16px;}
-.gywmlistym li a{width:25px; height:25px; border-radius:100px; display:block; border:1px solid #cfcfcf; background:#fff; line-height:25px; font-size:12px; color:#2f3032;}
-.gywmlistym li a:hover{ border:none; background:#fa6f15; color:#fff; text-decoration:none;}
+.gywmlistym li a,.gywmlistym li.current span{width:25px; height:25px; border-radius:100px; display:block; border:1px solid #cfcfcf; background:#fff; line-height:25px; font-size:12px; color:#2f3032;}
+.gywmlistym li a:hover,.gywmlistym li.current span{ border:none; background:#fa6f15; color:#fff; text-decoration:none;}
 .gywmlistym li.li2 a{ line-height:24px; font-size:18px; }
 
 
