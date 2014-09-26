@@ -1,13 +1,6 @@
 <?php
 /**
  * 分页类
- * 
- * show(2)  1 ... 62 63 64 65 66 67 68 ... 150
- * 分页样式 
- * #page{font:12px/16px arial}
- * #page span{float:left;margin:0px 3px;}
- * #page a{float:left;margin:0 3px;border:1px solid #ddd;padding:3px 7px; text-decoration:none;color:#666}
- * #page a.now_page,#page a:hover{color:#fff;background:#05c}
 */
 
 class Page
@@ -211,38 +204,61 @@ class Page
         }
         return '';
     }
-     
+    
+    /*
+    <li>&lt;</li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">6</a></li>
+    <li class="li1">…</li>
+    <li><a href="#">7</a></li>
+    <li><a href="#">8</a></li>
+    <li class="li2"><a href="#">&gt;</a></li>
+    */
     protected function show_orange()
     {
         if($this->total_pages != 1)
         {
             $return = '';
-            $return .= $this->up_page('<');
+            //上一页
+            if($this->now_page != 1) {
+                $return .= '<li class="li2">'.$this->_get_link($this->now_page - 1, '&lt;').'</li>';
+            } else {
+                $return .= '<li>&lt;</li>';
+            }
             for($i = 1;$i<=$this->total_pages;$i++)
             {
                 if($i == $this->now_page)
                 {
-                    $return .= "<a class='now_page'>$i</a>\n";
+                    $return .= "<li class='current'><span>$i</span></li>\n";
                 }
                 else
                 {
-                    if($this->now_page-$i>=4 && $i != 1)
+                    if($this->now_page-$i>=3 && $i != 1)
                     {
-                        $return .="<span class='pageMore'>...</span>\n";
-                        $i = $this->now_page-3;
+                        $return .="<li class='li1'>...</li>\n";
+                        $i = $this->now_page-2;
                     }
                     else
                     {
-                        if($i >= $this->now_page+5 && $i != $this->total_pages)
+                        if($i >= $this->now_page+4 && $i != $this->total_pages)
                         {
-                            $return .="<span>...</span>\n"; 
+                            $return .= "<li class='li1'>...</li>\n";
                             $i = $this->total_pages;
                         }
-                        $return .= $this->_get_link($i, $i) . "\n";
+                        $return .= '<li>'.$this->_get_link($i, $i).'</li>'."\n";
                     }
                 }
             }
-            $return .= $this->down_page('>');
+            //下一页
+            if($this->now_page < $this->total_pages) {
+                $return .= '<li class="li2">'.$this->_get_link($this->now_page + 1, '&gt;').'</li>';
+            } else {
+                $return .= '<li>&gt;</li>';
+            }
             return $return;
         }
     }
