@@ -10,9 +10,15 @@ class MsgonlineAction extends ACommonAction
     public function index()
     {
 		$msgconfig = FS("Webconfig/msgconfig");
-		$d = file_get_contents('http://service.winic.org/webservice/public/remoney.asp?uid='.urlencode(auto_charset($msgconfig['sms']['user'],"utf-8","gbk")).'&pwd='.urlencode($msgconfig['sms']['pass']), false);
-		if($d<0) $d="用户名或密码错误";
-		else $d = "￥".$d;
+		$str = 'http://service.winic.org/webservice/public/remoney.asp?uid='.urlencode(auto_charset($msgconfig['sms']['user'],"utf-8","gbk")).'&pwd='.urlencode($msgconfig['sms']['pass']);
+		$d = file_get_contents($str, false);
+		if (false === $d) {
+			$d = '远程获取数据出错';
+		} elseif($d < 0) {
+			$d = '用户名或密码错误';
+		} else {
+			$d = '￥'.$d;
+		}
 		$this->assign('d',$d);
 		$this->assign('stmp_config',$msgconfig['stmp']);
 		$this->assign('sms_config',$msgconfig['sms']);
