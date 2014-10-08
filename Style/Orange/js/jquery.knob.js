@@ -300,6 +300,11 @@ $(function () {
                 // Canvas insert
                 $this.wrap(wd).before(c);
 
+                // IE support
+                if ($.browser.msie) {
+                    c = $(window.G_vmlCanvasManager.initElement(c[0]));
+                };
+
                 initStyle();
                 $this.after($('<span>').text(opt.unit).css({
                 	'position' : $this.css('position')

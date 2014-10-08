@@ -113,16 +113,16 @@ header{ position: relative; z-index: 1000; -moz-box-shadow: 0 1px 4px rgba(0, 0,
 .mainnav .denglv ul li ul li.xian{ border-bottom:1px solid #d7dbe6; margin-bottom:5px; padding-bottom:5px;}
 
 /*网站底部样式*/
-footer{ background:#2f3032; margin:0 auto; padding:0;}
-footer ul{ width:1170px; margin:0 auto; padding:50px 0 20px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
-footer ul li{ width:214px; height:190px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; text-align:center;}
-footer ul li p{ font-size:14px; line-height:26px;}
-footer ul li p.p1{ font-size:18px; padding:10px 0 0 0; line-height:30px;}
-footer ul li p.p2{ font-size:30px; line-height:36px;}
-footer ul li a{ color:#fff;}
-footer ul li.li1{ width:240px; border:none; box-shadow:none; padding-left:20px; text-align:left;}
-footer ul li.li2{ width:240px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; padding-right:20px; text-align:right;}
-footer .banquan{ width:1170px; margin:0 auto; text-align:center;color:#848485; font-size:12px; line-height:40px; background:#2f3032;}
+.footer{ background:#2f3032; margin:0 auto; padding:0;}
+.footer ul{ width:1170px; margin:0 auto; padding:50px 0 20px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
+.footer ul li{ width:214px; height:190px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; text-align:center;}
+.footer ul li p{ font-size:14px; line-height:26px;}
+.footer ul li p.p1{ font-size:18px; padding:10px 0 0 0; line-height:30px;}
+.footer ul li p.p2{ font-size:30px; line-height:36px;}
+.footer ul li a{ color:#fff;}
+.footer ul li.li1{ width:240px; border:none; box-shadow:none; padding-left:20px; text-align:left;}
+.footer ul li.li2{ width:240px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; padding-right:20px; text-align:right;}
+.footer .banquan{ width:1170px; margin:0 auto; text-align:center;color:#848485; font-size:12px; line-height:40px; background:#2f3032;}
 
 /*按钮*/
 .btn a{ border-radius:2px; display:block; margin:20px 0 0; line-height:40px; text-align:center; color:#fff; background:#fa6f15;}
