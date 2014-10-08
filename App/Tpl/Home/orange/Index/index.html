@@ -6,11 +6,14 @@
 <script type="text/javascript" src="__ROOT__/Style/H/js/backtotop.js"></script>
 <script type="text/javascript" src="__ROOT__/Style/H/js/index.js"></script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.countdown.min.js"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/excanvas.min.js"></script>
+<![endif]-->
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
 <php>$online_time = strtotime($glo['online_time']);</php>
 <script type="text/javascript">
 $(function() {
-  $('.knob').knob();
+  //countdown
   $('#getting-started').hide().countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
     var t = event.strftime('<span>%D天</span>%H : %M : %S');
     $(this).html(t).fadeIn('2000');
@@ -37,6 +40,8 @@ $(function() {
   };
   var timer = setInterval(autoPlay,speed);
   $('.banner .show,.banner .focus').hover(function() {clearInterval(timer);},function() {timer = setInterval(autoPlay,speed);});
+  //knob
+  $('.knob').knob();
 });
 </script>
 <include file="Public:_header_main" />
