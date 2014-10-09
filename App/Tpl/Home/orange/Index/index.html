@@ -6,7 +6,7 @@
 <script type="text/javascript" src="__ROOT__/Style/H/js/backtotop.js"></script>
 <script type="text/javascript" src="__ROOT__/Style/H/js/index.js"></script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.countdown.min.js"></script>
-<!--[if IE]>
+<!--[if lt IE 9]>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/excanvas.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
@@ -15,7 +15,7 @@
 $(function() {
   //countdown
   $('#getting-started').hide().countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
-    var t = event.strftime('<span>%D天</span>%H : %M : %S');
+    var t = event.strftime('<span>%D天</span>%H&nbsp;:&nbsp;%M&nbsp;:&nbsp;%S');
     $(this).html(t).fadeIn('2000');
   });
   //jcarousellite
