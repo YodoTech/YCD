@@ -4,6 +4,9 @@
 <meta http-equiv="description" content="{$glo.web_descript}" />
 
 <script type="text/javascript" src="__ROOT__/Style/H/js/area.js"></script>
+<!--[if IE]>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/excanvas.min.js"></script>
+<![endif]-->
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
 <script type="text/javascript">
 $(function() {
@@ -88,7 +91,7 @@ $(function() {
   <ul class="licai2_3 fn-clear">
     <volist name="list.list" id="vb">
       <li>
-        <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+        <div class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></div>
         <h4 title="{$vb.borrow_name}">{:getIco($vb)}{$vb.borrow_name|cnsubstr=###,8}</h4>
         <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
         <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>

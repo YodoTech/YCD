@@ -3,6 +3,15 @@
 <include file="Public:_header_common" />
 <title>会员中心 - {$glo.web_name}</title>
 <!--{$uclogin}-->
+<!--[if IE]>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('.knob').knob();
+});
+</script>
 <include file="orange:Public:_header_main" group="Home"/>
 <!--中部开始-->
 <div class="nyconter">
@@ -124,7 +133,7 @@
             <ul class="hyxx6 fn-clear">
                 <volist name="listBorrow_tj.list" id="vb">
                 <li>
-                    <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
+                    <div class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></div>
                     <h4 title="{$vb.borrow_name}">{:getIco($vb)}{$vb.borrow_name|cnsubstr=###,8}</h4>
                     <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
                     <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>

@@ -654,7 +654,13 @@ class BorrowAction extends ACommonAction
 				}
 			break;
 			case "fail":
+				for($i=0;$i<=10;$i++){
+					if(in_array($i,array("1","2")) ) continue;
+					unset($borrow_status[$i]);
+				}
+				/*
 				unset($borrow_status['3'],$borrow_status['4'],$borrow_status['5']);
+				*/
 			break;
 		}
 		///////////////////////////////////////////////////////////////////////////////////
@@ -712,7 +718,7 @@ class BorrowAction extends ACommonAction
 		$vm = M('borrow_info')->field('borrow_uid,borrow_status,borrow_type,first_verify_time,password,updata,danbao,vouch_money')->find($m->id);
 		
 		if($vm['borrow_status']==2 && $m->borrow_status<>2){
-			$this->error('已通过初审通过的借款不能改为别的状态');
+			$this->error('已通过初审的借款不能改为别的状态');
 			exit;
 		}
 		////////////////////图片编辑///////////////////////
@@ -923,28 +929,76 @@ class BorrowAction extends ACommonAction
         if (false === $m->create()) {
             $this->error($m->getError());
         }
-		$vm = M('borrow_info')->field('borrow_uid,borrow_status')->find($m->id);
+		$vm = M('borrow_info')->field('borrow_uid,borrow_status,borrow_type,first_verify_time,password,updata,danbao,vouch_money')->find($m->id);
+		
 		if($vm['borrow_status']==2 && $m->borrow_status<>2){
-			$this->error('已通过审核的借款不能改为别的状态');
+			$this->error('已通过初审的借款不能改为别的状态');
 			exit;
 		}
+		////////////////////图片编辑///////////////////////
+		if(!empty($_POST['swfimglist'])){
+			foreach($_POST['swfimglist'] as $key=>$v){
+				$row[$key]['img'] = substr($v,1);
+				$row[$key]['info'] = $_POST['picinfo'][$key];
+			}
+			$m->updata=serialize($row);
+		}
+		////////////////////图片编辑///////////////////////
 		
-		foreach($_POST['updata_name'] as $key=>$v){
-			$updata[$key]['name'] = $v;
-			$updata[$key]['time'] = $_POST['updata_time'][$key];
+		if($vm['borrow_status']<>2 && $m->borrow_status==2){
+		  //新标提醒
+			MTip('chk8',$vm['borrow_uid'],$m->id);
+		  //自动投标
+			if($m->borrow_type==1){
+				memberLimitLog($vm['borrow_uid'],1,-($m->borrow_money),$info="{$m->id}号标初审通过");
+			}elseif($m->borrow_type==2){
+				memberLimitLog($vm['borrow_uid'],2,-($m->borrow_money),$info="{$m->id}号标初审通过");
+			}
+			$vss = M("members")->field("user_phone,user_name")->where("id = {$vm['borrow_uid']}")->find();
+			SMStip("firstV",$vss['user_phone'],array("#USERANEM#","ID"),array($vss['user_name'],$m->id));
+		}
+		if($m->borrow_status==2){ 
+			$m->collect_time = strtotime("+ {$m->collect_day} days");
 		}
 		$m->borrow_interest = getBorrowInterest($m->repayment_type,$m->borrow_money,$m->borrow_duration,$m->borrow_interest_rate);
-		$m->updata = serialize($updata);
-		$m->collect_time = strtotime($m->collect_time);
         //保存当前数据对象
+		if($m->borrow_status==2 || $m->borrow_status==1) $m->first_verify_time = time();
+		else unset($m->first_verify_time);
+		unset($m->borrow_uid);
+		$bs = intval($_POST['borrow_status']);
         if ($result = $m->save()) { //保存成功
+			if($bs==2 || $bs==1){
+				$verify_info['borrow_id'] = intval($_POST['id']);
+				$verify_info['deal_info'] = text($_POST['deal_info']);
+				$verify_info['deal_user'] = $this->admin_id;
+				$verify_info['deal_time'] = time();
+				$verify_info['deal_status'] = $bs;
+				if($vm['first_verify_time']>0) {
+					M('borrow_verify')->save($verify_info);
+					$did = $vm['id'];
+				} else {
+					$did = M('borrow_verify')->add($verify_info);
+				}
+				if ($did) {//日志记录
+					m('data_verify_log')->add(array(
+						'type' 			=> 'borrowverify1',
+						'did' 			=> $did,
+						'op_status' 	=> $verify_info['deal_status'],
+						'op_info' 		=> $verify_info['deal_info'],
+						'op_credits' 	=> 0,
+						'op_uid' 		=> $verify_info['deal_user'],
+						'op_time' 		=> time()
+					));
+				}
+			}
+			if($vm['borrow_status']<>2 && $_POST['borrow_status']==2 && empty($vm['password'])==true) autoInvest(intval($_POST['id']));
             //成功提示
             $this->assign('jumpUrl', __URL__."/".session('listaction'));
             $this->success(L('修改成功'));
         } else {
             //失败提示
             $this->error(L('修改失败'));
-		}	
+		}
 	}
 	
 	
