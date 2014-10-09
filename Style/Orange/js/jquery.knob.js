@@ -300,8 +300,8 @@ $(function () {
                 // Canvas insert
                 $this.wrap(wd).before(c);
 
-                // IE support
-                if ($.browser.msie) {
+                // IE6/7/8 support
+                if ($.browser.msie && !$.support.leadingWhitespace) {
                     c = $(window.G_vmlCanvasManager.initElement(c[0]));
                 };
 
