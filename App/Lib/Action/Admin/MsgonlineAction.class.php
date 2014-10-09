@@ -17,7 +17,7 @@ class MsgonlineAction extends ACommonAction
 		} elseif($d < 0) {
 			$d = '用户名或密码错误';
 		} else {
-			$d = '￥'.$d;
+			$d = '￥'.sprintf('%01.2f', $d);
 		}
 		$this->assign('d',$d);
 		$this->assign('stmp_config',$msgconfig['stmp']);
