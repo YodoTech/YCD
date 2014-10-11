@@ -16,7 +16,8 @@
 .cont1R li.li2 p a{ color:#fff;}
 .cont1R li.li2 p.p1{ font-size:20px; line-height:30px;}
 .cont1R li.li2 p.p2{ font-size:48px; line-height:70px; font-weight:bold;}
-.cont1R li.li2 p.p2 span{ border-right:2px solid #fff; font-size:40px; padding-right:20px; margin-right:15px;}
+.cont1R li.li2 p.p2 span:first-child{ border-right:2px solid #fff; font-size:40px; padding-right:20px; margin-right:15px;}
+.cont1R li.li2 p.p2 span {display: inline;}
 .cont1R li.li2 p.p3{ font-size:14px; text-align:right;}
 .cont2{ width:1170px; margin:0 auto; padding:40px 0 20px; border-bottom:1px solid #eaeaea;}
 .cont2 ul{ width:1168px; margin:0 auto; padding:22px 0;}
@@ -47,7 +48,9 @@
 	position:relative;
 	height:356px;
 	overflow:hidden;
-	width:100%;
+	/* width:100%; */
+	width: 1170px;
+	margin: 0 auto;
 }
 .banner .show {
 	width:2500px;
