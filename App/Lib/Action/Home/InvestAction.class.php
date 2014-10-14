@@ -213,6 +213,11 @@ class InvestAction extends HCommonAction {
 		$this->assign("paying_list",$paying_list);
 		//paying_list
 
+		//借款资料
+		$file_list = M("borrow_apply_file")->field('deal_image')->where("bid={$borrowinfo['id']} AND uid={$borrowinfo['borrow_uid']} AND status=1")->select();
+		$this->assign("file_list", $file_list);
+		//借款资料
+
 		//近期还款的投标
 		//$time1 = microtime(true)*1000;
 		$history = getDurationCount($borrowinfo['borrow_uid']);

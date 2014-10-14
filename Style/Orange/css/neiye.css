@@ -716,8 +716,10 @@ ul.ysd7 li span a{ color:#fa6f15;}
 .ysdB ul li.li2{ width:400px; text-align:left;}
 .ysdB h4{ font-size:20px; font-weight:normal;}
 
-
-
-
+/*imglei*/
+.list3 ul.imglei{ width:1096px; margin:0 auto; padding:10px 0;}
+*html .list3 ul.imglei{ width:1098px; margin:0 auto; padding:10px 0;}
+.list3 ul.imglei li{ width:270px; height:auto; line-height:40px; margin:4px 2px 0 2px; padding:0; text-align:center;}
+.list3 ul.imglei li img{ width:270px;}
 
 

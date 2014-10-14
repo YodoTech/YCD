@@ -196,6 +196,7 @@ function InnerMsg(){
       <li id="li_menu_3" onclick="changeDIV(3)"><a href="javascript:;">账户详情</a></li>
       <li id="li_menu_4" onclick="changeDIV(4)"><a href="javascript:;">还款信用</a></li>
       <li id="li_menu_5" onclick="changeDIV(5)"><a href="javascript:;">待还款记录</a></li>
+      <li id="li_menu_6" onclick="changeDIV(6)"><a href="javascript:;">借款资料</a></li>
     </ul>
     <div class="list3">
         <div id="detail_menu_1">
@@ -402,6 +403,17 @@ function InnerMsg(){
             </volist>
           </if>
         </div>
+        <div id="detail_menu_6" style="display:none;">
+          <if condition="!is_array($file_list)">
+            <ul class="ul2 fn-clear"><li>没有任何资料审核通过!</li></ul>
+          <else/>
+            <ul class="imglei fn-clear">
+            <volist name="file_list" id="vf">
+              <li><a rel="img_group" href="__ROOT__/{$vf.deal_image}" target="_blank"><img src="__ROOT__/{$vf.deal_image|get_thumb_pic=###}" /></a></li>
+            </volist>
+            </ul>
+          </if>
+        </div>
         <h3>审核状态</h3>
         <if condition="!is_array($data_list)">
           <ul class="ul2 fn-clear"><li>没有任何资料审核通过!</li></ul>
@@ -469,7 +481,7 @@ $(document).ready(function() {
 
 //DIV隐显
 function changeDIV(num){
-  for(var id = 1;id<=5;id++)
+  for(var id = 1;id<=6;id++)
     {
       if(id==num)
       {

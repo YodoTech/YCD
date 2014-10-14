@@ -1438,6 +1438,8 @@ class BorrowAction extends ACommonAction
         }
         //处理文件
         if (!empty($_FILES['imgfile']['name'])) {
+        	$this->thumbMaxWidth = C('BORROW_UPLOAD_H');;
+        	$this->thumbMaxHeight = C('BORROW_UPLOAD_W');;
 			$this->savePathNew = C("ADMIN_UPLOAD_DIR").'Borrow/'.$model->uid.'/';
 			$this->saveRule = date("YmdHis",time()).rand(0,1000);
 			$info = $this->CUpload();

@@ -48,14 +48,14 @@
 <script>
 function select_all(id){
 	var se = id+"_son";
-	if($("#"+id).attr('checked')){
+	if($("#"+id).prop('checked')){
 		$("input:[data="+se+"]").each(function(i,obj){
-			$(obj).attr('checked','true');
+			$(obj).prop('checked','true');
 		
 		});
 	}else{
 		$("input:[data="+se+"]").each(function(i,obj){
-			$(obj).attr('checked','');
+			$(obj).prop('checked','');
 		
 		});
 	}
