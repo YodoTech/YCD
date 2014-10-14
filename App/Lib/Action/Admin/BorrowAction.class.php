@@ -1145,6 +1145,435 @@ class BorrowAction extends ACommonAction
 			echo "{$_SESSION['count_file']}:".__ROOT__."/".$data['product_thumb'];//返回给前台显示缩略图
 		}
 	}
+
+	//----- apply -----
+	public function apply() {
+		$map = array();
+		import("ORG.Util.Page");
+		$count = M('borrow_apply b')->join("{$this->pre}members m ON m.id=b.uid")->where($map)->count('b.id');
+		$p = new Page($count, C('ADMIN_PAGE_SIZE'));
+		$page = $p->show();
+		$Lsql = "{$p->firstRow},{$p->listRows}";
+		
+		$field= 'b.id,b.borrow_name,b.add_group,b.status,b.add_ip,b.add_time,m.id as uid,m.user_name as uname';
+		$list = M('borrow_apply b')->field($field)->join("{$this->pre}members m ON m.id=b.uid")->where($map)->limit($Lsql)->order("b.id DESC")->select();
+		
+		$this->assign('list',$list);
+		$this->assign('pagebar',$page);
+        $this->display();
+	}
+
+	public function apply_edit() {
+        $id = intval($_REQUEST['id']);
+        $vo = D('borrow_apply')->find($id);
+        if (empty($vo)) {
+        	$this->error('数据不存在');
+        }
+        $vo['uname'] = m('members')->getFieldById($vo['uid'], 'user_name');
+        $this->assign('vo', $vo);
+
+		//资料列表
+        $filelist = M('borrow_apply_file')->where(array('iid'=>$id))->select();
+        $this->assign('filelist', $filelist);
+
+		//审核日志
+		$loglist = M('data_verify_log')->where(array('type'=>'borrowapply','did'=>$id))->order('op_time DESC')->select();
+		$this->assign('loglist', $loglist);
+
+		$this->display();
+	}
+
+	public function apply_borrow() {
+		$id = intval($_GET['id']);
+		$vo = D('borrow_apply')->find($id);
+		if (empty($vo)) {
+			exit('数据不存在');
+		}
+		
+		$borrow_type = intval($_GET['borrow_type']);
+		switch ($borrow_type) {
+			case '1'://普通标
+				break;
+			case '2'://担保标
+				break;
+			case '3'://秒还标
+				$this->assign("miao",'yes');
+				break;
+			case '4'://净值标
+				break;
+			case '5'://抵押标
+				break;
+		}
+
+		$borrow_duration_day = explode("|",$this->glo['borrow_duration_day']);
+		$day = range($borrow_duration_day[0],$borrow_duration_day[1]);
+		$day_time = array();
+		foreach ($day as $v) {
+			$day_time[$v] = $v."天";
+		}
+
+		$borrow_duration = explode("|",$this->glo['borrow_duration']);
+		$month = range($borrow_duration[0],$borrow_duration[1]);
+		$month_time = array();
+		foreach ($month as $v) {
+			$month_time[$v] = $v."个月";
+		}
+		$rate_lixt = explode("|",$this->glo['rate_lixi']);
+		$borrow_config = require C("APP_ROOT")."Conf/borrow_config.php";
+		$this->assign("borrow_use",$borrow_config['BORROW_USE']);
+		$this->assign("borrow_min",$borrow_config['BORROW_MIN']);
+		$this->assign("borrow_max",$borrow_config['BORROW_MAX']);
+		$this->assign("borrow_time",$borrow_config['BORROW_TIME']);
+		$this->assign("borrow_type",$borrow_type);
+		$this->assign("borrow_day_time",$day_time);
+		$this->assign("borrow_month_time",$month_time);
+		$this->assign("repayment_type",$borrow_config['REPAYMENT_TYPE']);
+		$this->assign("rate_lixt",$rate_lixt);
+		$this->assign("vo",$vo);
+		
+		$this->display();
+	}
+
+	private function _doApply_borrow($m) {
+		$vo = M('borrow_apply')->find($m->id);
+		$pre = C('DB_PREFIX');
+		//相关的判断参数
+		$rate_lixt = explode("|",$this->glo['rate_lixi']);
+		$borrow_duration = explode("|",$this->glo['borrow_duration']);
+		$borrow_duration_day = explode("|",$this->glo['borrow_duration_day']);
+		$fee_borrow_manage = explode("|",$this->glo['fee_borrow_manage']);
+		$vminfo = M('members m')->join("{$pre}member_info mf ON m.id=mf.uid")->field("m.user_leve,m.time_limit,mf.province_now,mf.city_now,mf.area_now")->where("m.id=".$vo['uid'])->find();
+		//相关的判断参数
+		$borrow['borrow_type'] = intval($_POST['borrow_type']);
+		
+		if(floatval($_POST['borrow_interest_rate'])>$rate_lixt[1] || floatval($_POST['borrow_interest_rate'])<$rate_lixt[0]) return array('status'=>false,'error'=>'提交的借款利率有误，请重试');
+		$borrow['borrow_money'] = intval($_POST['borrow_money']);
+
+
+		$_minfo = getMinfo($vo['uid'], true);
+		$_capitalinfo = getMemberBorrowScan($vo['uid']);
+		switch ($borrow['borrow_type']) {
+			case 1://普通标
+				if($_minfo['credit_cuse']<$borrow['borrow_money']) return array('status'=>false,'error'=>'您的可用信用额度为'.$_minfo['credit_cuse'].'元，小于您准备借款的金额，不能发标');
+			break;
+			case 2://担保标
+				if($_minfo['borrow_vouch_cuse']<$borrow['borrow_money']) return array('status'=>false,'error'=>'您的可用信用担保借款额度为'.$_minfo['borrow_vouch_cuse'].'元，小于您准备借款的金额，不能发标');
+			break;
+			case 3://秒还标
+			break;
+			case 4://净值标
+				///////////////////////////////////////////////////////
+				$borrowNum = M('borrow_info')->field("borrow_type,count(id) as num,sum(borrow_money) as money,sum(repayment_money) as repayment_money")->where("borrow_uid = {$this->uid} AND borrow_status=6 ")->group("borrow_type")->select();
+				$borrowDe = array();
+				foreach ($borrowNum as $k => $v) {
+					$borrowDe[$v['borrow_type']] = $v['money'] - $v['repayment_money'];
+				}
+				///////////////////////////////////////////////////
+				$_netMoney = getFloatValue(0.9*$_minfo['money_collect']-$borrowDe[4],2);
+				if($_netMoney<$borrow['borrow_money']) return array('status'=>false,'error'=>'您的净值额度'.$_netMoney.'元，小于您准备借款的金额，不能发标');
+			break;
+			case 5://抵押标
+			break;
+		}
+		
+		if ($borrow['borrow_type'] == 2) {//担保标
+			$borrow['reward_vouch_rate'] = floatval($_POST['vouch_rate']);
+			$borrow['reward_vouch_money'] = getFloatValue($borrow['borrow_money']*$borrow['reward_vouch_rate']/100,2);
+			$borrow['vouch_member'] = text($_POST['vouch_member']);
+		}
+		
+		$borrow['borrow_uid'] = $vo['uid'];
+		$borrow['borrow_name'] = text($_POST['borrow_name_x']);
+		$borrow['borrow_duration'] = ($borrow['borrow_type'] == 3)?1:intval($_POST['borrow_duration']);//秒标固定为一月
+		$borrow['borrow_interest_rate'] = floatval($_POST['borrow_interest_rate']);
+		if (strtolower($_POST['is_day']) == 'yes') $borrow['repayment_type'] = 1;
+		elseif ($borrow['borrow_type'] == 3) $borrow['repayment_type'] = 2;//秒标按月还
+		else $borrow['repayment_type'] = intval($_POST['repayment_type']);
+		
+		if ($_POST['show_tbzj'] == 1) $borrow['is_show_invest'] = 1;//共几期(分几次还)
+		
+		$borrow['total'] = ($borrow['repayment_type']==1)?1:$borrow['borrow_duration'];//共几期(分几次还)
+		$borrow['borrow_status'] = 0;
+		$borrow['borrow_use'] = intval($_POST['borrow_use']);
+		$borrow['add_time'] = time();
+		$borrow['collect_day'] = intval($_POST['borrow_time']);
+		$borrow['add_ip'] = get_client_ip();
+		$borrow['borrow_info'] = text($_POST['borrow_info_x']);
+		$borrow['reward_type'] = intval($_POST['reward_type']);
+		$borrow['reward_num'] = floatval($_POST["reward_type_{$borrow['reward_type']}_value"]);
+		$borrow['borrow_min'] = intval($_POST['borrow_min']);
+		$borrow['borrow_max'] = intval($_POST['borrow_max']);
+		$borrow['province'] = $vminfo['province_now'];
+		$borrow['city'] = $vminfo['city_now'];
+		$borrow['area'] = $vminfo['area_now'];
+		if ($_POST['is_pass'] && intval($_POST['is_pass']) == 1) $borrow['password'] = md5($_POST['password']);
+		
+		//借款费和利息
+		$borrow['borrow_interest'] = getBorrowInterest($borrow['repayment_type'], $borrow['borrow_money'], $borrow['borrow_duration'], $borrow['borrow_interest_rate']);
+		
+		if ($borrow['repayment_type'] == 1) {//按天还
+			$fee_rate = (is_numeric($fee_borrow_manage[0]))?($fee_borrow_manage[0]/100):0.001;
+			$borrow['borrow_fee'] = getFloatValue($fee_rate*$borrow['borrow_money']*$borrow['borrow_duration'],2);
+		} else {
+			$fee_rate_1 = (is_numeric($fee_borrow_manage[1]))?($fee_borrow_manage[1]/100):0.02;
+			$fee_rate_2=(is_numeric($fee_borrow_manage[2]))?($fee_borrow_manage[2]/100):0.002;
+			if ($borrow['borrow_duration']>$fee_borrow_manage[3]&&is_numeric($fee_borrow_manage[3])) {
+				$borrow['borrow_fee'] = getFloatValue($fee_rate_1*$borrow['borrow_money'],2);
+				$borrow['borrow_fee'] += getFloatValue($fee_rate_2*$borrow['borrow_money']*($borrow['borrow_duration']-$fee_borrow_manage[3]),2);
+			} else {
+				$borrow['borrow_fee'] = getFloatValue($fee_rate_1*$borrow['borrow_money'],2);
+			}
+		}
+		
+		if ($borrow['borrow_type'] == 3) {//秒还标
+			if ($borrow['reward_type']>0) {
+				if ($borrow['reward_type'] == 1) $_reward_money = getFloatValue($borrow['borrow_money']*$borrow['reward_num']/100,2);
+				elseif ($borrow['reward_type'] == 2) $_reward_money = getFloatValue($borrow['reward_num'],2);
+			}
+			$_reward_money = floatval($_reward_money);
+			if (($_minfo['account_money']+$_minfo['back_money'])<($borrow['borrow_fee']+$_reward_money)) return array('status'=>false,'error'=>'发布此标您最少需保证您的帐户余额大于等于'.($borrow['borrow_fee']+$_reward_money).'元，以确保可以支付借款管理费和投标奖励费用');
+		}
+		
+		return array('status'=>true,'data'=>$borrow);
+	}
+
+	public function doApply_edit() {
+		//审核通过的无法再次操作审核
+        $id = intval($_POST['id']);
+        if (M('borrow_apply')->getFieldById($id, 'status') == 1) {
+        	$this->error('该申请已经通过审核了');
+        }
+
+		$model = D('borrow_apply');
+        if (false === $model->create()) {
+            $this->error($model->getError());
+        }
+        $model->deal_user = $this->admin_id;
+        $model->deal_time = time();
+
+        $msg = '';
+        $model->startTrans();
+        $status = true;
+
+        if ($model->status == 1) {
+        	$binfo = $this->_doApply_borrow($model);
+			if ($binfo['status'] === false) {
+				$status = false;
+				$msg .= '借款发布失败，'.$binfo['error'].'<br />';
+			}
+        }
+
+        if ($status) {
+        	if ($result = $model->save()) { //保存成功
+        		if (!empty($binfo['data'])) {
+        			//审核通过后生成“初审待审核借款”
+					$bid = M('borrow_info')->add($binfo['data']);
+					if ($bid) {
+						$pre = C('DB_PREFIX');
+						if (!(m()->execute("update `{$pre}borrow_apply` set `bid`={$bid} WHERE `id`={$id}")&&m()->execute("update `{$pre}borrow_apply_file` set `bid`={$bid} WHERE `iid`={$id}"))) {
+							$status = false;
+						}
+					} else {
+						$status = false;
+					}
+        		}
+
+	        	if ($status) {
+	        		$vd = M('borrow_apply')->field("id,status,deal_info,deal_user")->find($id);
+					//日志记录
+					$lid = m('data_verify_log')->add(array(
+						'type' 			=> 'borrowapply',
+						'did' 			=> $vd['id'],
+						'op_status' 	=> $vd['status'],
+						'op_info' 		=> $vd['deal_info'],
+						'op_uid' 		=> $vd['deal_user'],
+						'op_time' 		=> time()
+					));
+
+					$status = $lid ? true : false;
+	        	}
+
+	        	if ($status) {
+	        		$model->commit();
+	        	} else {
+	        		$model->rollback();
+	        	}
+	        }
+        }
+
+        if ($status) {
+        	//成功提示
+            $this->assign('jumpUrl', __URL__.'/apply.html');
+            $msg .= '修改成功';
+            $this->success(L($msg));
+        } else {
+        	//失败提示
+            $this->assign('jumpUrl', __URL__.'/apply_edit?id='.$id);
+            $msg .= '修改失败，请重试';
+            $this->error(L($msg));
+        }
+	}
+
+	public function apply_file() {
+		$id = intval($_REQUEST['id']);
+        $vo = D('borrow_apply_file')->find($id);
+        if (empty($vo)) {
+        	$this->error('数据不存在');
+        }
+        $this->assign('vo', $vo);
+
+		//审核日志
+		$loglist = M('data_verify_log')->where(array('type'=>'borrowapplyfile','did'=>$id))->order('op_time DESC')->select();
+		$this->assign('loglist', $loglist);
+
+		$this->display();
+	}
+
+	public function doApply_file() {
+		$id = intval($_POST['id']);
+
+		$model = D('borrow_apply_file');
+        if (false === $model->create()) {
+            $this->error($model->getError());
+        }
+        //处理文件
+        if (!empty($_FILES['imgfile']['name'])) {
+			$this->savePathNew = C("ADMIN_UPLOAD_DIR").'Borrow/'.$model->uid.'/';
+			$this->saveRule = date("YmdHis",time()).rand(0,1000);
+			$info = $this->CUpload();
+			$data['deal_image'] = $info[0]['savepath'].$info[0]['savename'];
+		}
+		if ($data['deal_image']) $model->deal_image = $data['deal_image'];
+		$model->deal_user = $this->admin_id;
+		$model->deal_time = time();
+
+        $msg = '';
+        //保存当前数据对象
+        if ($result = $model->save()) { //保存成功
+			$vd = M('borrow_apply_file')->field("id,iid,status,deal_image,deal_info,deal_user")->find($id);
+			//日志记录
+			m('data_verify_log')->add(array(
+				'type' 			=> 'borrowapplyfile',
+				'did' 			=> $vd['id'],
+				'op_status' 	=> $vd['status'],
+				'op_image' 		=> $vd['deal_image'],
+				'op_info' 		=> $vd['deal_info'],
+				'op_uid' 		=> $vd['deal_user'],
+				'op_time' 		=> time()
+			));
+            //成功提示
+            $this->assign('jumpUrl', __URL__.'/apply_edit?id='.$vd['iid']);
+            $msg .= '修改成功';
+            $this->success(L($msg));
+        } else {
+            //失败提示
+            $this->assign('jumpUrl', __URL__.'/apply_edit?id='.m('borrow_apply_file')->getFieldById($id, 'iidd'));
+            $msg .= '修改失败，请重试';
+            $this->error(L($msg));
+        }
+	}
+
+	//swf上传图片
+	public function apply_swfUpload() {
+		if ($_POST['picpath']) {//删除
+			$imgpath = substr($_POST['picpath'], 1);
+			if (in_array($imgpath,$_SESSION['imgfiles'])) {
+				unlink(C("WEB_ROOT").$imgpath);
+				$thumb = get_thumb_pic($imgpath);
+				$res = unlink(C("WEB_ROOT").$thumb);
+				if($res) {
+					//数据删除
+					m("borrow_apply_file")->where("data_url='{$imgpath}'")->delete();
+					$this->success("删除成功","",$_POST['oid']);
+				} else {
+					$this->error("删除失败","",$_POST['oid']);
+				}
+			} else {
+				$this->error("图片不存在","",$_POST['oid']);
+			}
+		} else {//上传
+			$this->savePathNew = C('ADMIN_UPLOAD_DIR').'Borrow/A/';
+			$this->thumbMaxWidth = C('BORROW_UPLOAD_W');
+			$this->thumbMaxHeight = C('BORROW_UPLOAD_H');
+			$this->saveRule = date("YmdHis",time()).rand(0,1000);
+			$info = $this->CUpload();
+
+			$data['borrow_thumb'] = $info[0]['savepath'].$info[0]['savename'];
+
+			//数据保存
+			$infos = array(
+				'uid' 		=> intval($_POST['uid']),
+				'data_name' => $info[0]['name'],
+				'data_url' 	=> $data['borrow_thumb'],
+				'ext' 		=> $info[0]['extension'],
+				'size' 		=> $info[0]['size'],
+				'add_ip' 	=> get_client_ip(),
+				'add_time' 	=> time()
+			);
+			if (!(M("borrow_apply_file")->add($infos))) {
+				unlink(C("WEB_ROOT").$data['borrow_thumb']);
+				unlink(C("WEB_ROOT").get_thumb_pic($data['borrow_thumb']));
+				echo "error";
+			} else {
+				if(!isset($_SESSION['count_file'])) $_SESSION['count_file']=1;
+				else $_SESSION['count_file']++;
+				$_SESSION['imgfiles'][$_SESSION['count_file']] = $data['borrow_thumb'];
+				echo "{$_SESSION['count_file']}:".__ROOT__.'/'.$data['borrow_thumb'];//返回给前台显示缩略图
+			}
+		}
+	}
+
+	public function apply_add() {
+		$uid = intval($_REQUEST['uid']);
+		$uname = m('members')->getFieldById($uid, 'user_name');
+		if (empty($uname)) {
+			$this->error('用户不存在');
+		}
+		$vo = array(
+			'uid' 	=> $uid,
+			'uname' => $uname
+		);
+		$this->assign('vo', $vo);
+		$this->display();
+	}
+
+	public function doApply_add() {
+		$uid = intval($_POST['uid']);
+
+		$pre = c("DB_PREFIX");
+		$status = true;
+		$borrowApply = d('borrow_apply');
+    	$borrowApply->startTrans();
+    	//信息添加
+    	$iid = M('borrow_apply')->add(array(
+    		'uid' 			=> $uid,
+    		'borrow_name' 	=> text($_POST['borrow_name']),
+    		'borrow_info' 	=> text($_POST['borrow_info']),
+    		'add_group' 	=> strtolower(GROUP_NAME),
+    		'add_user' 		=> $this->admin_id,
+    		'add_ip' 		=> get_client_ip(),
+    		'add_time' 		=> time()
+    	));
+    	if ($iid) {
+    		foreach ($_POST['swfimglist'] as $v) {
+    			if (!(m()->execute("update `{$pre}borrow_apply_file` set `iid`={$iid} WHERE `data_url`='".substr($v, strlen(__ROOT__.'/'))."'"))) {
+					$status = false;
+					break;
+				}
+    		}
+    	} else {
+    		$status = false;
+    	}
+    	if ($status) {
+    		$borrowApply->commit();
+    		$this->assign('jumpUrl', __URL__.'/apply.html');
+			$this->success('申请成功，请审核');
+    	} else {
+    		$borrowApply->rollback();
+    		$this->assign('jumpUrl', __URL__.'/apply_add?uid='.$uid);
+			$this->error('申请失败，请重试');
+    	}
+	}
 	
 }
 ?>

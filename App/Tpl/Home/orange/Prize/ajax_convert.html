@@ -11,8 +11,9 @@ function doConvert() {
 		data: $('#convertForm').serializeArray(),
 		success: function(d) {
 			if(d.status) {
-                $.jBox.success(d.message, '提示');
-                window.location.reload();
+				$.jBox.success(d.message, '提示', {
+                    closed: function() {window.location.reload();}
+                });
             } else {
                 $.jBox.error(d.message, '提示');
             }

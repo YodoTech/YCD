@@ -31,6 +31,9 @@ $menu_left[$i][$i."-".$j][] = array('网点管理',U('/admin/map/'),1);
 
 $i++;
 $menu_left[$i]= array('借款管理','#',1);
+$menu_left[$i]['low_title'][$i."-".$j] = array('借款申请','#',1);
+$menu_left[$i][$i."-".$j][] = array('资料审核',U('/admin/borrow/apply'),1);
+$j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('借款列表','#',1);
 $menu_left[$i][$i."-".$j][] = array('初审待审核借款',U('/admin/borrow/waitverify'),1);
 $menu_left[$i][$i."-".$j][] = array('初审未通过的借款',U('/admin/borrow/fail'),1);

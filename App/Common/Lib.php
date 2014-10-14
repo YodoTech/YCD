@@ -3780,6 +3780,24 @@ function get_coupon_code($id)
     return $row;
 }
 
+function get_group_name($group_action) {
+    $group_action = strtolower($group_action);
+    $group_name = '';
+    switch ($group_action) {
+        case 'admin':
+            $group_name = '后台';
+            break;
+        case 'home':
+            $group_name = '前台';
+            break;
+        case 'member':
+            $group_name = '会员中心';
+            break;
+        default:break;
+    }
+    return $group_name;
+}
+
 //数据操作类
 class MY_FUNC {
     /*

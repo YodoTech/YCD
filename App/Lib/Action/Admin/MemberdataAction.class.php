@@ -57,11 +57,11 @@ class MemberdataAction extends ACommonAction
 		$this->assign('pagebar',$page);
         $this->display();
     }
-	public function _editFilter(){
+	public function _editFilter($id){
 		setBackUrl();
 
 		//审核日志
-		$loglist = M('data_verify_log')->where(array('type'=>'memberdata'))->order('op_time DESC')->select();
+		$loglist = M('data_verify_log')->where(array('type'=>'memberdata','did'=>$id))->order('op_time DESC')->select();
 		$Bconfig = require C("APP_ROOT")."Conf/borrow_config.php";
 		foreach($loglist as $k=>$v) {
 			$loglist[$k]['op_status_name'] = $Bconfig['DATA_STATUS'][$v['op_status']];

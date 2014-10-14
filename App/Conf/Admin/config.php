@@ -23,6 +23,10 @@ return array(
 	'IDCARD_UPLOAD_H'=>'100,100',//产品缩图图高度
 	'IDCARD_UPLOAD_W'=>'100,290',//产品缩图图宽度
 
+	//借款资料缩略图
+	'BORROW_UPLOAD_H'=>'100,300',
+	'BORROW_UPLOAD_W'=>'100,300',
+
 	//是否生成静态
     'IS_HTML'=>array(
 			0=>'否',
