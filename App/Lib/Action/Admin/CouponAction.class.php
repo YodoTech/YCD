@@ -51,9 +51,10 @@ class CouponAction extends ACommonAction
     }
     //获取序列号
     private function _sn() {
-    	$d = new DateTime();
-		$thisMonth = $d->modify('first day of +0 month')->getTimestamp();
-		$nextMonth = $d->modify('first day of +1 month')->getTimestamp();
+        $thisMonth = date('Y-m-01');
+        $nextMonth = strtotime("$thisMonth +1 month");
+        $thisMonth = strtotime(date('Y-m-01'));
+        
 		$sn = m('coupon')->where('add_time >= '.$thisMonth.' and add_time < '.$nextMonth)->order('id DESC')->getField('coupon_code');
 		if (empty($sn)) {
 			$sn = 1;
