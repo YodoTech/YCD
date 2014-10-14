@@ -44,7 +44,7 @@ class InvestAction extends HCommonAction {
 			$searchMap['borrow_status']=array("in",'2,4,6,7');
 		}
 		$parm['map'] = $searchMap;
-		$parm['pagesize'] = 4;
+		$parm['pagesize'] = 12;
 		//排序
 		(strtolower($_GET['sort'])=="asc")?$sort="desc":$sort="asc";
 		unset($surl['orderby'],$surl['sort']);

@@ -37,7 +37,7 @@
 .cont3 ul li{ width:190px; margin:35px 15px; padding:35px; border:1px solid #d7dbe6;}
 *html .cont3 ul li{ margin:35px 15px 35px 12px;}
 .jdt_bg{ width:120px; height:120px; margin:0 auto; padding:0;}
-.cont3 ul li h4{ margin:0; padding:30px 0 6px; font-size:20px;}
+.cont3 ul li h4{ margin:0; padding:30px 0 6px; font-size:20px; height:28px;}
 .cont3 ul li p{ line-height:26px;}
 .cont3 ul li p span.bg{ border-radius:100px; width:24px; height:24px; margin:3px 0 0; line-height:24px; display:block; background:#fa6f15; text-align:center; color:#fff; font-size:12px;}
 .cont3_btn{ width:428px; margin:0 auto 35px; padding:0;}
