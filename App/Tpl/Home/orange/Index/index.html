@@ -15,7 +15,7 @@
 $(function() {
   //countdown
   $('#getting-started').hide().countdown('{$online_time|mydate="Y/m/d",###}', function(event) {
-    var t = event.strftime('<span>%D天</span><span>%H&nbsp;:&nbsp;%M&nbsp;:&nbsp;%S</span>');
+    var t = event.strftime('<span>%D天</span>%H&nbsp;:&nbsp;%M&nbsp;:&nbsp;%S');
     $(this).html(t).fadeIn('2000');
   });
   //jcarousellite
