@@ -1,194 +1,121 @@
-<include file="Public:_header_common" />
-<title>自动投标-- {$glo.web_name}</title>
 <style type="text/css">
-.sideT{ width:760px;background:#F6F6F6; overflow:hidden;}
-.set_table{ margin:10px;}
-.set_table th{color:#333333}
-.set_table td{padding:8px 8px; border-bottom:1px dotted #CCC;}
-.user_right_title{height:30px; line-height:30px; background:#F6F6F6; overflow:hidden; color:#03F;}
-fieldset {float:right;width:758px;overflow: hidden; border:1px solid #C8C4BB; FONT-SIZE: 12px; text-align:left;-moz-border-radius:8px;} 
-legend{color:#666;} 
-.title{ width:100px; line-height:18px; font-weight:bolder;font-size:12px; text-align:center;}
+.hyxx25_2R_1 {width: 100%!important; height: auto;}
+.hyxx25_2R_1C {width: 400px;}
+.hyxx25_2R_1R {width: 270px;}
 </style>
-<include file="default:Public:_header_main" group="Home"/>
-<!--中部开始-->
 <tagLib name="htmlA" />
-<div class="wrap2">
-  <div id="hy_left"> <include file="Public:_left" /> </div>
-  <div id="hy_right">
-    <div class="box">
-      <div class="Menubox1">
-        <ul class="menu">
-          <li><a href="__URL__/index">自动投标</a></li>
-          <li class="ui-tabs-selected"><a>修改自动投标</a></li>
-        </ul>
+<form name="x" id="x" method="post" action="__URL__/doedit">
+  <input type="hidden" name="id" value="{$vo.id}" />
+  <fieldset>
+    <legend>生效状态</legend>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">是否启用：</div>
+      <div class="hyxx25_2R_1C">
+        <htmlA:radio id="status" default="0|否,1|是" value="key|vo['status']"/>
       </div>
-      <div class="contentright">
-        <form name="x" method="post" action="__URL__/doedit">
-          <div class="sideT" >
-            <fieldset>
-            <legend align="left" style=" margin-left:30px;">
-            <div class="title">生效状态</div>
-            </legend>
-            <table border="0" style="clear:both;" class="set_table">
-              <tr>
-                <th> 是否启用： </th>
-                <td><htmlA:radio id="status" default="0|否,1|是" value="key|vo['status']"/>
-                  <span>(如果不选中则当前规则不会生效)</span> </td>
-              </tr>
-              <tr>
-                <th> 每次投标金额： </th>
-                <td style="width:550px"><script type="text/javascript">
-								function checkt(id){
-									$("input[name='tender_type'][value='"+id+"']").attr("checked",true);
-								}
-							</script>
-                  <span style="color:Blue;font-weight:bold;"><input  type="radio" name="tender_type" value="1" 
-                  <if condition="$vo.tender_type eq 1"> checked="checked"</if>
-                  />
-                  <label for="" style=" color:#666">按金额投标</label>
-                  </span>
-                  <input name="tender_account" type="text" onclick="checkt('1')" maxlength="5" id="tender_account"  style="width:80px;"  onkeyup="value=value.replace(/[^0-9]/g,'')" value="{$vo.tender_account}" />
-                  元<span>(最少50元)</span> <span style="color:Blue;font-weight:bold;"><input  type="radio" name="tender_type" value="2"  
-                  <if condition="$vo.tender_type eq 2"> checked="checked"</if>
-                  />
-                  <label for="" style=" color:#666">按比例投标</label>
-                  </span>
-                  <input name="tender_rate" type="text" onclick="checkt('2')"  onkeyup="value=value.replace(/[^0-9]/g,'')"  value="{$vo.tender_rate}" maxlength="2"  style="width:80px;" />
-                  %<span>(只能在1%~<span id="">20</span>%)</span> </td>
-              </tr>
-              <tr>
-                <th> </th>
-                <td><span style="color:ccc;">1、如果超过标的的最大投标额度则以标的的最大额度为准，如果小于标的的最小投标额度则不投。 <br />
-                  2、当按比列投标时，根据所设定的比例算得金额少于50元时，以50元进行投标。 <br />
-                  3、当按比列投标时，根据所设定的比例算得金额大于标的最大投标金额时，以最大投标金额进行投标。 <br />
-                  4、当投标金额大于标的金额的<span id="">20</span>%时，则按此比例进行投标。 </span> </td>
-              </tr>
-            </table>
-            </fieldset>
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" height="10px;">
-              <tr>
-                <td>&nbsp;</td>
-              </tr>
-            </table>
-            <fieldset>
-          <legend align="left" style=" margin-left:30px;">
-          <div class="title">借款人信息限制 </div>
-          </legend>
-            <table border="0" class="set_table" style="clear:both;">
-              <tr>
-                <th> 关系选项： </th>
-                <td><input id="my_friend" type="checkbox" name="my_friend" value="1" 
-                  <if condition="$vo.my_friend eq 1"> checked="checked"</if>
-                  />
-                  <label for="my_friend">必须是我的好友</label>
-                  <input id="not_black" type="checkbox" name="not_black" value="1" 
-                  <if condition="$vo.not_black eq 1"> checked="checked"</if>
-                  />
-                  <label for="not_black">必须不在我的黑名单中</label>
-                </td>
-                <td><span>(不选中则没有此项限制)</span> </td>
-              </tr>
-              <tr>
-                <th> 会员头衔： </th>
-                <td style="width:380px"> 必须为网站的
-                  <htmlA:select id="target_user" default="--不选则不限制--" datakey="xmembertype" value="key|vo.target_user"/>
-                  会员 </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <th> 信用积分： </th>
-                <td><input id="borrow_credit_status" type="checkbox" name="borrow_credit_status" value="1" 
-                  <if condition="$vo.borrow_credit_status eq 1"> checked="checked"</if>
-                  />
-                  <label for="borrow_credit_status">积分必须在</label>
-                  <input name="borrow_credit_first" type="text" value="{$vo.borrow_credit_first}" maxlength="6" id="borrow_credit_first" style="width:50px;" />
-                  ~
-                  <input name="borrow_credit_last" type="text" value="{$vo.borrow_credit_last}" maxlength="6" id="borrow_credit_last"  style="width:50px;" />
-                  之间 </td>
-              </tr>
-            </table>
-            </fieldset>
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" height="10px;">
-              <tr>
-                <td>&nbsp;</td>
-              </tr>
-            </table>
-            <fieldset>
-            <legend align="left" style=" margin-left:30px;">
-            <div class="title">标的信息限制</div>
-            </legend>
-            <div >
-            <table border="0" class="set_table" style="clear:both;">
-              <tr>
-                <th> 还款方式： </th>
-                <td><htmlA:select id="repayment_type" datakey="repayment_type" default="--不选则不限制--" value="key|vo.repayment_type"/></td>
-                <td><span></span></td>
-              </tr>
-              <tr>
-                <th> 借款期限： </th>
-                <td style="width:400px"><input id="timelimit_status"  name="timelimit_status" type="radio" value="0" checked="checked" 
-                  <if condition="$vo.timelimit_status eq 0"> checked="checked"</if>
-                  />
-                  <label for="">不限定借款期限范围</label>
-                </td>
-                <td><span></span> </td>
-              </tr>
-              <tr>
-                <th> </th>
-                <td style="width:400px"><span title="此选项只对按月还款、按季还款有效">
-                  <input id="timelimit_status" type="radio" name="timelimit_status" value="1"   name="timelimit_status" 
-                  <if condition="$vo.timelimit_status eq 1"> checked="checked"</if>
-                  />
-                  <label for="">借款期限按月范围必须在</label>
-                  </span>
-                  <htmlA:select id="timelimit_month_first" datakey="borrow_month_time" nodefalut="true" value="key|vo.timelimit_month_first"/>
-                  ~
-                  <htmlA:select id="timelimit_month_last" datakey="borrow_month_time" nodefalut="true" value="key|vo.timelimit_month_last"/>
-                </td>
-                <td><span>(此选项只对按月还款、按季还款有效)</span> </td>
-              </tr>
-              <tr>
-                <th> 利率选项： </th>
-                <td><input id="apr_status" type="checkbox" name="apr_status" value="1"  
-                  <if condition="$vo.apr_status eq 1"> checked="checked"</if>
-                  />
-                  <label for="">利率范围必须在</label>
-                  <input name="apr_first" type="text" value="{$vo.apr_first}" maxlength="6" id="apr_first" style="width:50px;" />
-                  %~
-                  <input name="apr_last" type="text" value="{$vo.apr_last}" maxlength="6" id="apr_last"  style="width:50px;" />
-                  %之间 </td>
-                <td><span>(不选中则没有此项限制)</span> </td>
-              </tr>
-              <!--<tr> 
-                        <th> 
-                            奖励选项：
-                        </th> 
-                        <td> 
-                           <input  type="checkbox" name="award_status"  value="1" <if condition="$vo.award_status eq 1"> checked="checked"</if> /><label for="">奖励范围必须在</label> 
-                           <input name="award_first" type="text" value="{$vo.award_first}" maxlength="6" id="award_first" style="width:50px;" />%~<input name="award_last" type="text" value="{$vo.award_last}" maxlength="6" id="award_last"  style="width:50px;" />%之间</td> 
-                        <td> 
-                            <span>(不选中则没有此项限制)</span> 
-                        </td> 
-                    </tr> 
-                 <tr> -->
-              <th> 其他要求： </th>
-                <td> 必须为
-                  <htmlA:select id="borrow_type" datakey="borrow_type" default="--不选则不限制--" value="key|vo.borrow_type"/>
-                </td>
-                <td></td>
-              </tr>
-            </table>
-            </fieldset>
-          </div>
-          <div style="text-align:center; margin-top:10px; clear:both;">
-            <input type="hidden" name="id" value="{$vo.id}" />
-            <input type="submit" name="" value="保存" id="" style="width:100px; line-height:30px;" />
-            <input type="reset" name="" value="取消" id="" style="width:100px; line-height:30px;"  />
-          </div>
-        </form>
+      <div class="tdTip hyxx25_2R_1R">(如果不选中则当前规则不会生效)</div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">每次投标金额：</div>
+      <div class="hyxx25_2R_1C">
+        <div>
+          <input type="radio" name="tender_type" value="1" <if condition="$vo.tender_type eq 1"> checked="checked"</if> />
+          <label for="" style="color:#666">按金额投标</label>
+          <input name="tender_account" type="text" onclick="checkt('1')" maxlength="5" id="tender_account" style="width:80px;" onkeyup="value=value.replace(/[^0-9]/g,'')" value="{$vo.tender_account}" />&nbsp;元
+          <span>(最少50元)</span>
+        </div>
+        <div>
+          <input type="radio" name="tender_type" value="2" <if condition="$vo.tender_type eq 2"> checked="checked"</if> />
+          <label for="" style="color:#666">按比例投标</label>
+          <input name="tender_rate" type="text" onclick="checkt('2')"  onkeyup="value=value.replace(/[^0-9]/g,'')" value="{$vo.tender_rate}" maxlength="2" style="width:80px;" />&nbsp;%
+          <span>(只能在1%~20%)</span>
+        </div>
       </div>
     </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      1、如果超过标的的最大投标额度则以标的的最大额度为准，如果小于标的的最小投标额度则不投。<br />
+      2、当按比列投标时，根据所设定的比例算得金额少于50元时，以50元进行投标。<br />
+      3、当按比列投标时，根据所设定的比例算得金额大于标的最大投标金额时，以最大投标金额进行投标。<br />
+      4、当投标金额大于标的金额的20%时，则按此比例进行投标。
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>借款人信息限制</legend>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">关系选项：</div>
+      <div class="hyxx25_2R_1C">
+        <input id="my_friend" type="checkbox" name="my_friend" value="1" <if condition="$vo.my_friend eq 1"> checked="checked"</if> />
+        <label for="my_friend">必须是我的好友</label>
+        <input id="not_black" type="checkbox" name="not_black" value="1" <if condition="$vo.not_black eq 1"> checked="checked"</if> />
+        <label for="not_black">必须不在我的黑名单中</label>
+      </div>
+      <div class="tdTip hyxx25_2R_1R">(不选中则没有此项限制)</div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">会员头衔：</div>
+      <div class="hyxx25_2R_1C">
+        必须为网站的&nbsp;<htmlA:select id="target_user" default="--不选则不限制--" datakey="xmembertype" value="key|vo.target_user" />&nbsp;会员
+      </div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">信用积分：</div>
+      <div class="hyxx25_2R_1C">
+        <input id="borrow_credit_status" type="checkbox" name="borrow_credit_status" value="1" <if condition="$vo.borrow_credit_status eq 1"> checked="checked"</if> />
+        <label for="borrow_credit_status">积分必须在</label>
+        <input name="borrow_credit_first" type="text" value="{$vo.borrow_credit_first}" maxlength="6" id="borrow_credit_first" style="width:50px;" />&nbsp;~&nbsp;<input name="borrow_credit_last" type="text" value="{$vo.borrow_credit_last}" maxlength="6" id="borrow_credit_last"  style="width:50px;" />&nbsp;之间
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>标的信息限制</legend>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">还款方式：</div>
+      <div class="hyxx25_2R_1C">
+        <htmlA:select id="repayment_type" datakey="repayment_type" default="--不选则不限制--" value="key|vo.repayment_type" />
+      </div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">借款期限：</div>
+      <div class="hyxx25_2R_1C">
+        <div>
+          <input id="timelimit_status" name="timelimit_status" type="radio" value="0" checked="checked" <if condition="$vo.timelimit_status eq 0"> checked="checked"</if> />
+          <label for="">不限定借款期限范围</label>
+        </div>
+        <div>
+          <span title="此选项只对按月还款、按季还款有效">
+            <input id="timelimit_status" type="radio" name="timelimit_status" value="1" name="timelimit_status" <if condition="$vo.timelimit_status eq 1"> checked="checked"</if> />
+            <label for="">借款期限按月范围必须在</label>
+          </span>
+          <htmlA:select id="timelimit_month_first" datakey="borrow_month_time" nodefalut="true" value="key|vo.timelimit_month_first" />&nbsp;~&nbsp;<htmlA:select id="timelimit_month_last" datakey="borrow_month_time" nodefalut="true" value="key|vo.timelimit_month_last" />
+        </div>
+      </div>
+      <div class="tdTip hyxx25_2R_1R">(此选项只对按月还款、按季还款有效)</div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">利率选项：</div>
+      <div class="hyxx25_2R_1C">
+        <input id="apr_status" type="checkbox" name="apr_status" value="1" <if condition="$vo.apr_status eq 1"> checked="checked"</if> />
+        <label for="">利率范围必须在</label>
+        <input name="apr_first" type="text" value="{$vo.apr_first}" maxlength="6" id="apr_first" style="width:50px;" />&nbsp;%&nbsp;~&nbsp;<input name="apr_last" type="text" value="{$vo.apr_last}" maxlength="6" id="apr_last"  style="width:50px;" />&nbsp;%&nbsp;之间
+      </div>
+      <div class="tdTip hyxx25_2R_1R">(不选中则没有此项限制)</div>
+    </div>
+    <div class="hyxx25_2R_1 fn-clear">
+      <div class="hyxx25_2R_1L">其他要求：</div>
+      <div class="hyxx25_2R_1C">
+        必须为&nbsp;<htmlA:select id="borrow_type" datakey="borrow_type" default="--不选则不限制--" value="key|vo.borrow_type" />
+      </div>
+    </div>
+  </fieldset>
+  <div class="hyxx25_2R_1 mt10 fn-clear">
+    <div class="hyxx25_2R_1L">&nbsp;</div>
+      <div class="hyxx25_2R_1C">
+      <div class="hyxx25_1R"><span class="btn"><a href="#" onclick="$('#x').submit();return false;" onmousemove="this.style.cursor='hand'">保存</a></span></div>
+      </div>
   </div>
-</div>
-<include file="default:Public:_footer_inner" group="Home" />
+</form>
+<script type="text/javascript">
+function checkt(id) {
+  $("input[name='tender_type'][value='"+id+"']").attr("checked",true);
+}
+</script>

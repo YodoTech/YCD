@@ -1,0 +1,69 @@
+<style>
+.hyxx24ul li.w30 {width: 30px;}
+.hyxx24ul li.w110 {width: 110px;}
+.hyxx24ul li.w175 {width: 175px;}
+.hyxx24ul li.w130 {width: 130px;}
+</style>
+<div class="hyxx24 fn-clear" style="border:none;">
+    <ul class="hyxx24ul fn-clear">
+        <li class="w30">编号</li>
+        <li class="w175">是否开启</li>
+        <li class="w175">每次投标金额</li>
+        <li class="w130">借款期限</li>
+        <li class="w110">操作</li>
+    </ul>
+    <volist name="list" id="vo">
+    <ul class="hyxx24ul fn-clear">
+        <li class="w30">{$vo.id}</li>
+        <li class="w175"><if condition="$vo.status eq 1"><font color="#00CC00">已开启</font><else/>未开启</if></li>
+        <li class="w175"><if condition="$vo.tender_type eq 1">{$vo.tender_account}元<else/>{$vo.tender_rate}%</if></li>
+        <li class="w130"><if condition="$vo.timelimit_status eq 0">不限制<else/>{$vo.timelimit_month_first}---{$vo.timelimit_month_last}个月</if></li>
+        <li class="w110"><a href="#" class="editBtn" rel="{$vo.id}">编辑</a>&nbsp;|&nbsp;<a href="#" class="delBtn" rel="{$vo.id}">删除</a></li>
+    </ul>
+    </volist>
+    <div id="pager" data="info1" class="ajaxpagebar hyxx12 fn-right">{$pagebar}</div>
+</div>
+<script type="text/javascript">
+$('.ajaxpagebar a').click(function() {
+    try {
+        var geturl = $(this).attr('href');
+        var id = $(this).parent().attr('data');
+        var x = {};
+        $.ajax({
+            url: geturl,
+            data: x,
+            timeout: 5000,
+            cache: false,
+            type: "get",
+            dataType: "json",
+            success: function (d, s, r) {
+                if(d) $("#"+id).html(d.content);//更新客户端竞拍信息 作个判断，避免报错
+            }
+        });
+    } catch(e){};
+    return false;
+});
+$('.editBtn').on('click', function() {
+    var id = $(this).attr('rel');
+    $.jBox.tip('加载中...', 'loading');
+    $.getJSON('__URL__/edit', {id:id}, function(d, textStatus) {
+        $.jBox.closeTip();
+        $.jBox.info(d.content, '修改', {
+            width: 'auto',
+            top: '20px',
+            buttons: {'关闭': true }
+        });
+    });
+    return false;
+});
+$('.delBtn').on('click', function() {
+    var id = $(this).attr('rel');
+    $.jBox.confirm('确定吗？', null, function (v, h, f) {
+        if (v == 'ok') {
+            window.location.href = '__URL__/del?id=' + id;
+        }
+        return true;//close
+    });
+    return false;
+});
+</script>
