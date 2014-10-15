@@ -66,9 +66,9 @@ $(function() {
 	})
 	<php>if('index' != $member_orange_page){</php>
 	//左边导航定位
-	.next('span').filter(":contains('"+window.location.pathname+"')").each(function(i) {
+	.next('span').filter(":contains('"+window.location.pathname.toLowerCase()+"')").each(function(i) {
 		var $this = $(this);
-		if ($this.text().indexOf(window.location.hash) != -1 || i === 0) {
+		if ($this.text().indexOf(window.location.hash.toLowerCase()) != -1 || i === 0) {
 			$this
 				.parent('li').addClass('active')
 				.siblings('li').removeClass('active')
