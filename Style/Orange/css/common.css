@@ -115,7 +115,7 @@ header{ position: relative; z-index: 1000; -moz-box-shadow: 0 1px 4px rgba(0, 0,
 
 /*网站底部样式*/
 .footer{ background:#2f3032; margin:0 auto; padding:0;}
-.footer ul{ width:1170px; margin:0 auto; padding:50px 0 20px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
+.footer ul{ width:1170px; margin:0 auto; padding:20px 0 20px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
 .footer ul li{ width:214px; height:190px; border-left:1px solid #191a1b;-moz-box-shadow:-1px 0 0 #3b3c3d;-webkit-border-shadow: -1px 0 0 #3b3c3d;box-shadow: -1px 0 0 #3b3c3d; text-align:center;}
 .footer ul li p{ font-size:14px; line-height:26px;}
 .footer ul li p.p1{ font-size:18px; padding:10px 0 0 0; line-height:30px;}
@@ -127,3 +127,8 @@ header{ position: relative; z-index: 1000; -moz-box-shadow: 0 1px 4px rgba(0, 0,
 
 /*按钮*/
 .btn a{ border-radius:2px; display:block; margin:20px 0 0; line-height:40px; text-align:center; color:#fff; background:#fa6f15;}
+
+/*友情链接*/
+.footer ul.yqlj{width:1170px; margin:0 auto; padding:50px 0 10px 0; color:#fff; border-bottom:1px dashed #1e1e1f; background:#2f3032;}
+.footer ul.yqlj li{ width:auto; height:30px; font-size:18px; line-height:30px; border:none; box-shadow:none; text-align:center; padding:0 4px; color:#FA6F15;}
+.footer ul.yqlj li a{ font-size:16px;}
