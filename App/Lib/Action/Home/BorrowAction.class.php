@@ -194,6 +194,238 @@ class BorrowAction extends HCommonAction {
 		else $this->error("发布失败，请先检查是否完成了个人详细资料然后重试");
 		
 	}
+
+	//资料上传页面
+	public function apply() {
+		$array = $this->_apply_setting();
+		$this->assign('applySetting', $array);
+		$this->display();
+	}
+
+	private function _apply_setting() {
+		$array = array(
+			'maxSize' => 1024*1024*3,//3M
+			'chunkSize' => 1024*1024*1,//1M
+			'extensions' => array('jpg', 'gif', 'png', 'jpeg')
+		);
+		return $array;
+	}
+
+	private function _apply_error($data) {
+		ajaxmsg($data, 0);
+	}
+
+	//上传文件校验
+	private function _apply_check($file) {
+		$applySetting = $this->_apply_setting();
+		$data = array(
+			'jsonrpc' => '2.0',
+			'id' => 'id'
+		);
+		if($file['error']!== 0) {
+            //文件上传失败
+            //捕获错误代码
+            switch($file['error']) {
+	            case 1:$error = '上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值';break;
+	            case 2:$error = '上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值';break;
+	            case 3:$error = '文件只有部分被上传';break;
+	            case 4:$error = '没有文件被上传';break;
+	            case 6:$error = '找不到临时文件夹';break;
+	            case 7:$error = '文件写入失败';break;
+	            default:$error = '未知上传错误！';
+	        }
+	        $data['error'] = array('code' => $file['error'], 'message' => $error);
+            $this->_apply_error($data);
+        }
+        //文件上传成功，进行自定义规则检查
+        //检查文件大小
+        if(($file['size'] > $applySetting['maxSize']) && ($applySetting['maxSize'] > 0)) {
+            $data['error'] = array('code' => 201, 'message' => '上传文件大小不符！');
+            $this->_apply_error($data);
+        }
+
+        //检查文件类型
+        $pathinfo = pathinfo($file['name']);
+        if(!in_array(strtolower($pathinfo['extension']),$applySetting['extensions'],true)) {
+            $data['error'] = array('code' => 202, 'message' => '上传文件类型不允许');
+            $this->_apply_error($data);
+        }
+
+        //检查是否合法上传
+        if(!is_uploaded_file($file['tmp_name'])) {
+        	$data['error'] = array('code' => 203, 'message' => '非法上传文件！');
+            $this->_apply_error($data);
+        }
+        return true;
+	}
+
+	//Plupload 文件上传
+	public function apply_upload() {
+		$data = array(
+			'jsonrpc' => '2.0',
+			'id' => 'id'
+		);
+		// HTTP headers for no cache etc
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+
+		// Settings
+		$targetDir = C('HOME_UPLOAD_DIR').'Borrow';
+
+		$cleanupTargetDir = true; // Remove old files
+		$maxFileAge = 5 * 3600; // Temp file age in seconds
+
+		// 5 minutes execution time
+		@set_time_limit(5 * 60);
+
+		// Uncomment this one to fake upload time
+		// usleep(5000);
+
+		// Get parameters
+		$chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
+		$chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
+		$fileName = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
+
+		// Clean the fileName for security reasons
+		$fileName = preg_replace('/[^\w\._]+/', '_', $fileName);
+
+		// Make sure the fileName is unique but only if chunking is disabled
+		if ($chunks < 2 && file_exists($targetDir.'/'.$fileName)) {
+			$ext = strrpos($fileName, '.');
+			$fileName_a = substr($fileName, 0, $ext);
+			$fileName_b = substr($fileName, $ext);
+
+			$count = 1;
+			while (file_exists($targetDir.'/'.$fileName_a.'_'.$count.$fileName_b))
+				$count++;
+
+			$fileName = $fileName_a.'_'.$count.$fileName_b;
+		}
+
+		$filePath = $targetDir.'/'.$fileName;
+
+		// Create target dir
+		if (!file_exists($targetDir)) @mkdir($targetDir);
+
+		// Remove old temp files	
+		if ($cleanupTargetDir) {
+			if (is_dir($targetDir) && ($dir = opendir($targetDir))) {
+				while (($file = readdir($dir)) !== false) {
+					$tmpfilePath = $targetDir.'/'.$file;
+
+					// Remove temp file if it is older than the max age and is not the current file
+					if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge) && ($tmpfilePath != "{$filePath}.part")) {
+						@unlink($tmpfilePath);
+					}
+				}
+				closedir($dir);
+			} else {//Failed to open temp directory
+				$data['error'] = array('code' => 100, 'message' => '系统出错');
+				$this->_apply_error($data);
+			}
+		}
+
+		if ($this->_apply_check($_FILES['upload'])) {
+			// Open temp file
+			$out = @fopen("{$filePath}.part", $chunk == 0 ? "wb" : "ab");
+			if ($out) {
+				// Read binary input stream and append it to temp file
+				$in = @fopen($_FILES['upload']['tmp_name'], "rb");
+
+				if ($in) {
+					while ($buff = fread($in, 4096))
+						fwrite($out, $buff);
+				} else {//Failed to open input stream.
+					$data['error'] = array('code' => 101, 'message' => '系统出错');
+					$this->_apply_error($data);
+				}
+				@fclose($in);
+				@fclose($out);
+				@unlink($_FILES['upload']['tmp_name']);
+			} else {//Failed to open output stream.
+				$data['error'] = array('code' => 102, 'message' => '系统出错');
+				$this->_apply_error($data);
+			}
+		} else {//Failed to move uploaded file.
+			$data['error'] = array('code' => 103, 'message' => '系统出错');
+			$this->_apply_error($data);
+		}
+
+		// Check if file has been uploaded
+		if (!$chunks || $chunk == $chunks - 1) {
+			// Strip the temp .part suffix off 
+			rename("{$filePath}.part", $filePath);
+
+			//保存数据
+			$infos = array(
+				'uid' 		=> $this->uid,
+				'add_ip' 	=> get_client_ip(),
+				'add_time' 	=> time()
+			);
+			$infos['data_name'] = $_FILES['upload']['name'];
+			$infos['data_url'] 	= $filePath;
+			$pathinfo = pathinfo($filePath);
+			$infos['ext'] 		= $pathinfo['extension'];
+			$infos['size'] 		= $_FILES['upload']['size'];
+			if (!(M("borrow_apply_file")->add($infos))) {
+				@unlink($filePath);
+				$data['error'] = array('code' => 104, 'message' => '上传失败，请重试');
+				$this->_apply_error($data);
+			}
+		}
+
+		$data['result'] = null;
+		ajaxmsg($data, 1);
+	}
+
+	//资料提交
+	/* post data
+		borrow_name:xxx
+		borrow_info:xxxx
+		uploader_0_tmpname:p193se6qjbjor16qhplu4ldapj4.jpg
+		uploader_0_name:yanzhengma.jpg
+		uploader_0_status:done
+		uploader_count:1
+	*/
+	public function apply_submit() {
+		$pre = c("DB_PREFIX");
+		$status = true;
+		$borrowApply = d('borrow_apply');
+    	$borrowApply->startTrans();
+    	//信息添加
+    	$iid = M('borrow_apply')->add(array(
+    		'uid' 			=> $this->uid,
+    		'borrow_name' 	=> text($_POST['borrow_name']),
+    		'borrow_info' 	=> text($_POST['borrow_info']),
+    		'add_group' 	=> strtolower(GROUP_NAME),
+    		'add_user' 		=> $this->uid,
+    		'add_ip' 		=> get_client_ip(),
+    		'add_time' 		=> time()
+    	));
+    	if ($iid) {
+			$uploader_count = intval($_POST['uploader_count']);
+			for ($i=0; $i < $uploader_count; $i++) {
+				if (!(m()->execute("update `{$pre}borrow_apply_file` set `iid`={$iid} WHERE `data_name`='".text($_POST['uploader_'.$i.'_name'])."'"))) {
+					$status = false;
+					break;
+				}
+			}
+    	} else {
+    		$status = false;
+    	}
+    	if ($status) {
+    		$borrowApply->commit();
+    		$data['message'] = '申请成功，请耐心等待审核';
+			ajaxmsg($data, 1);
+    	} else {
+    		$borrowApply->rollback();
+    		$data['message'] = '申请失败，请重试';
+			$this->_apply_error($data);
+    	}
+	}
 	
 	//swf上传图片
 	public function swfUpload(){

@@ -8,7 +8,7 @@ function getBorrowList($parm=array()){
 	
 	if($parm['pagesize']){
 		//分页处理
-		import("ORG.Util.Page");
+		import("@.Page");
 		$count = M('borrow_info b')->where($map)->count('b.id');
 		$p = new Page($count, $parm['pagesize']);
 		$page = $p->show();
@@ -48,7 +48,7 @@ function getArticleList($parm){
 	//查询条件 
 	if($parm['pagesize']){
 		//分页处理
-		import("ORG.Util.Page");
+		import("@.Page");
 		$count = M('article')->where($map)->count('id');
 		$p = new Page($count, $parm['pagesize']);
 		$page = $p->show();

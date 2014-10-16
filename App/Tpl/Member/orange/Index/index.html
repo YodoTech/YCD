@@ -3,6 +3,15 @@
 <include file="Public:_header_common" />
 <title>会员中心 - {$glo.web_name}</title>
 <!--{$uclogin}-->
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/excanvas.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/jquery.knob.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('.knob').knob();
+});
+</script>
 <include file="orange:Public:_header_main" group="Home"/>
 <!--中部开始-->
 <div class="nyconter">
@@ -22,14 +31,14 @@
                     <p class="p1 fn-clear"><span><a href="__APP__/member/charge#fragment-1" title="充值">充&nbsp;值</a></span><span><a href="__APP__/member/withdraw#fragment-1" title="提现" class="a1">提&nbsp;现</a></span></p>
                     <p class="p2 fn-clear">
                         <if condition="$verifyStatus['phone_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-2"><img title="绑定手机，已绑定" alt="手机认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_1.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-2"><img title="绑定手机，未绑定" alt="手机认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_1h.jpg" /></a></span>
                         </if>
                         <if condition="$verifyStatus['id_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-3"><img title="实名认证，已设置" alt="实名认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_2.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-3"><img title="实名认证，未设置" alt="实名认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_2h.jpg" /></a></span>
                         </if>
                         <if condition="$memberinfo.pin_pass eq ''">
                         <span><a class="a1" href="__APP__/member/user#fragment-3"><img title="支付密码，未设置" alt="支付密码未设置" src="__ROOT__/Style/Orange/images/hyxxicon_3h.jpg" /></a></span>
@@ -37,9 +46,9 @@
                         <span><a href="__APP__/member/user#fragment-3"><img title="支付密码，已设置" alt="支付密码已设置" src="__ROOT__/Style/Orange/images/hyxxicon_3.jpg" /></a></span>
                         </if>
                         <if condition="$verifyStatus['email_status'] eq 1 ">
-                        <span><a href="__APP__/member/verify"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
+                        <span><a href="__APP__/member/verify#fragment-1"><img title="绑定邮箱，已绑定" alt="邮件认证通过" src="__ROOT__/Style/Orange/images/hyxxicon_4.jpg" /></a></span>
                         <else />
-                        <span><a class="a1" href="__APP__/member/verify"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
+                        <span><a class="a1" href="__APP__/member/verify#fragment-1"><img title="绑定邮箱，未绑定" alt="邮件认证未通过" src="__ROOT__/Style/Orange/images/hyxxicon_4h.jpg" /></a></span>
                         </if>
                         <if condition="($verifyStatus['user_leve'] neq 0) AND (time() lt $verifyStatus['time_limit']) ">
                         <span><a href="__APP__/member/vip"><img alt="VIP会员" title="VIP会员" src="__ROOT__/Style/Orange/images/hyxxicon_6.jpg" /></a></span>
@@ -124,13 +133,23 @@
             <ul class="hyxx6 fn-clear">
                 <volist name="listBorrow_tj.list" id="vb">
                 <li>
-                    <p class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></p>
-                    <h4 title="{$vb.borrow_name}">{$vb.borrow_name|cnsubstr=###,8}</h4>
+                    <div class="jdt_bg"><input class="knob" data-width="120" data-cgColor="#2f3032" data-fgColor="#fa6f15" data-bgColor="#EAEAEA" data-thickness=".17" data-readOnly=true value="{$vb.progress|round}" data-unit="%" /></div>
+                    <h4 title="{$vb.borrow_name}">{:getIco($vb)}{$vb.borrow_name|cnsubstr=###,7}</h4>
                     <p>期       限：{$vb.borrow_duration} <if condition="$vb.repayment_type eq 1">天 <else/>个月</if></p>
                     <p>金       额：{$vb.borrow_money|Fmoney=###}元</p>
                     <p>利       率：{$vb.borrow_interest_rate}% <if condition="$vb.repayment_type eq 1">每天<else/>每年</if></p>
                     <p class="fn-clear"><span class="fn-left">信用等级：</span><span class="bg fn-left">{$vb.credits|getLeveName=###}</span></p>
-                    <p class="btn"><a href="{$vb.id|getInvestUrl=###}">我要投标</a></p>
+                    <p class="btn"><a href="{$vb.id|getInvestUrl=###}">
+                        <if condition="$vb.borrow_status eq 2">
+                            我要投标
+                        <elseif condition="$vb.borrow_status eq 4"/>
+                            已满标
+                        <elseif condition="$vb.borrow_status eq 6"/>
+                            还款中
+                        <elseif condition="$vb.borrow_status gt 6"/>
+                            已完成
+                        </if>
+                    </a></p>
                 </li>
                 </volist>
             </ul>

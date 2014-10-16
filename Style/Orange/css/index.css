@@ -2,8 +2,6 @@
 /* CSS Document */
 /*首页中心部分*/
 .conter{ margin:0 auto; padding:0;}
-.banner{ background:#fa6f15; margin:0; padding:0;}
-.banner ul{ width:1170px; height:356px; margin:0 auto; padding:0;}
 .cont1{ width:1170px; margin:0 auto; padding:40px 0 20px; border-bottom:1px solid #eaeaea;}
 .cont1L{ width:560px;}
 .cont1L li{ width:280px; padding:22px 0;}
@@ -17,7 +15,7 @@
 .cont1R li.li2 p{ width:418px; margin:0 auto; text-align:left;}
 .cont1R li.li2 p a{ color:#fff;}
 .cont1R li.li2 p.p1{ font-size:20px; line-height:30px;}
-.cont1R li.li2 p.p2{ font-size:48px; line-height:70px; font-weight:bold;}
+.cont1R li.li2 p.p2{ font-size:46px; line-height:70px; font-weight:bold;}
 .cont1R li.li2 p.p2 span{ border-right:2px solid #fff; font-size:40px; padding-right:20px; margin-right:15px;}
 .cont1R li.li2 p.p3{ font-size:14px; text-align:right;}
 .cont2{ width:1170px; margin:0 auto; padding:40px 0 20px; border-bottom:1px solid #eaeaea;}
@@ -39,7 +37,72 @@
 .cont3 ul li{ width:190px; margin:35px 15px; padding:35px; border:1px solid #d7dbe6;}
 *html .cont3 ul li{ margin:35px 15px 35px 12px;}
 .jdt_bg{ width:120px; height:120px; margin:0 auto; padding:0;}
-.cont3 ul li h4{ margin:0; padding:30px 0 6px; font-size:20px;}
+.cont3 ul li h4{ margin:0; padding:30px 0 6px; font-size:20px; height:28px;}
 .cont3 ul li p{ line-height:26px;}
 .cont3 ul li p span.bg{ border-radius:100px; width:24px; height:24px; margin:3px 0 0; line-height:24px; display:block; background:#fa6f15; text-align:center; color:#fff; font-size:12px;}
 .cont3_btn{ width:428px; margin:0 auto 35px; padding:0;}
+
+/*首页焦点图*/
+.banner {
+	position:relative;
+	height:356px;
+	overflow:hidden;
+	/* width:100%; */
+	width: 1170px;
+	margin: 0 auto;
+}
+.banner .show {
+	width:2500px;
+	position:absolute;
+	left:50%;
+	top:0px;
+	margin-left:-1250px;
+	height:100%;
+	overflow:hidden;
+}
+.banner .show ul {
+	position:relative;
+	height:100%;
+	overflow:hidden;
+	width:2500px;
+	float:left;
+}
+.banner .show ul li {
+	text-align:center;
+	width:2500px;
+	float:left;
+	height:100%;
+	position:absolute;
+	display:none;
+}
+.banner .hot {
+	width:100%;
+	height:42px;
+	line-height:42px;
+	position:absolute;
+	bottom:0;
+	z-index:2;
+	/*background-image: url(../images/bg03.png);*/
+	background-repeat: repeat-x;
+}
+.banner .focus {
+	width:120px;
+	padding-top:13px;
+	height:29px;
+	margin:0 auto;
+}
+.banner .focus a {
+	width:12px;
+	height:12px;
+	/*background:url(../images/ico01.png) no-repeat left -24px;*/
+	background-color:#fff;
+	border-radius:100%;
+
+	float:left;
+	margin-left:10px;
+	display:inline-block;
+}
+.banner .focus a.on {
+	/*background:url(../images/ico01.png) no-repeat left top;*/
+	background-color:#2f3032;
+}

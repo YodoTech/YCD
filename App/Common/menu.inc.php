@@ -31,15 +31,18 @@ $menu_left[$i][$i."-".$j][] = array('网点管理',U('/admin/map/'),1);
 
 $i++;
 $menu_left[$i]= array('借款管理','#',1);
+$menu_left[$i]['low_title'][$i."-".$j] = array('借款申请','#',1);
+$menu_left[$i][$i."-".$j][] = array('资料审核',U('/admin/borrow/apply'),1);
+$j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('借款列表','#',1);
 $menu_left[$i][$i."-".$j][] = array('初审待审核借款',U('/admin/borrow/waitverify'),1);
-$menu_left[$i][$i."-".$j][] = array('复审待审核借款',U('/admin/borrow/waitverify2'),1);
+$menu_left[$i][$i."-".$j][] = array('初审未通过的借款',U('/admin/borrow/fail'),1);
 $menu_left[$i][$i."-".$j][] = array('招标中借款',U('/admin/borrow/waitmoney'),1);
+$menu_left[$i][$i."-".$j][] = array('已流标借款',U('/admin/borrow/unfinish'),1);
+$menu_left[$i][$i."-".$j][] = array('复审待审核借款',U('/admin/borrow/waitverify2'),1);
+$menu_left[$i][$i."-".$j][] = array('复审未通过的借款',U('/admin/borrow/fail2'),1);
 $menu_left[$i][$i."-".$j][] = array('还款中借款',U('/admin/borrow/repaymenting'),1);
 $menu_left[$i][$i."-".$j][] = array('已完成的借款',U('/admin/borrow/done'),1);
-$menu_left[$i][$i."-".$j][] = array('已流标借款',U('/admin/borrow/unfinish'),1);
-$menu_left[$i][$i."-".$j][] = array('初审未通过的借款',U('/admin/borrow/fail'),1);
-$menu_left[$i][$i."-".$j][] = array('复审未通过的借款',U('/admin/borrow/fail2'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('逾期借款管理','#',1);
 $menu_left[$i][$i."-".$j][] = array('逾期统计',U('/admin/expired/detail'),0);
@@ -73,6 +76,11 @@ $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('积分兑换管理','#',1);
 $menu_left[$i][$i."-".$j][] = array('奖品列表',U('/admin/prize/index'),1);
 $menu_left[$i][$i."-".$j][] = array('兑换日志',U('/admin/prize/log'),1);
+//优惠券管理
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('优惠券管理','#',1);
+$menu_left[$i][$i."-".$j][] = array('优惠券列表',U('/admin/coupon/index'),1);
+$menu_left[$i][$i."-".$j][] = array('使用日志',U('/admin/coupon/log'),1);
 
 $i++;
 $menu_left[$i]= array('充值提现','#',1);
@@ -124,6 +132,9 @@ $menu_left[$i][$i."-".$j][] = array('用户组权限管理',U('/admin/acl/'),1);
 $j++;
 $menu_left[$i]['low_title'][$i."-".$j] = array('文件管理','#',0);
 $menu_left[$i][$i."-".$j][] = array('文件管理',U('/admin/mfields/'),1);
+$j++;
+$menu_left[$i]['low_title'][$i."-".$j] = array('日志管理','#',1);
+$menu_left[$i][$i."-".$j][] = array('短信发送记录',U('/admin/sms/log'),1);
 
 $i++;
 $menu_left[$i]= array('数据库','#',1);

@@ -1,0 +1,171 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<div class="so_main">
+	<div class="page_tit">申请数据</div>
+	<div class="form2">
+		<dl class="lineD"><dt>申请用户：</dt><dd>{$vo.uname}</dd></dl>
+		<dl class="lineD"><dt>借款标题：</dt><dd>{$vo.borrow_name}</dd></dl>
+		<dl class="lineD"><dt>借款说明：</dt><dd>{$vo.borrow_info}</dd></dl>
+		<dl class="lineD"><dt>审核状态：</dt><dd>
+			<if condition="$vo.status eq 1">
+				<span style="margin:0;color:#00CC00">已通过</span>
+			<elseif condition="$vo.status eq 2"/>
+				<span style="margin:0;color:red">未通过</span>
+			<else/>
+				<span style="margin:0;">待审核</span>
+			</if>
+		</dd></dl>
+	</div>
+
+	<if condition="$vo.status neq 1">
+		<form method="post" action="__URL__/doApply_edit" onsubmit="return subcheck();">
+			<input type="hidden" name="id" value="{$vo.id}" />
+			<div class="page_tit">审核资料</div>
+			<div class="form2">
+				<div id="tab_1">
+					<dl class="lineD"><dt>是否通过：</dt><dd><htmlA:radio id="status" value="key|vo.status" default="1|是,2|否"/></dd></dl>
+					<dl class="lineD"><dt>审核说明：</dt><dd><htmlA:input id="deal_info" value="{$vo.deal_info}" tip="简短说明"/></dd></dl>
+				</div><!--tab1-->
+			</div>
+			<div id="apply_borrow" style="display:none;">
+				<div class="page_tit">借款信息</div>
+				<div class="form2">
+					<dl class="lineD"><dt>标类型：</dt><dd>
+						<select id="borrow_type" name="borrow_type">
+							<option value="">--请选择--</option>
+							<option value="1">普通标</option>
+							<option value="2">担保标</option>
+							<!-- <option value="3">秒还标</option> -->
+							<!-- <option value="4">净值标</option> -->
+							<option value="5">抵押标</option>
+						</select>
+					</dd></dl>
+					
+					<div id="apply_borrow_content"></div>
+				</div>
+			</div>
+			<div class="form2">
+				<div class="page_btm">
+				    <input type="submit" class="btn_b" value="确定" />
+				</div>
+			</div>
+		</form>
+	</if>
+
+	<div class="page_tit">资料列表</div>
+	<div class="Toolbar_inbox">
+		<div class="page right">{$pagebar}</div>&nbsp;
+	</div>
+    <div class="list">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+		    <th class="line_l">ID</th>
+		    <th class="line_l">文件名称</th>
+		    <th class="line_l">审核状态</th>
+		    <th class="line_l">处理文件</th>
+		    <th class="line_l">处理人</th>
+		    <th class="line_l">处理时间</th>
+		    <th class="line_l">操作</th>
+	    </tr>
+	    <volist id="vf" name="filelist">
+	        <tr overstyle='on'>
+		        <td>{$vf.id}</td>
+		        <td><a href="__ROOT__/{$vf.data_url}" target="_blank">{$vf.data_name}</a></td>
+		        <td>
+					<if condition="$vf.status eq 1">
+						<span style="color:#00CC00">已通过</span>
+					<elseif condition="$vf.status eq 2"/>
+						<span style="color:red">未通过</span>
+					<else/>
+						<span>待审核</span>
+					</if>
+		        </td>
+		        <td><if condition="$vf.deal_image neq ''"><a href="__ROOT__/{$vf.deal_image}" target="_blank">查看</a></if></td>
+		        <td><if condition="$vf.deal_user neq 0">{$vf.deal_user|get_admin_name=###}</if></td>
+		        <td><if condition="$vf.deal_time gt 0">{$vf.deal_time|date="Y-m-d H:i:s",###}</if></td>
+		        <td><a href="javascript:void(0);" onclick="apply_file('{$vf.id}');">审核</a></td>
+	        </tr>
+	    </volist>
+	    </table>
+    </div>
+	<div class="Toolbar_inbox">
+		<div class="page right">{$pagebar}</div>&nbsp;
+	</div>
+
+	<div class="page_tit">审核日志</div>
+    <div class="list">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+		    <th class="line_l">ID</th>
+	        <th class="line_l">审核状态</th>
+	        <th class="line_l">审核说明</th>
+	        <th class="line_l">操作用户</th>
+	        <th class="line_l">操作时间</th>
+	    </tr>
+	    <volist name="loglist" id="vl">
+	        <tr overstyle='on'>
+		        <td>{$vl.id}</td>
+		        <td>
+					<if condition="$vl.op_status eq 1">
+						<span style="color:#00CC00">已通过</span>
+					<elseif condition="$vl.op_status eq 2"/>
+						<span style="color:red">未通过</span>
+					<else/>
+						<span>待审核</span>
+					</if>
+		        </td>
+		        <td>{$vl.op_info}</td>
+		        <td>{$vl.op_uid|get_admin_name=###}</td>
+		        <td>{$vl.op_time|date="Y-m-d",###}</td>
+	        </tr>
+	    </volist>
+	    </table>
+    </div>
+</div>
+<script type="text/javascript">
+function subcheck() {
+	$status = $("input[name='status']:checked");
+	if ($status.length != 1) {
+		ui.error('请选择审核结果');
+		return false;
+	}
+	$deal_info = $("#deal_info");
+	if ($.trim($deal_info.val()) == '') {
+		ui.error('请填写审核说明');
+		return false;
+	}
+	if ($status.val() == '1') {
+		if ($('#borrow_type').val() == '') {
+			ui.error('请选择标类型');
+			return false;
+		}
+		//填写借款资料
+		if (!subcheck_borrow()) return false;
+	}
+	return true;
+}
+function apply_file(id) {
+	ui.box.load('__URL__/apply_file?id='+id, {title:'资料审核'});
+}
+$(function() {
+	$('input[name=status]').on('click', function() {
+		if ($(this).val() == '1') {
+			//填写借款资料
+			$('#apply_borrow').show();
+		} else {
+			$('#apply_borrow').hide();
+		}
+	});
+	$('#borrow_type').on('change', function() {
+		$this = $(this);
+		$apply_borrow_content = $('#apply_borrow_content');
+		if ($this.val() == '') {
+			$apply_borrow_content.html('');
+		} else {
+			//填写借款资料
+			$apply_borrow_content.html('加载中...').load('__URL__/apply_borrow?id={$vo.id}&borrow_type='+$this.val());
+		}
+	});
+});
+</script>
+<include file="Public:_footer" />

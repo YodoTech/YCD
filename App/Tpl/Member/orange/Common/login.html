@@ -4,6 +4,17 @@
 <script type="text/javascript">
 var imgpath="__ROOT__/Style/M/";
 var curpath="__URL__";
+$(function(){
+    $('.partner').hover(function(){ $(this).addClass('hover');},function(){ $(this).removeClass('hover');});
+    $('#btnReg').on('click', function() {
+        LoginSubmit(this);
+        return false;
+    });
+    $('#loginForm').on('submit', function() {
+        $('#btnReg').trigger('click');
+        return false;
+    });
+});
 </script>
 <script type="text/javascript" src="__ROOT__/Style/Orange/js/M/login.js"></script>
 <include file="orange:Public:_header_main" group="Home" />
@@ -12,77 +23,86 @@ var curpath="__URL__";
 <div class="nyconter">
     <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;登录</div>
     <div class="dengluym">
-        <ul class="fn-clear">
-            <li>
-                <img src="/Style/Orange/images/zcicon_1.jpg" />
-                <span><input type="text" title="请输入用户名或邮箱" id="txtUser"></span>
-                <div id="dvUser" style="padding-top: 50px;"></div>
-            </li>
-            <li>
-                <img src="/Style/Orange/images/zcicon_2.jpg" />
-                <span><input type="password" class="in_r_1" id="txtPwd"></span>
-                <div id="dvPwd" style="padding-top: 50px;"></div>
-            </li>
-            <li class="li2 fn-clear">
-                <span class="sp1 fn-left"><input type="text" maxlength="4" id="txtCode"></span>
-                <span class="sp2 fn-left"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></span>
-                <div id="dvCode" style="padding-top: 50px;"></div>
-            </li>
-            <li class="li1 fn-clear">
-                <span class="sp1"><input id="loginstate" type="checkbox" value="7" /></span>
-                <span class="sp2">记住用户名</span>
-                <span class="sp3"><a href="javascript:;" onclick="getPassWord();">忘记密码</a></span>
-            </li>
-            <input type="hidden" id="redirect_uri" value="{$redirect_uri}" />
-        </ul>
+        <form action="#" id="loginForm">
+            <ul class="fn-clear">
+                <li>
+                    <img src="/Style/Orange/images/zcicon_1.jpg" />
+                    <span><input type="text" title="请输入用户名或邮箱" id="txtUser"></span>
+                    <div id="dvUser" style="padding-top: 50px;"></div>
+                </li>
+                <li>
+                    <img src="/Style/Orange/images/zcicon_2.jpg" />
+                    <span><input type="password" class="in_r_1" id="txtPwd"></span>
+                    <div id="dvPwd" style="padding-top: 50px;"></div>
+                </li>
+                <li class="li2 fn-clear">
+                    <span class="sp1 fn-left"><input type="text" maxlength="4" id="txtCode"></span>
+                    <span class="sp2 fn-left"><img src='__URL__/verify' alt="点击换一个校验码" id="imVcode" onclick="this.src=this.src+'?t='+Math.random()" /></span>
+                    <div id="dvCode" style="padding-top: 50px;"></div>
+                </li>
+                <li class="li1 fn-clear">
+                    <span class="sp1"><input id="loginstate" type="checkbox" value="7" /></span>
+                    <span class="sp2">记住用户名</span>
+                    <span class="sp3"><a href="javascript:;" onclick="getPassWord();">忘记密码</a></span>
+                </li>
+                <input type="hidden" id="redirect_uri" value="{$redirect_uri}" />
+            </ul>
+            {/* 使用隐藏的type=submit表单来实现回车提交 */}
+            <input type="submit" class="fn-hide" />
+        </form>
         <div class="dengluym1">
-            <p class="btn"><a href="#" onclick="LoginSubmit(this);return false;" id="btnReg">立即登录</a></p>
+            <p class="btn"><a href="#" id="btnReg">立即登录</a></p>
         </div>
         <div class="dengluym2">没有账号？&nbsp;<a href="__APP__/member/common/register/">免费注册</a></div>
         <div class="dengluym3">
             <ul class="fn-clear">
-                <li class="li1 fn-left">您还可以使用合作账号登录</li>
-                <li class="li2 fn-right">
-                    <a href="__APP__/member/oauth/qq/"><img src="__ROOT__/Style/Orange/images/qq.jpg" alt="腾讯登陆"></a>
-                    <!-- <a style=" margin-left:10px;" href="__APP__/member/oauth/sina/"><img src="__ROOT__/Style/Orange/images/sina.jpg" alt="微博登陆"></a> -->
+                <li class="li1">您还可以使用合作账号登录</li>
+                <li class="li2">
+                    <div class="bottom">
+                        <a id="partner-qq" class="partner" href="__APP__/member/oauth/qq/">腾讯账号</a>
+                        <a id="partner-weibo" class="partner" href="__APP__/member/oauth/sina/">新浪微博</a>
+                    </div>
                 </li>
             </ul>
         </div>  
     </div>
     <script type="text/javascript">
-    function jfun_dogetpass(){
-        var ux = $("#emailname").val();
-        if(ux==""){
-            $.jBox.tip('请输入用户名或者邮箱','tip');
-            return;
-        }
-        $.jBox.tip("邮件发送中......","loading");
-        $.ajax({
-            url: "__APP__/member/common/dogetpass/",
-            data: {"u":ux},
-            //timeout: 5000,
-            cache: false,
-            type: "post",
-            dataType: "json",
-            success: function (d, s, r) {
-                if(d){
-                    if(d.status==1){
-                        $.jBox.tip("发送成功，请去邮箱查收",'success');
-                        $.jBox.close(true);
-                    }else{
-                        $.jBox.tip("发送失败，请重试",'fail');
-                    }
-                }
-            }
-        });
-
-    }
-
     function getPassWord() {
-        $.jBox("get:__APP__/member/common/getpassword/", {
-            title: "找回密码",
-            width: "auto",
-            buttons: {'发送邮件':'jfun_dogetpass()','关闭': true }
+        $.jBox('get:__APP__/member/common/getpassword/', {
+            title: '找回密码',
+            width: 'auto',
+            buttons: {'发送邮件':true, '关闭':false},
+            submit: function(v, h, f) {
+                if (v) {
+                    h.find('.reg_wrong').hide('fast', function() { $(this).remove();});
+                    var ux = $.trim($('#emailname').val());
+                    if (ux == '') {
+                        $('<div class="reg_wrong pt10 pb10 ml10" style="display:none;">请输入用户名或者邮箱</div>').prependTo(h).show('fast');
+                        return false;
+                    }
+                    $.jBox.tip('邮件发送中......', 'loading');
+                    $.ajax({
+                        url: '__APP__/member/common/dogetpass/',
+                        data: {'u':ux},
+                        //timeout: 5000,
+                        cache: false,
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (d, s, r) {
+                            if(d) {
+                                if(d.status == 1) {
+                                    $.jBox.tip('发送成功，请去邮箱查收','success');
+                                    $.jBox.close(true);
+                                } else {
+                                    $.jBox.tip('发送失败，请重试','fail');
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    return true;
+                } 
+            }
         });   
     }
     </script>

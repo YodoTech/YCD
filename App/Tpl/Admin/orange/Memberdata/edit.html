@@ -1,24 +1,61 @@
 <tagLib name="htmlA" />
 <div class="so_main">
-
-<div class="page_tit">审核资料</div>
-<div class="form2">
-	<form method="post" action="__URL__/doEdit" onsubmit="return subcheck();">
+	<form method="post" action="__URL__/doEdit" onsubmit="return subcheck();" enctype="multipart/form-data">
 	<input type="hidden" name="id" value="{$vo.id}" />
-	<div id="tab_1">
-	
-	<dl class="lineD"><dt>是否通过：</dt><dd><htmlA:radio id="status" value="key|vo.status" default="1|是,2|否"/></dd></dl>
-	<dl class="lineD"><dt>审核说明：</dt><dd><htmlA:input id="deal_info" value="{$vo.deal_info}" tip="简短说明"/></dd></dl>
-	<dl class="lineD"><dt>奖励积分：</dt><dd><htmlA:input id="deal_credits" value="{$vo.deal_credits}" tip="如不奖励积分则不用填"/></dd></dl>
-	
-	</div><!--tab1-->
-	
-	<div class="page_btm">
-	  <input type="submit" class="btn_b" value="确定" />
+	<input type="hidden" name="uid" value="{$vo.uid}" />
+	<div class="page_tit">编辑数据</div>
+	<div class="form2">
+		<dl class="lineD"><dt>用户上传资料：</dt><dd><a href="__ROOT__/{$vo.data_url}" target="_blank">查看</a></dd></dl>
+		<dl class="lineD"><dt>后台编辑资料：</dt><dd>
+			<input type="file" id="imgfile" name="imgfile" />
+			<div style="text-align:left; clear:both;padding:5px 0;"><div id="imgDiv"></div><if condition="$vo.deal_image eq ''">无缩略图<else/><a href="__ROOT__/{$vo.deal_image}" target="_blank"><img src="__ROOT__/{$vo.deal_image}" width="100" height="100" /></a></if></div>
+		</dd></dl>
+	</div>
+	<div class="page_tit">审核资料</div>
+	<div class="form2">
+		<div id="tab_1">
+			<dl class="lineD"><dt>是否通过：</dt><dd><htmlA:radio id="status" value="key|vo.status" default="1|是,2|否"/></dd></dl>
+			<dl class="lineD"><dt>审核说明：</dt><dd><htmlA:input id="deal_info" value="{$vo.deal_info}" tip="简短说明"/></dd></dl>
+			<dl class="lineD"><dt>奖励积分：</dt><dd><htmlA:input id="deal_credits" value="{$vo.deal_credits}" tip="如不奖励积分则不用填"/></dd></dl>
+		</div><!--tab1-->
+		<div class="page_btm">
+		    <input type="submit" class="btn_b" value="确定" />
+		</div>
 	</div>
 	</form>
-</div>
-
+	<div class="page_tit">审核日志</div>
+	<div class="list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <th class="line_l">ID</th>
+		        <th class="line_l">审核状态</th>
+		        <th class="line_l">审核说明</th>
+		        <th class="line_l">上传资料</th>
+		        <th class="line_l">奖励积分</th>
+		        <th class="line_l">操作用户</th>
+		        <th class="line_l">操作时间</th>
+		    </tr>
+		    <volist name="loglist" id="vl">
+		    <tr overstyle="on">
+		        <td>{$vl.id}</td>
+		        <td>
+					<if condition="$vl.op_status eq 0">
+						<font color="red">{$vl.op_status_name}</font>
+					<elseif condition="$vl.op_status eq 1"/>
+						<font color="#00CC00">{$vl.op_status_name}</font>
+					<else/>
+						{$vl.op_status_name}
+					</if>
+		        </td>
+		        <td>{$vl.op_info}</td>
+		        <td><a href="__ROOT__/{$vl.op_image}" target="_blank">查看</a></td>
+		        <td>{$vl.op_credits}</td>
+		        <td>{$vl.op_uid|get_admin_name=###}</td>
+		        <td>{$vl.op_time|date="Y-m-d",###}</td>
+		    </tr>
+			</volist>
+		</table>
+	</div>
 </div>
 <script type="text/javascript">
 function subcheck(){

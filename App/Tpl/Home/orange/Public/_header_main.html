@@ -59,6 +59,11 @@ $(document).ready(function() {
             $('ul', this).hide();
         }
     );
+    $('#qrcode').hover(function() {
+        $(this).next('div').removeClass('fn-hide');
+    }, function() {
+        $(this).next('div').addClass('fn-hide');
+    });
 });
 </script>
 </head>
@@ -69,7 +74,7 @@ $(document).ready(function() {
             <li><a href="/service/index.html">在线客服</a></li>
             <li><a href="javascript:addBookmark('{$glo.web_name} - {$glo.index_title}','{:C('WEB_URL')}')">加入收藏</a></li>
             <li><a href="__APP__/member/">我的账户</a></li>
-            <li><a href="#">移动客户端</a></li>
+            <li><a href="javascript:;" id="qrcode">移动客户端</a><div class="pt10 fn-hide" style="position:absolute;z-index:1;"><img src="/Public/images/qrcode.png" /></div></li>
         </ul>
     </div>
     <div class="top2 fn-clear">

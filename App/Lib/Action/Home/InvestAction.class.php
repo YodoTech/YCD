@@ -21,14 +21,10 @@ class InvestAction extends HCommonAction {
 			$maprow[$vs] = text($surl[$vs]);
 		}
 		//searchMap
-		if(in_array($maprow['borrow_status'],array(2,3,6,7,8,9))){
-			if($maprow['borrow_status']==9){
-				$searchMap['borrow_status']=array("in",'2,6,7');
-			}else{
-				$searchMap['borrow_status']=$maprow['borrow_status'];
-			}
+		if(in_array($maprow['borrow_status'],array(2,4,6,7))){
+			$searchMap['borrow_status']=$maprow['borrow_status'];
 		}else{
-			$searchMap['borrow_status']=array("in",'2');
+			$searchMap['borrow_status']=array("in",'2,4,6,7');
 		}
 		if(!empty($maprow['borrow_name'])) $searchMap['b.borrow_name'] = array("like","%{$maprow['borrow_name']}%");
 		if(!empty($maprow['repayment_type'])) $searchMap['b.repayment_type'] =intval($maprow['repayment_type']);
@@ -45,10 +41,10 @@ class InvestAction extends HCommonAction {
 		//searchMap
 		//if(is_array($searchMap['borrow_status'])) $searchMap['collect_time']=array('gt',time());
 		if($maprow['borrow_status']==''){
-			$searchMap['borrow_status']=array("in",'2,6,7');
+			$searchMap['borrow_status']=array("in",'2,4,6,7');
 		}
 		$parm['map'] = $searchMap;
-		$parm['pagesize'] = 4;
+		$parm['pagesize'] = 12;
 		//排序
 		(strtolower($_GET['sort'])=="asc")?$sort="desc":$sort="asc";
 		unset($surl['orderby'],$surl['sort']);
@@ -216,6 +212,11 @@ class InvestAction extends HCommonAction {
 		$paying_list = getMemberBorrow($borrowinfo['borrow_uid']);
 		$this->assign("paying_list",$paying_list);
 		//paying_list
+
+		//借款资料
+		$file_list = M("borrow_apply_file")->field('deal_image')->where("bid={$borrowinfo['id']} AND uid={$borrowinfo['borrow_uid']} AND status=1")->select();
+		$this->assign("file_list", $file_list);
+		//借款资料
 
 		//近期还款的投标
 		//$time1 = microtime(true)*1000;

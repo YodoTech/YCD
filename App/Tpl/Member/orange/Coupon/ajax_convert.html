@@ -1,0 +1,46 @@
+<style type="text/css">
+.pop-tb-con{width:400px;}.pop-tb-con ul li{line-height:30px;}
+</style>
+<script>
+function doConvert() {
+	var $coupon_pass = $('#coupon_pass');
+	if ($.trim($coupon_pass.val()) == '') {
+		$coupon_pass.focus();
+		return false;
+	}
+	$.jBox.tip('加载中...', 'loading');
+	$.ajax({
+		url: '__URL__/convert',
+		type: 'POST',
+		dataType: 'json',
+		data: $('#convertForm').serializeArray(),
+		success: function(d) {
+			if(d.status) {
+                $.jBox.success(d.message, '提示');
+            } else {
+                $.jBox.error(d.message, '提示');
+            }
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.jBox.error(textStatus, '提示');
+		}
+	}).always(function() {
+		$.jBox.closeTip();
+	});
+	return false;
+}
+</script>
+<div class="pop-tb-con pt10 pl10 pb10 pr10 clearfix">
+	<form method="post" id="convertForm" action="#">
+		<input type="hidden" name="coupon_code" value="{$vo.coupon_code}" />
+		<input type="hidden" name="cookieKey" value="{$cookieKey}" />
+		<ul>
+			<li class="fn-left">
+				<input type="text" id="coupon_pass" name="coupon_pass" class="inp1 mt10" placeholder="请输入优惠券密码">
+			</li>
+			<li class="fn-left">
+				<div class="btn"><a href="javascript:;" onclick="doConvert()" class="w130 mt10">确认使用</a></div>
+			</li>
+		</ul>
+	</form>
+</div>

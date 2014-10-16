@@ -1,6 +1,21 @@
 <include file="orange:Public:_left" group="Home" />
 <!--link友情链接开始-->
-<footer>{$glo.bottom}</footer>
+<div class="footer">
+	<if condition="$home_orange_page eq 'index'">
+		<php>$friend_list = get_home_friend(1);</php>
+	<else/>
+		<php>$friend_list = get_home_friend(2);</php>
+	</if>
+	<notempty name="friend_list">
+	<ul class="yqlj fn-clear fn-text-overflow">
+    	<li>友情链接：</li>
+		<volist name="friend_list" id="vf">
+		<li><a href="{$vf.link_href}" target="_blank">{$vf.link_txt}</a></li>
+		</volist>
+    </ul>
+	</notempty>
+	{$glo.bottom}
+</div>
 <div class="fn-hide">
 	<script type="text/javascript">
 	var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");

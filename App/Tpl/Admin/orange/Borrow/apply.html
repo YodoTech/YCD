@@ -1,0 +1,52 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<div class="so_main">
+  <div class="page_tit">借款资料管理</div>
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>&nbsp;
+  </div>
+  
+  <div class="list">
+  <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="line_l">ID</th>
+    <th class="line_l">会员名</th>
+    <th class="line_l">标题</th>
+    <th class="line_l">申请类型</th>
+    <th class="line_l">审核状态</th>
+    <th class="line_l">IP地址</th>
+    <th class="line_l">申请时间</th>
+    <th class="line_l">操作</th>
+  </tr>
+  <volist id="vo" name="list">
+      <tr overstyle='on'>
+        <td>{$vo.id}</td>
+        <td><htmlA:user id="vo.uid" uname="vo.uname" /></td>
+        <td>{$vo.borrow_name}</td>
+        <td>{$vo.add_group|get_group_name=###}</td>
+        <td>
+          <if condition="$vo.status eq 1">
+            <span style="color:#00CC00">已通过</span>
+          <elseif condition="$vo.status eq 2"/>
+            <span style="color:red">未通过</span>
+          <else/>
+            <span>待审核</span>
+          </if>
+        </td>
+        <td>{$vo.add_ip}</td>
+        <td>{$vo.add_time|date="Y-m-d H:i:s",###}</td>
+        <td>
+          <a href="__URL__/apply_edit?id={$vo.id}"><if condition="$vo.status eq 1">查看<else/>审核</if></a>
+        </td>
+      </tr>
+  </volist>
+  </table>
+
+  </div>
+  
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>&nbsp;
+  </div>
+</div>
+
+<include file="Public:_footer" />

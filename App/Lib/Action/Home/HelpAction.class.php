@@ -23,7 +23,7 @@ class HelpAction extends HCommonAction {
 		$this->assign("cid",$typeid);
 		
 		if($typeset==1){
-			$parm['pagesize']=15;
+			$parm['pagesize']=10;
 			$parm['type_id']=$typeid;
 			if($is_subsite===false){
 				$list = getArticleList($parm);

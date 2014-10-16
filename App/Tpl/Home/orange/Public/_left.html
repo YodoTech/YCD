@@ -15,6 +15,7 @@
 								<span class="pic"><img src="__ROOT__/Style/Orange/images/line/line_tel.png"></span>
 								<span class="name">咨询热线</span>
 							</div>
+							<notempty name="glo['online_qq']">
 							<div id="line_qq_icon" class="line_icon">
 								<span class="pic">
 									<img src="__ROOT__/Style/Orange/images/line/line_qq.png"></span>
@@ -34,16 +35,12 @@
 													<small class="sanjiao"></small>
 													<small class="tab_close"></small>
 													<dl>
-														<dt>QQ客服1</dt>
+														<volist name=":explode('|', $glo['online_qq'])" id="vo" key="k">
+														<dt>QQ客服{$k}</dt>
 														<dd>
-															<a target="_blank" href="#">
-																<img src="__ROOT__/Style/Orange/images/line/pa.gif" alt="点击这里给我发消息" title="点击这里给我发消息" border="0"></a>
+															<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$vo}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:{$vo}:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
 														</dd>
-														<dt>QQ客服2</dt>
-														<dd>
-															<a target="_blank" href="#">
-																<img src="__ROOT__/Style/Orange/images/line/pa.gif" alt="点击这里给我发消息" title="点击这里给我发消息" border="0"></a>
-														</dd>
+														</volist>
 													</dl>
 												</div>
 											</div>
@@ -56,6 +53,7 @@
 									</div>
 								</div>
 							</div>
+							</notempty>
 						</div>
 					</div>
 				</div>

@@ -1,0 +1,158 @@
+<tagLib name="htmlA" />
+<style type="text/css">
+.x_border {border:1px solid;}
+</style>
+<dl class="lineD"><dt>借贷总金额：</dt><dd><input onkeyup="NumberCheck(this)" type="text" class="x_input" name="borrow_money" title="交易币种均为人民币。借款成功后,请按时还款 手续费请查看收费规则" /></dd></dl>
+<dl class="lineD"><dt id="_day_rate">年利率：</dt><dd class="x_border"><div><input onkeyup="NumberCheck(this)" type="text" class="x_input" name="borrow_interest_rate" title="填写您提供给投资者的年利率,所填写的利率是您还款的年利率。且只保留小数后最后两位。" />&nbsp;% (<span style="color:red">利率范围：{$rate_lixt[0]}%-{$rate_lixt[1]}%</span>)</div></dd></dl>
+<dl class="lineD"><dt>借款用途：</dt><dd><htmlA:select id="borrow_use" datakey="borrow_use" class="x_select" addstr='title="说明借款成功后的具体用途"' /></dd></dl>
+<dl class="lineD"><dt>借款期限：</dt><dd>
+	<if condition="$miao eq 'yes'">
+		<span style="color:#F00">标满自动还款</span>
+    <else/>
+        <htmlA:select id="borrow_duration" datakey="borrow_month_time" class="x_select" addstr='title="借款成功后,打算以几(天)个月的时间来还清贷款。" onchange="test_duration()"' />
+        <input type="checkbox" class="x_checkbox" name="is_day" id="is_day" value="yes" onclick="checkday()" title="按天还款注意利率为 '日利率',如 '日利率为1%' 则100元借1天利息1元，借两天利息2元" /><label for="is_day">按天</label>
+    </if>
+</dd></dl>
+<dl class="lineD"><dt>最低投标金额：</dt><dd><htmlA:select id="borrow_min" datakey="borrow_min" class="x_select" addstr='title="允许投资者对一个借款标的投标总额的限制"' /></dd></dl>
+<dl class="lineD"><dt>最多投标总额：</dt><dd><htmlA:select id="borrow_max" datakey="borrow_max" nodefalut="true" addstr='title="允许投资者对一个借款标的投标总额的限制"' /></dd></dl>
+<dl class="lineD"><dt>有效时间：</dt><dd><htmlA:select id="borrow_time" datakey="borrow_time" class="x_select" addstr='title="设置此次借款融资的天数。融资进度达到100%后直接进行网站的复审"' /></dd></dl>
+<dl class="lineD"><dt>还款方式：</dt><dd>
+	<if condition="$miao eq 'yes'">
+		<em class="red">标满自动还款</em>
+	<else/>
+		<htmlA:select id="repayment_type" datakey="repayment_type" class="x_select" addstr='title="1.按天到期还款 是按天算利息，到期的那一天同时还本息。2.按月分期还款是指贷款者借款成功后，每月还本息。3.按季分期还款是指贷款者借款成功后,每月还息，季度还本。4.到期还本按月付息是指贷款者借款成功后,每月还息,最后一月还同时还本金。" onchange="test_duration()"' />
+	</if>
+</dd></dl>
+<dl class="lineD"><dt>是否有投标奖励：</dt><dd><input type="checkbox" name="is_reward" id="is_reward" class="x_checkbox" onclick="is_reward_do();" title="如果您设置了奖励金额，将会冻结您帐户中相应的账户余额。如果要设置奖励，请确保您的帐户有足够 的账户余额。" /></dd></dl>
+<if condition="$borrow_type eq 2">
+<dl class="lineD"><dt>是否有担保奖励：</dt><dd>
+	<input type="checkbox" class="x_checkbox" name="is_reward_vouch" id="is_reward_vouch" onclick="is_reward_vouch_do()" title="复审通过后会直接从借款中扣除相应的奖励金额给担保人" />
+</dd></dl>
+</if>
+<div id="_is_reward" style="display:none">
+	<dl class="lineD"><dt>投标奖励</dt><dd>
+		<div>
+			<input type="radio" class="x_radio" id="reward_type_1" name="reward_type" value="1" /><label for="reward_type_1">按投标金额比例奖励</label>
+			<input type="text" class="x_input" name="reward_type_1_value" onclick="reward_type_do(1)" onkeyup="NumberCheck(this)" title="范围：0.1%~6% ，这里设置本次标的要奖励给所有投标用户的奖励比例。" />&nbsp;%
+		</div>
+		<div>
+			<input type="radio" class="x_radio" id="reward_type_2" name="reward_type" value="2" /><label for="reward_type_2">按固定金额分摊奖励</label>
+			<input type="text" class="x_input" name="reward_type_2_value" onclick="reward_type_do(2)" onkeyup="NumberCheck(this)" title="不能低于5元,不能高于总标的金额的2%，且请保留到“元”为单位。这里设置本次标的要奖励给所有投标用户的总金额。" />&nbsp;元
+		</div>
+	</dd></dl>
+</div>
+<div id="_is_reward_vouch" style="display:none">
+	<dl class="lineD"><dt>担保奖励</dt><dd>
+		<div>
+			担保比例：<input onkeyup="NumberCheck(this)" type="text" class="x_input" name="vouch_rate" title="担保奖励按照所要借款的百分比给担保人，比如借100，奖励是3%，担保人借出50，则奖励50*3%=1.5" />&nbsp;%
+		</div>
+		<div>
+			指定担保人：<input type="text" class="x_input" name="vouch_member" title="指定多个担保人请用|隔开，为空表示所有人都可以担保" />
+		</div>
+	</dd></dl>
+</div>
+<dl class="lineD"><dt>帐户信息公开设置</dt><dd>
+	<div>
+		公开我的帐户资金情况：<input type="checkbox" class="x_checkbox" name="show_zhzj" title="如果您勾上此选项，将会实时公开您帐户的：账户总额、可用余额、冻结总额。" checked="checked" disabled="disabled" />
+	</div>
+	<div>
+		公开我的借款资金情况：<input type="checkbox" class="x_checkbox" name="show_jkzj" title="如果您勾上此选项，将会实时公开您帐户的：借款总额、已还款总额、未还款总额、迟还总额、逾期总额。" checked="checked" disabled="disabled" />
+	</div>
+	<div>
+		公开我的投标资金情况：<input type="checkbox" class="x_checkbox" name="show_tbzj" title="如果您勾上此选项，将会实时公开您帐户的：投标总额、已收回总额、待收回总额。" value="1" />
+	</div>
+	<div>
+		公开我的信用额度情况：<input type="checkbox" class="x_checkbox" name="show_xyed" title="如果您勾上此选项，将会实时公开您帐户的：最低信用额度、最高信用额度。 " checked="checked" disabled="disabled" />
+	</div>
+</dd></dl>
+<dl class="lineD"><dt>借款标题：</dt><dd><input type="text" class="x_input" id="borrow_name_x" name="borrow_name_x" title="填写借款的标题，写好一点能借的几率也大一点" value="{$vo.borrow_name}" />&nbsp;是否定向标<input type="checkbox" class="x_checkbox_c" name="is_pass" value="1" id="is_pass" title="定向标需要借款者设置密码，投标者知道密码才能投标"/><span id="li_password" style="display:none;"><input type="text" class="x_input" name="password" id="password" title="请设置密码" /></span></dd></dl>
+<dl class="lineD"><dt>借款说明：</dt><dd>
+	<textarea rows="14" cols="80" name="borrow_info_x" id="borrow_info_x">{$vo.borrow_info}</textarea>
+</dd></dl>
+
+<script type="text/javascript" src="__ROOT__/Style/Orange/js/H/borrow.js"></script>
+<link rel="stylesheet" type="text/css" href="__ROOT__/Style/JQtip/tip-yellowsimple/tip-yellowsimple.css" />
+<script type="text/javascript" src="__ROOT__/Style/JQtip/jquery.poshytip.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('.x_input').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5
+	});
+	$('.x_checkbox_c').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5
+	});
+	$('.x_checkbox').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 10,
+		offsetY: -25
+	});
+	$('.x_select').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'hover',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 10,
+		offsetY: -25
+	});
+});
+<if condition="$miao eq 'yes'">
+var miao = 'yes';
+</if>
+$("#is_pass").click(function(e) {
+    if ($(this).attr('checked')) {
+        $("#li_password").show();
+    } else {
+        $("#li_password").hide();
+    }
+});
+function setError(tip) {
+	ui.error(tip);
+	return false;
+}
+function makevar(v) {
+    var d = {};
+    for(i in v) {
+        var id = v[i];
+        var o = $(":input[name='"+id+"']");
+        switch(o.prop('type')) {
+            case 'text':;
+            case 'textarea': d[id] = $.trim(o.val());break;
+            case 'radio': d[id] = o.filter(':checked').val();break;
+            case 'select-one': d[id] = o.children('option:selected').val();break;
+            default: d[id] = $.trim(o.val());break;
+        }
+        if(typeof d[id] == "undefined") d[id] = "";
+    }
+    return d;
+}
+function subcheck_borrow() {
+	var p = makevar(['borrow_money', 'borrow_interest_rate', 'borrow_use', 'borrow_duration', 'borrow_min', 'borrow_max', 'borrow_time', 'repayment_type', 'reward_type_1', 'reward_type_1_value', 'reward_type_2', 'reward_type_2_value', 'vouch_rate', 'vouch_member', 'vouch_member', 'borrow_name_x', 'borrow_info_x']);
+	if (p.borrow_money == '') return setError('借款金额不能为空！');
+	if (p.borrow_interest_rate == '') return setError('借款利率不能为空！');
+	if (p.borrow_use == '') return setError('借款用途不能为空！');
+	if (p.borrow_duration == '' && typeof miao == 'undefined') return setError('借款期限不能为空！');
+	if (p.borrow_min == '') return setError('最小投资金额不能为空！');
+	if (p.borrow_time == '') return setError('借款有效时间不能为空！');
+	if (p.repayment_type == '' && typeof miao == 'undefined') return setError('还款方式不能为空！');
+	if (p.borrow_name_x == '') return setError('借款标题不能为空！');
+	if (p.borrow_info_x == '') return setError('借款内容不能为空！');
+	return true;
+}
+</script>

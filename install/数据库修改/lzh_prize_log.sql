@@ -26,7 +26,7 @@ CREATE TABLE `lzh_prize_log` (
   `current_num` int(10) unsigned DEFAULT '0' COMMENT '本次兑换数量',
   `current_cost` mediumint(9) DEFAULT NULL COMMENT '本次花费积分',
   `cumulate_cost` mediumint(9) DEFAULT NULL COMMENT '累计花费积分',
-  `info` varchar(50) DEFAULT NULL COMMENT '备注',
+  `info` varchar(255) DEFAULT NULL COMMENT '备注',
   `add_ip` varchar(16) DEFAULT NULL COMMENT '添加IP',
   `add_time` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)

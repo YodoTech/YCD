@@ -1,0 +1,72 @@
+<include file="orange:Public:_header_common" group="Home" />
+<include file="Public:_header_common" />
+<title>优惠券管理 - 会员中心 - {$glo.web_name}</title>
+<script>
+$(function() {
+    $('#btn_convert').on('click', function() {
+        var $coupon_code = $('#coupon_code');
+        var coupon_code = $.trim($coupon_code.val());
+        if (coupon_code == '') {
+            $coupon_code.focus();
+            return false;
+        }
+        $.jBox.tip('加载中...', 'loading');
+        $.post('__URL__/ajax_convert', {'coupon_code':coupon_code}, function(d) {
+            $.jBox.closeTip();
+            if(d.status) {
+                $.jBox(d.content, {
+                    title: '优惠券使用',
+                    width: 'auto',
+                    buttons: {'取消': true}
+                });
+            } else {
+                $.jBox.error(d.message, '提示');
+            }
+        },'json');
+        return false;
+    });
+});
+</script>
+<include file="orange:Public:_header_main" group="Home"/>
+<!--中部开始-->
+<div class="nyconter">
+    <div class="lujing"><a href="__ROOT__/">网站首页</a>&nbsp;>&nbsp;<a href="__APP__/member/">会员中心</a>&nbsp;>&nbsp;活动管理</div>
+    <div class="gywm fn-clear">
+        <div class="fn-left"><include file="Public:_left" /></div>
+        <div class="hyxxR fn-right">
+            <div class="hyxx33 fn-clear">
+                <h2>我是借入者</h2>
+                <div class="hyxx33_1">
+                    <p>关注{$glo.web_name}官方微信、微博，及时了解最新活动！</p>
+                </div>
+                <!--
+                <h2>如何使用优惠券</h2>
+                <div class="hyxx33_1"><img src="__ROOT__/Style/Orange/images/hyxxi_1.jpg" /></div>-->
+           </div>
+           <div class="hyxx33 fn-clear">
+                <h2>优惠券使用</h2>
+                <ul class="hyxx34 fn-clear">
+                    <li class="fn-clear">
+                        <span class="sp1">当前用户：</span>
+                        <span>{:session('u_user_name')}</span>
+                    </li>
+                    <li class="fn-clear">
+                        <span class="sp1">优惠券：</span>
+                        <span><input type="text" id="coupon_code" class="inp1" placeholder="请输入您要使用的优惠券"></span>
+                  </li>
+                  <li class="fn-clear">
+                        <span class="sp1"></span>
+                        <span class="btn"><a href="#" id="btn_convert">使用</a></span>
+                  </li>
+                </ul>
+           </div>
+           <div class="hyxx33 fn-clear">
+                <h2>温馨提示</h2>
+                <div class="hyxx33_1">
+                    <p>暂无内容...</p>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+<include file="orange:Public:_footer" group="Home" />

@@ -33,7 +33,7 @@ $(function() {
                 <li class="hei">2</li>
                 <li class="li1 hei">3</li>
                 <li class="li2" style="text-align:left; color:#fa6f15;">填写账户信息</li>
-                <li class="li2">邮箱验证</li>
+                <li class="li2">{$regconfig['info'][$regconfig['type']]['title']}验证</li>
                 <li class="li2" style="text-align:right;">注册成功</li>
             </ul>
         </ul>
@@ -48,14 +48,11 @@ $(function() {
             </li>
             <li id="dvUser"></li>
         </ul>
-        <ul class="fn-clear">
-            <li class="zhuceym3L fn-left"><span>*</span>邮箱</li>
-            <li class="zhuceym3R fn-left">
-                <img src="/Style/Orange/images/zcicon_1.jpg"/>
-                <span><input id="txtEmail" name="txtEmail" type="text" /></span>
-            </li>
-            <li id="dvEmail"></li>
-        </ul>
+        <if condition="$regconfig['type'] eq 'email' ">
+            <include file="_register_email" />
+        <elseif condition="$regconfig['type'] eq 'phone' "/>
+            <include file="_register_phone" />
+        </if>
         <ul class="fn-clear">
             <li class="zhuceym3L fn-left"><span>*</span>登录密码</li>
             <li class="zhuceym3R fn-left">

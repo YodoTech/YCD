@@ -71,7 +71,7 @@ td.tdContent,th.tdHeard{width:auto}
 	<volist name="list" id="vo">
 <tr><td class="tdContent xffe">{$vo.add_time|date="Y-m-d H:i",###}</td><td class="tdContent xffe">{$aType[$vo['apply_type']]}</td><td class="tdContent xffe">{$vo.apply_money|Fmoney=###}</td><td class="tdContent xffe">{$vo.status}</td><td class="tdContent xffe">{$vo.deal_info|default="--"}</td><td class="tdContent xffe">{$vo.credit_money|Fmoney|default="0.00"}元</td></tr>
 	</volist>
-	<tr><td colspan="6"><div id="pager" data="info6" class="yahoo2 ajaxpagebar" style="text-align: right; padding-left:0px; padding-right:0px; height: 36px;width: 687px;text-indent: 0px;">{$pagebar}</div></td>
+	<tr><td colspan="6"><div id="pager" data="info6" class="yahoo2 ajaxpagebar" style="text-align: right; padding-left:0px; padding-right:0px; height: 36px;width: 687px;text-indent: 0px;">{$pagebar}</div></td></tr>
 </tbody></table>
 
 

@@ -1,0 +1,37 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<div class="so_main">
+	<div class="page_tit">生成优惠券</div>
+	<div class="form2">
+		<form action="__URL__/doAdd" id="addForm" method="POST">
+			<dl class="lineD"><dt>面值：</dt><dd>
+				<select id="coupon_val" name="coupon_val">
+					<option value="" selected>--请选择--</option>
+					<volist name="coupon_val_list" id="v">
+					<option value="{$v}">{$v}</option>
+					</volist>
+				</select>
+			</dd></dl>
+			<dl class="lineD"><dt>生成数量：</dt><dd><htmlA:input id="addnum" /></dd></dl>
+			<div class="page_btm">
+				<input type="submit" class="btn_b" value="确定" />
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$('#addForm').on('submit', function() {
+	var coupon_val = parseInt($.trim($('#coupon_val').val()));
+	if (isNaN(coupon_val)) {
+		ui.error('请选择面值!');return false;
+	}
+	var addnum = parseInt($.trim($('#addnum').val()));
+	if (isNaN(addnum)) {
+		ui.error('请填写生成数量!');return false;
+	}
+	if (addnum < 0 || addnum > 20) {
+		ui.error('一次性生成数量范围为：1~20');return false;
+	}
+});
+</script>
+<include file="Public:_footer" />

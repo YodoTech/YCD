@@ -12,7 +12,7 @@ function sendMobileValidSMSCode() {
 	var mobile = $("#txt_phone").val();
 	if (mobile == "") {
 		$("#btnSendMsg").html("获取验证码");
-		$('#sendSMSTip').html("请输入手机号码");
+		$('#sendSMSTip').html("<span class='red'>请输入手机号码</span>");
 		return;
 	}
 	if (mbTest.test(mobile)) {
@@ -440,7 +440,7 @@ $.jBox("get:__URL__/welcome/", {
                         <!-- <li><a id="mx4" href="#fragment-4" ajax_href="__URL__/face/">现场认证</a></li> -->
                         <!-- <li><a id="mx5" href="#fragment-5" ajax_href="__URL__/video/">视频认证</a></li> -->
 						<li><a id="mx6" href="#fragment-6" ajax_href="__URL__/safequestion/">安全问题设置</a></li>
-                        <!-- <li><a id="mx7" href="#fragment-7" ajax_href="__APP__/Member/memberinfo/editdata/">资料认证</a></li> -->
+                        <li style="width:163px;"><a id="mx7" href="#fragment-7" ajax_href="__APP__/Member/memberinfo/editdata/">资料认证</a></li>
                 	</ul>
                 </div>
                 <div class="hyxx31">
@@ -462,9 +462,9 @@ $.jBox("get:__URL__/welcome/", {
 			        <div class="fn-clear" id="fragment-6" style="display:none">
 			        	<!--升级会员-->
 			        </div>
-			        <!-- <div class="fn-clear" id="fragment-7" style="display:none"> -->
+			        <div class="fn-clear" id="fragment-7" style="display:none">
 			        	<!--升级会员-->
-			        <!-- </div> -->
+			        </div>
                 </div>
             </div>
         </div>

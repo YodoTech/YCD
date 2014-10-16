@@ -1,0 +1,65 @@
+<include file="Public:_header" />
+<tagLib name="htmlA" />
+<script type="text/javascript">
+var addUrl = '__URL__/add';
+var addTitle = '添加优惠券';
+</script>
+<div class="so_main">
+  <div class="page_tit">优惠券列表</div>
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="href" action="__URL__/add" value="添加优惠券" />
+  </div>
+  
+  <div class="list">
+    <table id="area_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th style="width:30px;">
+        <input type="checkbox" id="checkbox_handle" onclick="checkAll(this)" value="0">
+        <label for="checkbox"></label>
+      </th>
+      <th class="line_l">ID</th>
+      <th class="line_l">优惠券编号</th>
+      <th class="line_l">面值</th>
+      <th class="line_l">是否锁定</th>
+      <th class="line_l">使用时间</th>
+      <th class="line_l">过期时间</th>
+      <th class="line_l">添加时间</th>
+      <th class="line_l">操作</th>
+    </tr>
+    <volist id="vo" name="list">
+      <tr overstyle='on' id="list_{$vo.id}">
+        <td><input type="checkbox" name="checkbox" id="checkbox2" onclick="checkon(this)" value="{$vo.id}"></td>
+        <td>{$vo.id}</td>
+        <td>{$vo.coupon_code}</td>
+        <td>{$vo.coupon_val}</td>
+        <td>
+          <if condition="$vo.is_lock eq 0">
+            <span style="color:#00CC00;">未锁定</span>
+          <elseif condition="$vo.is_lock eq 1"/>
+            <span style="color:red;">已锁定</span>
+          </if>
+        </td>
+        <td>
+          <if condition="$vo.is_used eq 0">
+            <span style="color:#00CC00;">未使用</span>
+          <elseif condition="$vo.is_lock eq 1"/>
+            <span style="color:red;">时间时间：{$vo.used_time|date='Y-m-d H:i:s',###}</span>
+          </if>
+        </td>
+        <td><if condition="$vo.over_time eq 0">无<else/>{$vo.over_time|date='Y-m-d H:i:s',###}</if></td>
+        <td>{$vo.add_time|date='Y-m-d H:i:s',###}</td>
+        <td>
+          <a href="__URL__/edit?id={$vo['id']}">编辑</a>
+        </td>
+      </tr>
+    </volist>
+    </table>
+  </div>
+  
+  <div class="Toolbar_inbox">
+  	<div class="page right">{$pagebar}</div>
+    <htmlA:commonBtn type="href" action="__URL__/add" value="添加优惠券"/>
+  </div>
+</div>
+<include file="Public:_footer" />

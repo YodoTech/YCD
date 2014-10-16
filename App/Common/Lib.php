@@ -1385,23 +1385,30 @@ function get_admin_name($id = false)
 function getIco($map)
 {
     $str = "";
+    /* 暂停使用
     if (0 < $map['reward_type']) {
         $str .= "<img src=\"" . __ROOT__ . "/Style/H/images/j.gif\" align=\"absmiddle\">";
     }
+    */
     if ($map['borrow_type'] == 2) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/d.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 3) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/dan_icon.png\" align=\"absmiddle\">&nbsp;";
+    }/* 暂停使用
+    else if ($map['borrow_type'] == 3) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/m.gif\" align=\"absmiddle\">";
     } else if ($map['borrow_type'] == 4) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/jing.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 1) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/xin.gif\" align=\"absmiddle\">";
-    } else if ($map['borrow_type'] == 5) {
-        $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/ya.gif\" align=\"absmiddle\">";
     }
+    */
+    else if ($map['borrow_type'] == 1) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/xin_icon.png\" align=\"absmiddle\">&nbsp;";
+    } else if ($map['borrow_type'] == 5) {
+        $str .= "<img src=\"" . __ROOT__ . "/Style/Orange/images/di_icon.png\" align=\"absmiddle\">&nbsp;";
+    }
+    /* 暂停使用
     if ($map['repayment_type'] == 1) {
         $str .= "&nbsp;<img src=\"" . __ROOT__ . "/Style/H/images/t.jpg\" align=\"absmiddle\">";
     }
+    */
     return $str;
 }
 
@@ -1467,6 +1474,7 @@ function notice($type, $uid, $data = array())
         $smtp->From = $msgconfig['stmp']['user'];
         $smtp->FromName = $datag['web_name'];
         
+        $stmp->Encoding = 'base64';
         $stmp->CharSet = 'utf-8';
         $smtp->isHTML(true);// Set email format to HTML
     } else {
@@ -2611,15 +2619,40 @@ function getBorrowInterestRate($rate, $duration)
 function sendsms($mob, $content)
 {
     $msgconfig = fs("Webconfig/msgconfig");
-    $uid = $msgconfig['sms']['user'];
-    $pwd = $msgconfig['sms']['pass'];
-    $mob = $mob;
-    $content = urlencode(auto_charset($content, "utf-8", "gbk"));
-    $sendurl = "http://service.winic.org:8009/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $content . "&time=";
-    $xhr = new COM("MSXML2.XMLHTTP");
-    $xhr->open("GET", $sendurl, false);
-    $xhr->send();
-    $data = explode("/", $xhr->responseText);
+    $uid = urlencode(auto_charset($msgconfig['sms']['user'],"utf-8","gbk"));
+    $pwd = urlencode($msgconfig['sms']['pass']);
+    $mob = urlencode($mob);
+    $str = urlencode(auto_charset($content,"utf-8","gbk"));
+    $sendurl = "http://service.winic.org/sys_port/gateway/?id=" . $uid . "&pwd=" . $pwd . "&to=" . $mob . "&content=" . $str . "&time=";
+    $pos = strpos(PHP_OS, 'WIN');
+    if ($pos === false) {//Linux
+        $arr = file($sendurl);
+        $result = $arr[0];
+    } else {//Windows
+        $xhr = new COM("MSXML2.XMLHTTP");
+        $xhr->open("GET", $sendurl, false);
+        $xhr->send();
+        $result = $xhr->responseText;
+    }
+    $data = explode("/", $result);
+    
+    //记录日志
+    $d = array(
+        'to' => $mob,
+        'content' => $content,
+        'result' => $result,
+        'add_ip' => get_client_ip(),
+        'add_time' => time()
+    );
+    if (session('admin')) {
+        $d['uid'] = session("admin_id");
+        $d['is_admin'] = 1;
+    } else {
+        $d['uid'] = session('u_id');
+        $d['is_admin'] = 0;
+    }
+    M('sms_log')->add($d);
+
     if ($data[0] == "000") {
         return true;
     } else {
@@ -2633,7 +2666,7 @@ function getMoneyLog($map, $size)
         return;
     }
     if ($size) {
-        import("ORG.Util.Page");
+        import("@.Page");
         $count = m("member_moneylog")->where($map)->count("id");
         $p = new Page($count, $size);
         $page = $p->show();
@@ -3720,7 +3753,50 @@ function get_prize_name($id)
     }
     return $row;
 }
+//通过"优惠券ID"获取"优惠券编号"
+function get_coupon_code($id)
+{
+    $stype = "couponlist";
+    $list = array();
+    if (!s($stype)) {
+        $rule = m("coupon")->field("id,coupon_code")->select();
+        foreach ($rule as $v) {
+            $list[$v['id']] = $v['coupon_code'];
+        }
+        s($stype, $list, 3600 * c("ADMIN_CACHE_TIME"));
+        if (!$id) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    } else {
+        $list = s($stype);
+        if ($id === false) {
+            $row = $list;
+        } else {
+            $row = $list[$id];
+        }
+    }
+    return $row;
+}
 
+function get_group_name($group_action) {
+    $group_action = strtolower($group_action);
+    $group_name = '';
+    switch ($group_action) {
+        case 'admin':
+            $group_name = '后台';
+            break;
+        case 'home':
+            $group_name = '前台';
+            break;
+        case 'member':
+            $group_name = '会员中心';
+            break;
+        default:break;
+    }
+    return $group_name;
+}
 
 //数据操作类
 class MY_FUNC {

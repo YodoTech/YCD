@@ -57,8 +57,29 @@ class MemberdataAction extends ACommonAction
 		$this->assign('pagebar',$page);
         $this->display();
     }
-	public function _editFilter(){
+	public function _editFilter($id){
 		setBackUrl();
+
+		//审核日志
+		$loglist = M('data_verify_log')->where(array('type'=>'memberdata','did'=>$id))->order('op_time DESC')->select();
+		$Bconfig = require C("APP_ROOT")."Conf/borrow_config.php";
+		foreach($loglist as $k=>$v) {
+			$loglist[$k]['op_status_name'] = $Bconfig['DATA_STATUS'][$v['op_status']];
+		}
+		$this->assign('loglist', $loglist);
+	}
+
+	public function _doEditFilter($m) {
+		if(!empty($_FILES['imgfile']['name'])){
+			$this->savePathNew = C( "ADMIN_UPLOAD_DIR" ).'MemberData/'.$m->uid.'/' ;
+			$this->saveRule = date("YmdHis",time()).rand(0,1000);
+			$info = $this->CUpload();
+			$data['deal_image'] = $info[0]['savepath'].$info[0]['savename'];
+		}
+		if($data['deal_image']) $m->deal_image = $data['deal_image'];
+		$m->deal_user = $this->admin_id;
+		$m->deal_time = time();
+		return $m;
 	}
 	
 	public function doEdit(){
@@ -66,17 +87,35 @@ class MemberdataAction extends ACommonAction
         if (false === $model->create()) {
             $this->error($model->getError());
         }
+        if (method_exists($this, '_doEditFilter')) {
+            $model = $this->_doEditFilter($model);
+        }
+        $msg = '';
         //保存当前数据对象
         if ($result = $model->save()) { //保存成功
 			$credits = intval($_POST['deal_credits']);
-			$vd = M('member_data_info')->field("data_name,uid")->find(intval($_POST['id']));
+			$vd = M('member_data_info')->field("id,status,deal_image,deal_info,deal_credits,deal_user,data_name,uid")->find(intval($_POST['id']));
+			//日志记录
+			m('data_verify_log')->add(array(
+				'type' 			=> 'memberdata',
+				'did' 			=> $vd['id'],
+				'op_status' 	=> $vd['status'],
+				'op_image' 		=> $vd['deal_image'],
+				'op_info' 		=> $vd['deal_info'],
+				'op_credits' 	=> $vd['deal_credits'],
+				'op_uid' 		=> $vd['deal_user'],
+				'op_time' 		=> time()
+			));
+			//积分操作
 			if($credits<>0) memberCreditsLog($vd['uid'],1,$credits,$vd['data_name']);
             //成功提示
             $this->assign('jumpUrl', __URL__."/".session('listaction'));
-            $this->success(L('修改成功'));
+            $msg .= '修改成功';
+            $this->success(L($msg));
         } else {
             //失败提示
-            $this->error(L('修改失败'));
+            $msg .= '修改失败';
+            $this->error(L($msg));
         }
 		
 	}

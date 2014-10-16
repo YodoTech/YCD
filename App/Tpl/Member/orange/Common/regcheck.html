@@ -1,36 +1,5 @@
 <include file="orange:Public:_header_common" group="Home" />
 <title>新用户注册 - {$glo.web_name}</title>
-<script>
-$(function() {
-    $('a.reSend').on('click', function() {
-        $.jBox.tip("发送中......","loading");
-        $.ajax({
-            url: '__URL__/regaction/',
-            data: {
-                'txtEmail':'{$userEmail}',
-                't':new Date().getTime()
-            },
-            timeout: 8000,
-            cache: false,
-            type: 'post',
-            dataType: 'json',
-            success: function (d, s, r) {
-                if(d) {
-                    if(d.status == 0) {
-                        $.jBox.tip(d.message, 'fail');
-                    } else {
-                        $.jBox.tip(d.message, 'success');
-                    }
-                }
-            },
-            error:function(XMLHttpRequest, textStatus) {
-                $.jBox.tip(textStatus, 'error');
-            }
-        });
-        return false;
-    });
-});
-</script>
 <include file="orange:Public:_header_main" group="Home"/>
 <!--中部开始-->
 <div class="nyconter">
@@ -44,35 +13,111 @@ $(function() {
                 <li>2</li>
                 <li class="li1 hei">3</li>
                 <li class="li2" style="text-align:left; color:#fa6f15;">填写账户信息</li>
-                <li class="li2" style="color:#fa6f15;">邮箱验证</li>
+                <li class="li2" style="color:#fa6f15;">{$regconfig['data'][$regconfig['type']]['title']}验证</li>
                 <li class="li2" style="text-align:right;">注册成功</li>
             </ul>
         </ul>
     </div>
     <div class="zhuceym3">
-        <!--
-        <div class="zhuceym9">短信已发送至您手机，请输入短信中的验证码，确保您的手机号真实有效。<div class="zhuceym10">▼</div></div>
-        <ul class="fn-clear">
-        	<li class="zhuceym3L fn-left"><span>*</span>手机号确认</li>
-            <li class="zhuceym6 fn-left">15659099909</li>
-        </ul>
-        <ul class="fn-clear">
-        	<li class="zhuceym3L fn-left"><span>*</span>验证码</li>
-            <li class="zhuceym3R_2 fn-left fn-clear">
-            	<span class="fn-left"><input name="" type="text"></span>
-            </li>
-        </ul>
-        <div class="zhuceym4"><p class="btn"><a href="#">立即注册</a></p></div>
-        <div class="zhuceym7">如果您在1分钟之内没有收到验证码，请返<a href="#">回修改手机号码</a>或<a href="#">18秒重新获取</a></div>
-        <div class="zhuceym8 fn-clear">
-        	<div class="zhuceym8L fn-left"><p class="btn"><a href="#">获取语音验证码</a></p></div>
-            <div class="zhuceym8R fn-left">请注意接听010-52278080的来电。</div>
-        </div>
-        -->
-        <div class="zhuceym7">{$message}</div>
-        <div class="zhuceym8 fn-clear">
-            如果您在10分钟内没有收到激活邮件，请点击<a class="reSend" href="#" style="margin:0 3px;  font-size:14px; font-weight:bold;" target="_parent">这里</a>再次发送激活邮件。
-        </div>
+        <if condition="$regconfig['type'] eq 'email' ">
+            <div class="zhuceym7">我们给您的邮箱<span style="color:#930303; font-weight:bold; margin:0 3px;">{$userEmailOrPhone}</span>发送了确认邮件，请点击邮件中的链接进行确认。</div>
+            <div class="zhuceym8 fn-clear">
+                如果您在10分钟内没有收到激活邮件，请&nbsp;<a class="reSend" href="javascript:;">重新发送</a>
+            </div>
+        <elseif condition="$regconfig['type'] eq 'phone' "/>
+            <div class="zhuceym9">短信已发送至您手机，请输入短信中的验证码，确保您的手机号真实有效。<div class="zhuceym10">▼</div></div>
+            <ul class="fn-clear">
+                <li class="zhuceym3L fn-left"><span>*</span>手机号确认</li>
+                <li class="zhuceym6 fn-left">{$userEmailOrPhone}</li>
+            </ul>
+            <ul class="fn-clear">
+                <li class="zhuceym3L fn-left"><span>*</span>验证码</li>
+                <li class="zhuceym3R_2 fn-left fn-clear">
+                    <span class="fn-left"><input id="vcode" type="text"></span>
+                </li>
+            </ul>
+            <div class="zhuceym4"><p class="btn"><a href="#" id="doReg">立即注册</a></p></div>
+            <div class="zhuceym7">如果您在2分钟之内没有收到验证码，请<a href="javascript:;" class="reSend">重新发送</a></div>
+            <!--
+            <div class="zhuceym8 fn-clear">
+                <div class="zhuceym8L fn-left"><p class="btn"><a href="#">获取语音验证码</a></p></div>
+                <div class="zhuceym8R fn-left">请注意接听010-52278080的来电。</div>
+            </div>
+            -->
+        </if>
     </div>
 </div>
+<script>
+var timer = setInterval(setLeftTime, 1000, '1'),
+    leftsecond = 120;//倒计时
+var doReSend = function() {
+    $.jBox.tip('发送中......', 'loading');
+    $.ajax({
+        url: '__URL__/regaction/',
+        data: {
+            'txt{:ucfirst($regconfig['type'])}':'{$userEmailOrPhone}',
+            't':new Date().getTime()
+        },
+        timeout: 8000,
+        cache: false,
+        type: 'post',
+        dataType: 'json',
+        success: function (d, s, r) {
+            leftsecond = 120;
+            if(d) {
+                if(d.status == 0) {
+                    $.jBox.tip(d.message, 'fail');
+                } else {
+                    clearInterval(timer);
+                    timer = setInterval(setLeftTime, 1000, '1');
+                    $.jBox.tip(d.message, 'success');
+                }
+            }
+        },
+        error: function(XMLHttpRequest, textStatus) {
+            $.jBox.tip(textStatus, 'error');
+        }
+    });
+    return false;
+};
+$('a.reSend').on('click', doReSend);
+function setLeftTime() {
+    var $reSend = $('.reSend');
+    var second = Math.floor(leftsecond);
+    $reSend.html(second + '秒后可重发').off('click');
+    leftsecond--;
+    if (leftsecond < 1) {
+        $reSend.html('重新发送').on('click', doReSend);
+        clearInterval(timer);
+    }
+}
+<if condition="$regconfig['type'] eq 'phone'">
+$('#doReg').on('click', function() {
+    var vcode = $('#vcode').val();
+    if ($.trim(vcode) == '') {
+        $.jBox.tip('请输入验证码', 'error');
+        return false;
+    }
+    $.ajax({
+        url: '__URL__/phoneverify',
+        type: 'GET',
+        dataType: 'json',
+        data: {'vcode':vcode},
+        success: function(d, s, r) {
+            if (d.status == 0) {
+                $.jBox.alert(d.message, '出错了...');
+            } else {
+                $.jBox.success(d.message, '注册成功', {
+                    closed: function() {window.location.href = '__APP__/member';}
+                });
+            }
+        },
+        error: function(XMLHttpRequest, textStatus) {
+            $.jBox.tip(textStatus, 'error');
+        }
+    });
+    return false;
+});
+</if>
+</script>
 <include file="orange:Public:_footer" group="Home" />
